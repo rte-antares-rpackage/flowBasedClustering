@@ -30,6 +30,22 @@
 classifTypicalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
                               report = TRUE){
 
+
+
+  if(names(vertices) != c("Date", "Period", "BE", "DE", "FR")){
+    stop(paste0("Names of vertices must be Date, Period, BE, DE, FR, actualy : ",
+         paste0(names(vertices), collapse = ", ")))
+  }
+
+  if(any(!names(calendar)%in% c("interSaisonWe",
+                                "interSaisonSe",
+                                "winterWe",
+                                "winterSe",
+                                "summerWe","summerSe")) | is.null(names(calendar))){
+    stop("Calendar saison name must be interSaisonWe, interSaisonSe, winterWe, winterSe, summerWe, summerSe")
+  }
+
+
   getMesh <- function(out){
     tc <- geometry::delaunayn(out, full = F)
     # tetramesh(tc,out,alpha=0.7)

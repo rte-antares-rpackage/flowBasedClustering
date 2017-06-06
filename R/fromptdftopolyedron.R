@@ -22,6 +22,12 @@ fromPtdfToVertices <- function(PTDF = system.file("data/faceAllYear.csv",package
 {
   PTDF <- fread(PTDF)
 
+  if(all(names(PTDF)[1:7] != c("Date", "Period", "BE", "DE", "FR", "NL", "RAM_0"))){
+    stop(paste0("Names of ptdf file must be : Date, Period, BE, DE, FR, NL, RAM_0 currently : ",
+                paste0(names(PTDF)[1:7] , collapse = ", ")))
+  }
+
+
 
   calcPoly <- function(X, PTDF){
     data.table::rbindlist(lapply(1:24, function(Y, PTDF){
