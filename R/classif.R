@@ -22,12 +22,12 @@
 #' interSeasonEnd <- c("2016-05-15", "2016-10-31")
 #' dayInWeekend = c(6, 7)
 #' calendar <- cutYear(dates, interSeasonBegin, interSeasonEnd)
-#' myClassif <- classifTipycalDay(calendar, vertices)
+#' myClassif <- classifTypicalDay(calendar, vertices)
 #' }
 #'
 #'
 #' @export
-classifTipycalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
+classifTypicalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
                               report = TRUE){
 
   getMesh <- function(out){

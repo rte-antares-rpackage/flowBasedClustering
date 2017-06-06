@@ -1,7 +1,7 @@
 #' Get probability and quantiles from climat file and classif
 #'
 #' @param climat \code{data.table} climat file, 2 first columns are Date and Period, others are params files
-#' @param classif \code{data.table} output of \link{classifTipycalDay}
+#' @param classif \code{data.table} output of \link{classifTypicalDay}
 #'
 #'
 #' @examples
@@ -107,7 +107,7 @@ getProbability <- function(climat, classif)
 #' Plot monotone
 #'
 #' @param climat \code{data.table} climat file, 2 first columns are Date and Period, others are params files
-#' @param classif \code{data.table} output of \link{classifTipycalDay}
+#' @param classif \code{data.table} output of \link{classifTypicalDay}
 #' @param hour \code{numeric} hour
 #' @param dayType \code{numeric} typical day
 #' @param variable \code{character} name of variable to plot

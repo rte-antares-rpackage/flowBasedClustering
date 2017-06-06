@@ -2,7 +2,7 @@
 #'
 #' @param dayType \code{numeric} Typical day
 #' @param output_file \code{character} path of output
-#' @param data \code{data.table} data from \link{classifTipycalDay}
+#' @param data \code{data.table} data from \link{classifTypicalDay}
 #'
 #'
 #' @examples
@@ -41,7 +41,7 @@ generateRaportClustering <- function(dayType, output_file = NULL,
 
 #' Generate a plot for a typical day cluster
 #'
-#' @param data \code{data.table}, output of \link{classifTipycalDay}
+#' @param data \code{data.table}, output of \link{classifTypicalDay}
 #' @param country1 \code{character}, name of first country
 #' @param country2 \code{character}, name of second country
 #' @param hour \code{numeric}, hour

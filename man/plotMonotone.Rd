@@ -9,7 +9,7 @@ plotMonotone(climat, classif, hour, dayType, variable)
 \arguments{
 \item{climat}{\code{data.table} climat file, 2 first columns are Date and Period, others are params files}
 
-\item{classif}{\code{data.table} output of \link{classifTipycalDay}}
+\item{classif}{\code{data.table} output of \link{classifTypicalDay}}
 
 \item{hour}{\code{numeric} hour}
 

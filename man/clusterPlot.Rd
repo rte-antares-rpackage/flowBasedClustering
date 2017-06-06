@@ -7,7 +7,7 @@
 clusterPlot(data, country1, country2, hour, dayType)
 }
 \arguments{
-\item{data}{\code{data.table}, output of \link{classifTipycalDay}}
+\item{data}{\code{data.table}, output of \link{classifTypicalDay}}
 
 \item{country1}{\code{character}, name of first country}
 

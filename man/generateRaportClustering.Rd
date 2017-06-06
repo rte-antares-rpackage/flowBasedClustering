@@ -11,7 +11,7 @@ generateRaportClustering(dayType, output_file = NULL, data = NULL)
 
 \item{output_file}{\code{character} path of output}
 
-\item{data}{\code{data.table} data from \link{classifTipycalDay}}
+\item{data}{\code{data.table} data from \link{classifTypicalDay}}
 }
 \description{
 Generate html report
