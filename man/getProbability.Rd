@@ -17,8 +17,8 @@ Get probability and quantiles from climat file and classif
 \examples{
 
 \dontrun{
-climat <- fread("D:/Users/titorobe/Desktop/Antares/flowBasedClustering/inst/dev/Climat.txt")
-classif <- readRDS("D:/Users/titorobe/Desktop/Antares/flowBasedClustering/inst/dev/ClassifOut.RDS")
+climat <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
+classif <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
 
 MatProb <- getProbability(climat, classif)
 }
