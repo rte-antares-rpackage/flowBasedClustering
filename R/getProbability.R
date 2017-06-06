@@ -133,5 +133,10 @@ plotMonotone <- function(climat, classif, hour, dayType, variable){
                    decreasing = TRUE)
   amPlot(-1+1:length(selData), selData, type = "l", xlab = "monotone", ylab = variable, main = paste0(variable, " hour ",
                                                                                 hour - 1,  " day type ",
-                                                                                idDayType))
+                                                                                idDayType))%>>%
+    addGuide(value = 0, toValue =  as.numeric(quantile(-1+1:length(selData), 0.333)), fillAlpha = 0.1, fillColor = "#FFFF00")%>>%
+    addGuide(value = as.numeric(quantile(-1+1:length(selData), 0.333)), toValue =  as.numeric(quantile(-1+1:length(selData), 0.666)), fillAlpha = 0.1,
+             fillColor = "#FF8000")%>>%
+    addGuide(value = as.numeric(quantile(-1+1:length(selData), 0.666)), toValue =  length(selData) - 1, fillAlpha = 0.1,
+             fillColor = "#FF0000")
 }
