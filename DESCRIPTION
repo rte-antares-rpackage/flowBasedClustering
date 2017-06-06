@@ -17,5 +17,6 @@ Imports:
   timeDate(>= 3012.100),
   rgl(>= 0.98.1),
   Rvcg(>= 0.15),
-  parallel(>= 3.2.3)
+  parallel(>= 3.2.3),
+  cluster(>= 2.0.5)
 RoxygenNote: 6.0.1

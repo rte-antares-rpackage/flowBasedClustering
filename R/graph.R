@@ -1,3 +1,44 @@
+#' Generate html report
+#'
+#' @param dayType \code{numeric} Typical day
+#' @param output_file \code{character} path of output
+#' @param data \code{data.table} data from \link{classifTipycalDay}
+#'
+#'
+#' @examples
+#'
+#' \dontrun{
+#' generateRaportClustering(dayType = 7)
+#' }
+#' @export
+generateRaportClustering <- function(dayType, output_file = NULL,
+                             data = NULL){
+
+  if(is.null(data))
+  {
+    data <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+  }
+
+
+  dayType2 <- dayType
+  if(is.null(output_file)){
+    output_file <- getwd()
+  }
+  output_Dir <- output_file
+  output_file <- paste0(output_file, "/", "FlowBased_clustering",dayType, "_", Sys.Date(), ".html")
+  e <- environment()
+  e$dayType <- dayType
+  e$data <- data
+
+  rmarkdown::render(system.file("/report/resumeclustflex.Rmd", package = "flowBasedClustering"),
+                    output_file = output_file,
+                    params = list(set_title = paste0("Typical Day ", dayType, " (generated on ", Sys.Date(), ")")),
+                    intermediates_dir = output_Dir, envir = e,
+                    quiet = TRUE)
+}
+
+
+
 #' Generate a plot for a typical day cluster
 #'
 #' @param data \code{data.table}, output of \link{classifTipycalDay}

@@ -1,0 +1,835 @@
+---
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+    css: styles_flex.css
+params: 
+    set_title: ""
+title: "`r params$set_title`"
+---
+
+
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(rAmCharts)
+library(antaresFlowbased)
+library(manipulateWidget)
+library(flowBasedClustering)
+```
+
+
+Hour 1 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 1
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 2 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 2
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 3 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 3
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 4 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 4
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 5 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 5
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 6 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 6
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 7 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 7
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 8 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 8
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 9 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 9
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+Hour 10 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 10
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 11 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 11
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 12 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 12
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+
+Hour 13 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 13
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 14 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 14
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 15 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 15
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 16 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 16
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 17 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 17
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 18 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 18
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 19 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 19
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 20 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 20
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 21 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 21
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 22 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 22
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+
+Hour 23 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 23
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+
+
+Hour 24 {data-navmenu="Hour"}
+=====================================
+
+```{r, echo = FALSE, eval = TRUE}
+hour <- 24
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+### BE/FR
+```{r}
+clusterPlot(data, "BE", "FR", hour, dayType)
+```
+
+### DE/FR
+```{r}
+clusterPlot(data, "DE", "FR", hour, dayType)
+```
+
+Row {data-height=650}
+------------------------------------------------------------------
+### BE/NL {.no-padding}
+```{r}
+clusterPlot(data, "BE", "NL", hour, dayType)
+```
+
+
+### DE/NL
+```{r}
+clusterPlot(data, "DE", "NL", hour, dayType)
+```
+

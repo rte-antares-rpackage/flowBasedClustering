@@ -4,7 +4,8 @@
 \alias{classifTipycalDay}
 \title{Generate clusturing of typical day}
 \usage{
-classifTipycalDay(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1)
+classifTipycalDay(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
+  report = TRUE)
 }
 \arguments{
 \item{calendar}{\code{list}, vector of date in eatch period can be obtain which \link{cutYear}}
@@ -28,11 +29,11 @@ Generate clusturing of typical day
 \examples{
 
 \dontrun{
-
+library(data.table)
 vertices <- fread(system.file("dev/verticesAllDay.txt",package = "flowBasedClustering"))
 dates <- generateAllDate("2015-11-01", "2017-01-20")
-interSeasonBegin <- c("2016-03-01", "2016-09-01")
-interSeasonEnd <- c("2016-05-01", "2016-11-01")
+interSeasonBegin <- c("2016-03-01", "2016-10-01")
+interSeasonEnd <- c("2016-05-15", "2016-10-31")
 dayInWeekend = c(6, 7)
 calendar <- cutYear(dates, interSeasonBegin, interSeasonEnd)
 myClassif <- classifTipycalDay(calendar, vertices)

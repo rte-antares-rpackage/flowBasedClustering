@@ -1,9 +1,3 @@
-tmpData <- fread("D:/Users/titorobe/Desktop/clustering_pr_damien_mars2017_Benoit/matrices/Matrice distances winterWEnd.csv")
-tmpData$V1 <- NULL
-diag(tmpData) <- 0
-plot(hclust(as.dist(tmpData)))
-
-
 #' Generate clusturing of typical day
 #'
 #' @param calendar \code{list}, vector of date in eatch period can be obtain which \link{cutYear}
@@ -21,11 +15,11 @@ plot(hclust(as.dist(tmpData)))
 #' @examples
 #'
 #' \dontrun{
-#'
+#' library(data.table)
 #' vertices <- fread(system.file("dev/verticesAllDay.txt",package = "flowBasedClustering"))
 #' dates <- generateAllDate("2015-11-01", "2017-01-20")
-#' interSeasonBegin <- c("2016-03-01", "2016-09-01")
-#' interSeasonEnd <- c("2016-05-01", "2016-11-01")
+#' interSeasonBegin <- c("2016-03-01", "2016-10-01")
+#' interSeasonEnd <- c("2016-05-15", "2016-10-31")
 #' dayInWeekend = c(6, 7)
 #' calendar <- cutYear(dates, interSeasonBegin, interSeasonEnd)
 #' myClassif <- classifTipycalDay(calendar, vertices)
@@ -33,7 +27,8 @@ plot(hclust(as.dist(tmpData)))
 #'
 #'
 #' @export
-classifTipycalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1){
+classifTipycalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
+                              report = TRUE){
 
   getMesh <- function(out){
     tc <- geometry::delaunayn(out, full = F)
@@ -85,7 +80,13 @@ classifTipycalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeeken
     allTypDay$dayIn[[i]] <- list(merge(allTypDay$dayIn[[i]], vertices[,.SD, .SDcols = 1:3], by = c("Date", "Period")))
   }
   allTypDay[,idDayType :=1:.N ]
+
+  if(report){
+    sapply(allTypDay$idDayType, function(X){
+      generateRaportClustering(X, data = allTypDay)})
+  }
   allTypDay
+
 }
 
 
