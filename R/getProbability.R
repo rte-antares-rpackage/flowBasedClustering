@@ -8,84 +8,160 @@
 #'
 #' \dontrun{
 #' climat <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
+#'
 #' classif <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
 #'
 #' MatProb <- getProbability(climat, classif)
 #' }
 #' @export
-getProbability <- function(climat, classif)
+getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
 {
 
+  ##Control
+  levelsProba <- sort(levelsProba)
   if(names(climat)[1]!='Date'){
     stop(paste0("First column of climat file must be calls Date and contains dates actually : ",
                 names(climat)[1]))
   }
 
-  if(names(climat)[2]!='Period'){
-    stop(paste0("First column of climat file must be Period Date and contains id hours actually : ",
-                names(climat)[2]))
+  if(length(climat$Date)!=length(unique(climat$Date))){
+    stop("Somes dates are present not unique, you must give daily information")
   }
+
+  allDateInClassif <- unlist(lapply(classif$dayIn, function(X){
+    unique(X[[1]]$Date)
+  }))
+
+  DayNoInClimat <- allDateInClassif[!allDateInClassif%in%as.character(climat$Date)]
+  if(length(DayNoInClimat)>0){
+    stop(paste0("Day(s) no present in climat file : ",paste0(DayNoInClimat, collapse = ", ")))
+  }
+
+  datesDeleted <- climat[!climat$Date%in%na.omit(climat)$Date]$Date
+  if(length(datesDeleted)>0){
+    warning(paste0("Day(s) dalated due to NA : ",paste0(datesDeleted, collapse = ", ")))
+  }
+
+
 
   climat <-na.omit(climat)
-  concerneName <- names(climat)[!names(climat)%in%c("Date", "Period")]
+
+  #Define all variable to used
+  concerneName <- names(climat)[!names(climat)%in%c("Date")]
+
+  ##Merge classif out wich climat table
   climatAssoClasif <- .climAssoClassif(climat, classif, concerneName)
-  quantiles033 <- climatAssoClasif[,lapply(.SD, function(X){quantile(X, probs = c(0.333), na.rm = TRUE)}),
-                                   by = c("Period", "TypicalDay", "idDayType"), .SDcols = concerneName]
-  setnames(quantiles033,concerneName, paste0(concerneName, "0.33"))
-  var033Nam <-  paste0(concerneName, "0.33")
-  climatAssoClasif <- merge(climatAssoClasif, quantiles033, by = c("Period", "TypicalDay", "idDayType"))
-  quantiles066 <- climatAssoClasif[,lapply(.SD, function(X){quantile(X, probs = c(0.666), na.rm = TRUE)}),
-                                   by = c("Period", "TypicalDay", "idDayType"), .SDcols = concerneName]
-  setnames(quantiles066,concerneName, paste0(concerneName, "0.66"))
-  var066Nam <-  paste0(concerneName, "0.66")
+  levelsProbaCode <- paste0("Q", levelsProba)
 
-  climatAssoClasif <- merge(climatAssoClasif, quantiles066, by = c("Period", "TypicalDay", "idDayType"))
-  Inf033 <- climatAssoClasif[,.SD, .SDcols = concerneName]<=climatAssoClasif[,.SD, .SDcols = var033Nam]
-  Inf033 <- data.table(Inf033)
-  setnames(Inf033,concerneName,  paste0(concerneName, "Inf033"))
-  Bet033066 <- climatAssoClasif[,.SD, .SDcols = concerneName]>climatAssoClasif[,.SD, .SDcols = var033Nam] & climatAssoClasif[,.SD, .SDcols = concerneName]<=climatAssoClasif[,.SD, .SDcols = var066Nam]
-  Bet033066 <- data.table(Bet033066)
-  setnames(Bet033066,concerneName,  paste0(concerneName, "Bet033066"))
-  Sup066 <- climatAssoClasif[,.SD, .SDcols = concerneName]>climatAssoClasif[,.SD, .SDcols = var066Nam]
-  Sup066 <- data.table(Sup066)
-  setnames(Sup066,concerneName,  paste0(concerneName, "Sup066"))
-  climatquantiles <- cbind(climatAssoClasif[, .SD, .SDcols = c("TypicalDay", "Period")], Inf033, Bet033066, Sup066)
+  #Calcul quantiles
+  ClimQuantiles <- climatAssoClasif[,lapply(.SD, function(X){
+    quantile(X, levelsProba)
+  }), .SDcols = concerneName, by = c("Class")]
+  ClimQuantiles$Quantiles <- levelsProbaCode
 
-  climatProbs <- climatquantiles[, lapply(.SD, function(X){
-    sum(X)/.N
-  }), by =  c("TypicalDay", "Period")]
+  quantileNonClaire <- NULL
+  levelsProbaClair <- levelsProba
 
+  #Define all comparaison to do (<q1, >q1 & <q2, ....)
+  for(i in 1:length(levelsProbaClair)){
+    if(i == 1){
+      quantileNonClaire <- c(quantileNonClaire, paste0("I", levelsProbaClair[i]))
+    }else{
+      quantileNonClaire <- c(quantileNonClaire, paste0("B", levelsProbaClair[i - 1],"&", levelsProbaClair[i]))
+    }
 
-  comb <- which(3:ncol(climatProbs)%%3 == 0) + 2
-  comb2 <-  which(3:ncol(climatProbs)%%3 == 1) + 2
-  comb3 <-  which(3:ncol(climatProbs)%%3 == 2) + 2
-
-  allComb <- sapply(comb, function(X){
-    sapply(comb2, function(Y){
-      sapply(comb3, function(Z){
-        c(X, Y, Z)
-      }, simplify = FALSE)
-    }, simplify = FALSE)
-  }, simplify = FALSE)
-  allComb <- matrix(unlist(allComb), ncol = 3, byrow = TRUE)
-
-  nam <- apply(allComb, 1, function(X){
-    paste(names(climatProbs)[X], collapse = "_")
-  })
-
-  for( i in 1:length(nam))
-  {
-    combSel <- allComb[i, ]
-    multProb <- climatProbs[, .SD, .SDcols = combSel[1]] *  climatProbs[, .SD, .SDcols = combSel[2]] *
-      climatProbs[, .SD, .SDcols = combSel[3]]
-    climatProbs$tpcol <-  as.vector(unlist(multProb))
-    setnames(climatProbs, "tpcol", nam[i])
+    if(i == length(levelsProbaClair)){
+      quantileNonClaire <- c(quantileNonClaire, paste0("S", levelsProbaClair[i]))
+    }
   }
 
-  climatProbs[, c(comb, comb2, comb3) := NULL]
-  climatProbs <-  merge(quantiles033, climatProbs, by = c("Period", "TypicalDay"))
-  climatProbs <-  merge(quantiles066, climatProbs, by = c("Period", "TypicalDay", "idDayType"))
-  climatProbs
+
+  n <- length(concerneName)
+  l <- rep(list(quantileNonClaire), n)
+
+  #Extand combinaison to all variables
+  allComb <- expand.grid(l, stringsAsFactors = FALSE)
+
+  nbcomp <- nrow(allComb)
+  climQuant <- unique(climatAssoClasif[, .SD, .SDcols =  c("TypicalDay", "idDayType", "Class")])
+
+
+  #Creat the structure for result
+  andTableStruct <- data.table(Class = rep(climQuant$Class, each = nbcomp),
+                               TypicalDay = rep(climQuant$TypicalDay, each = nbcomp),
+                               idDayType = rep(climQuant$idDayType, each = nbcomp),
+                               do.call("rbind", rep(list(allComb), nrow(climQuant)))
+  )
+  names(andTableStruct)[4:ncol(andTableStruct)] <- concerneName
+
+
+
+  probaAndEffectifs  <- rbindlist(sapply(1:nrow(andTableStruct), function(VV){
+    StructRaw <- andTableStruct[VV]
+    constructRequest <- paste0("Class =='", StructRaw$Class,"'")
+    constructRequest <-  parse(text = constructRequest)
+
+    quantilesConcern <- ClimQuantiles[eval(constructRequest)]
+    climatConcern <- climatAssoClasif[eval(constructRequest)]
+    requestQuantile <- StructRaw[, .SD, .SDcols = concerneName]
+
+    allRequest <- lapply(requestQuantile, function(X){
+      sens <- substr(X, 1, 1)
+      res <- NULL
+      if(sens == "I"){
+        res <- c("<", substr(X, 2, nchar(X)))
+      }
+      if(sens == "S"){
+        res <- c(">=", substr(X, 2, nchar(X)))
+      }
+      if(sens == "B"){
+        X <- gsub("B", "", X)
+        X <- strsplit(X, "&")[[1]]
+        res <- list(c(">", X[1]), c("<=", X[2]))
+      }
+
+      res
+    })
+
+
+    req <- sapply(names(allRequest), function(X){
+      elemReq <- allRequest[[X]]
+      converRequest <- function(Y){
+        Q <- paste0("Q", Y[2])
+        paste(paste0("`", X, "`"), Y[1], as.numeric(quantilesConcern[Quantiles == Q, .SD, .SDcols = X]))
+      }
+
+      if(is.list(elemReq))
+      {
+        tpreq <- paste(unlist(lapply(elemReq, converRequest)), collapse = " & ")
+      }else{
+        tpreq <- converRequest(elemReq)
+      }
+    }, simplify = FALSE)
+
+
+    exp <- parse(text = paste0(unlist(req), collapse = "&"))
+    climatConcern <- climatConcern[eval(exp)]
+
+
+    StructRaw$idDayType
+
+    if(nrow(climatConcern)>0){
+
+    value <- nrow(climatConcern[idDayType ==  StructRaw$idDayType])/nrow(climatConcern)
+
+    }else{
+      value <- NA
+    }
+
+    data.table(value, nrow(climatConcern))
+  }, simplify = FALSE))
+
+  andTableStruct$Proba <- probaAndEffectifs$value
+  andTableStruct$effectifClass <- probaAndEffectifs$V2
+
+  return(list(andTableStruct, ClimQuantiles))
+
 }
 
 
@@ -93,14 +169,14 @@ getProbability <- function(climat, classif)
 .climAssoClassif <- function(climat, classif, concerneName)
 {
 
-  climat[,c(concerneName) :=lapply(.SD, scale), .SDcols = concerneName]
-  dayTypeAsso <- rbindlist(sapply(1:nrow(classif), function(X){
+  #climat[,c(concerneName) :=lapply(.SD, scale), .SDcols = concerneName]
+  dayTypeAsso <- unique(rbindlist(sapply(1:nrow(classif), function(X){
     typeDay <- classif[X]
     data.table(TypicalDay = typeDay$TypicalDay, Date = typeDay$dayIn[[1]][[1]]$Date,
-               Period = typeDay$dayIn[[1]][[1]]$Period,
-               idDayType = typeDay$idDayType)
-  }, simplify = FALSE))
-  climatAssoClasif <- merge(dayTypeAsso, climat, by = c("Date", "Period"))
+               idDayType = typeDay$idDayType,
+               Class = typeDay$Class)
+  }, simplify = FALSE)))
+  climatAssoClasif <- merge(dayTypeAsso, climat, by = c("Date"))
   climatAssoClasif
 }
 

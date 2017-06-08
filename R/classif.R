@@ -28,20 +28,20 @@
 #'
 #' @export
 classifTypicalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
-                              report = TRUE){
+                              report = TRUE, reportPath = setwd()){
 
 
 
-  if(names(vertices) != c("Date", "Period", "BE", "DE", "FR")){
-    stop(paste0("Names of vertices must be Date, Period, BE, DE, FR, actualy : ",
+  if(any(names(vertices) != c("Date", "Period", "BE", "DE", "FR"))){
+    stop(paste0("Names of vertices must be Date, Period, BE, DE, FR, curently : ",
          paste0(names(vertices), collapse = ", ")))
   }
 
   if(any(!names(calendar)%in% c("interSaisonWe",
-                                "interSaisonSe",
+                                "interSaisonWd",
                                 "winterWe",
-                                "winterSe",
-                                "summerWe","summerSe")) | is.null(names(calendar))){
+                                "winterWd",
+                                "summerWe","summerWd")) | is.null(names(calendar))){
     stop("Calendar saison name must be interSaisonWe, interSaisonSe, winterWe, winterSe, summerWe, summerSe")
   }
 
@@ -64,7 +64,7 @@ classifTypicalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeeken
   We <- rep(FALSE, length(calendar))
   We[grep("We", names(calendar))] <- TRUE
   #Apply classification for eatch period in calendar
-  allTypDay <- rbindlist(apply(  data.table(calendar, We), 1, function(season){
+  allTypDay <- rbindlist(apply(  data.table(calendar, We, nn = names(calendar)), 1, function(season){
     nbClust = ifelse(season$We, nbClustWeekend, nbClustWeek)
     veticesSel <- vertices[Date %in% as.character(season$calendar)]
     #get distance for eatch  day pairs
@@ -83,6 +83,7 @@ classifTypicalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeeken
       dateIn <- names(vect[which(vect == X)])
       colSel <- row.names(ditMat)%in%dateIn
       data.table(TypicalDay = names(which.min(rowSums(ditMat[colSel, colSel]))),
+                 Class = season$nn,
                  dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))))
 
 
@@ -99,7 +100,8 @@ classifTypicalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeeken
 
   if(report){
     sapply(allTypDay$idDayType, function(X){
-      generateRaportClustering(X, data = allTypDay)})
+      generateRaportClustering(X, data = allTypDay, output_file = reportPath)})
+      saveRDS(allTypDay, paste0(reportPath, "/resultClust.RDS"))
   }
   allTypDay
 

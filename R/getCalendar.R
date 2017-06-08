@@ -125,7 +125,7 @@ cutYear <- function(dates,
 
   interSaisonDayWeekend <- weekendDay(interSaisonDay, dayInWeekend, holiday)
   calendarReturn$interSaisonWe <- interSaisonDayWeekend
-  calendarReturn$interSaisonSe <- interSaisonDay[!interSaisonDay%in%interSaisonDayWeekend]
+  calendarReturn$interSaisonWd <- interSaisonDay[!interSaisonDay%in%interSaisonDayWeekend]
 
 
   saisonDay <- which(!allDay%in%interSaisonDay)
@@ -173,14 +173,14 @@ cutYear <- function(dates,
 
   winterWe <- weekendDay(winter, dayInWeekend, holiday)
   calendarReturn$winterWe <- winterWe
-  calendarReturn$winterSe <- winter[!winter%in%winterWe]
+  calendarReturn$winterWd <- winter[!winter%in%winterWe]
 
   summer <-  do.call("c",(Saison[which(WS == "S")]))
 
 
   summerWe <- weekendDay(summer, dayInWeekend, holiday)
   calendarReturn$summerWe <- summerWe
-  calendarReturn$summerSe <- summer[!summer%in%summerWe]
+  calendarReturn$summerWd <- summer[!summer%in%summerWe]
 
   calendarReturn <- lapply(calendarReturn, function(X){
     X[!X%in%dayExclude]

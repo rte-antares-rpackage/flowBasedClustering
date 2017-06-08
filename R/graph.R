@@ -50,10 +50,10 @@ generateClusteringReport <- function(dayType, output_file = NULL,
 #' @import rAmCharts
 #'
 #' @export
-clusterPlot <- function(data, country1, country2, hour, dayType, 
+clusterPlot <- function(data, country1, country2, hour, dayType,
                         typicalDayOnly = FALSE, ggplot = FALSE){
   dataPlot <- .getDataPlotClustering(data[idDayType==dayType],  country1, country2, hour)
-  .makeGraph(dataPlot, data[idDayType==dayType]$TypicalDay, 
+  .makeGraph(dataPlot, data[idDayType==dayType]$TypicalDay,
              typicalDayOnly = typicalDayOnly, ggplot = ggplot)
 }
 
@@ -118,7 +118,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
   } else {
     dates <- unique(substr(names(data), 1, 10))
   }
-  
+
   if(!ggplot){
     graphs <- sapply(dates, function(X){
       columns <- names(data)[grep(X,names(data))]
@@ -147,7 +147,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
       setExport(enabled = TRUE)
     )
   } else {
-    
+
     gg_data <- do.call("rbind.data.frame", lapply(dates, function(X){
       columns <- names(data)[grep(X,names(data))]
       tmp_data <- data[, columns]
@@ -163,13 +163,13 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
       }
       tmp_data
     }))
-    
-    ggplot(data=gg_data, aes(x = BE, y = FR, group = date, colour = col, size = size, linetype = as.character(col))) + geom_path() +
-      geom_point()  + scale_size(range=c(0.1, 2), guide=FALSE) + theme(legend.position="none") + 
-      xlim(-8000, 8000) + ylim(-8000, 8000) + 
+
+    ggplot(data=gg_data, aes(x = eval(parse(text=ctry[1])), y = eval(parse(text=ctry[2])), group = date, colour = col, size = size, linetype = as.character(col))) + geom_path() +
+      geom_point()  + scale_size(range=c(0.1, 2), guide=FALSE) + theme(legend.position="none") +
+      xlim(-8000, 8000) + ylim(-8000, 8000) +
       ggtitle(paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])) +
-      theme(plot.title = element_text(hjust = 0.5)) + ylab(paste(ctry[2], "(MW)")) + 
+      theme(plot.title = element_text(hjust = 0.5)) + ylab(paste(ctry[2], "(MW)")) +
       xlab(paste(ctry[1], "(MW)"))
-    
+
   }
 }

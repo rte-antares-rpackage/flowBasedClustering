@@ -1,7 +1,7 @@
 ---
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows
+    orientation: columns
     vertical_layout: scroll
     css: styles_flex.css
 params: 
@@ -17,6 +17,8 @@ library(rAmCharts)
 library(antaresFlowbased)
 library(manipulateWidget)
 library(flowBasedClustering)
+library(ggplot2)
+library(pipeR)
 ```
 
 
@@ -27,30 +29,35 @@ Hour 1 {data-navmenu="Hour"}
 hour <- 1
 ```
 
-Row {data-height=650}
+
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
+
 
 
 
@@ -61,31 +68,33 @@ Hour 2 {data-navmenu="Hour"}
 hour <- 2
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 3 {data-navmenu="Hour"}
@@ -95,31 +104,33 @@ Hour 3 {data-navmenu="Hour"}
 hour <- 3
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 4 {data-navmenu="Hour"}
@@ -129,29 +140,32 @@ Hour 4 {data-navmenu="Hour"}
 hour <- 4
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
 
@@ -163,29 +177,32 @@ Hour 5 {data-navmenu="Hour"}
 hour <- 5
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
 
@@ -197,31 +214,33 @@ Hour 6 {data-navmenu="Hour"}
 hour <- 6
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 7 {data-navmenu="Hour"}
@@ -231,31 +250,33 @@ Hour 7 {data-navmenu="Hour"}
 hour <- 7
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 8 {data-navmenu="Hour"}
@@ -265,29 +286,32 @@ Hour 8 {data-navmenu="Hour"}
 hour <- 8
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
 
@@ -299,29 +323,32 @@ Hour 9 {data-navmenu="Hour"}
 hour <- 9
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
 
@@ -332,31 +359,33 @@ Hour 10 {data-navmenu="Hour"}
 hour <- 10
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 11 {data-navmenu="Hour"}
@@ -366,31 +395,33 @@ Hour 11 {data-navmenu="Hour"}
 hour <- 11
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 12 {data-navmenu="Hour"}
@@ -400,32 +431,33 @@ Hour 12 {data-navmenu="Hour"}
 hour <- 12
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
-
 
 
 Hour 13 {data-navmenu="Hour"}
@@ -435,31 +467,33 @@ Hour 13 {data-navmenu="Hour"}
 hour <- 13
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 14 {data-navmenu="Hour"}
@@ -469,31 +503,33 @@ Hour 14 {data-navmenu="Hour"}
 hour <- 14
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 15 {data-navmenu="Hour"}
@@ -503,31 +539,33 @@ Hour 15 {data-navmenu="Hour"}
 hour <- 15
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 16 {data-navmenu="Hour"}
@@ -537,29 +575,32 @@ Hour 16 {data-navmenu="Hour"}
 hour <- 16
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
 
@@ -571,31 +612,33 @@ Hour 17 {data-navmenu="Hour"}
 hour <- 17
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 18 {data-navmenu="Hour"}
@@ -605,31 +648,33 @@ Hour 18 {data-navmenu="Hour"}
 hour <- 18
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 19 {data-navmenu="Hour"}
@@ -639,31 +684,33 @@ Hour 19 {data-navmenu="Hour"}
 hour <- 19
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 20 {data-navmenu="Hour"}
@@ -673,31 +720,33 @@ Hour 20 {data-navmenu="Hour"}
 hour <- 20
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 21 {data-navmenu="Hour"}
@@ -707,29 +756,32 @@ Hour 21 {data-navmenu="Hour"}
 hour <- 21
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
 
@@ -741,31 +793,33 @@ Hour 22 {data-navmenu="Hour"}
 hour <- 22
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
 
 
 Hour 23 {data-navmenu="Hour"}
@@ -775,29 +829,32 @@ Hour 23 {data-navmenu="Hour"}
 hour <- 23
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
 
@@ -808,28 +865,30 @@ Hour 24 {data-navmenu="Hour"}
 hour <- 24
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### BE/FR
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "FR", hour, dayType)
+clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### DE/FR
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Row {data-height=650}
+Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### BE/NL {.no-padding}
+### All typical day
 ```{r}
-clusterPlot(data, "BE", "NL", hour, dayType)
+clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-
-### DE/NL
-```{r}
-clusterPlot(data, "DE", "NL", hour, dayType)
+### Mean typical day
+```{r, fig.height=8}
+combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
+clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
