@@ -4,7 +4,8 @@
 \alias{clusterPlot}
 \title{Generate a plot for a typical day cluster}
 \usage{
-clusterPlot(data, country1, country2, hour, dayType)
+clusterPlot(data, country1, country2, hour, dayType, typicalDayOnly = FALSE,
+  ggplot = FALSE)
 }
 \arguments{
 \item{data}{\code{data.table}, output of \link{classifTypicalDay}}
@@ -17,7 +18,9 @@ clusterPlot(data, country1, country2, hour, dayType)
 
 \item{dayType}{\code{numeric}, dayType}
 
-\item{holiday}{\code{character}, holiday day default :}
+\item{typicalDayOnly}{: plot only typical day ?}
+
+\item{ggplot}{: ggplot or amCharts ?}
 }
 \description{
 Generate a plot for a typical day cluster

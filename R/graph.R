@@ -8,10 +8,10 @@
 #' @examples
 #'
 #' \dontrun{
-#' generateRaportClustering(dayType = 7)
+#' generateClusteringReport(dayType = 7)
 #' }
 #' @export
-generateRaportClustering <- function(dayType, output_file = NULL,
+generateClusteringReport <- function(dayType, output_file = NULL,
                              data = NULL){
 
   if(is.null(data))
@@ -19,8 +19,6 @@ generateRaportClustering <- function(dayType, output_file = NULL,
     data <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
   }
 
-
-  dayType2 <- dayType
   if(is.null(output_file)){
     output_file <- getwd()
   }
@@ -46,14 +44,17 @@ generateRaportClustering <- function(dayType, output_file = NULL,
 #' @param country2 \code{character}, name of second country
 #' @param hour \code{numeric}, hour
 #' @param dayType  \code{numeric}, dayType
-#' @param holiday \code{character}, holiday day default :
+#' @param typicalDayOnly : plot only typical day ?
+#' @param ggplot : ggplot or amCharts ?
 #'
 #' @import rAmCharts
 #'
 #' @export
-clusterPlot <- function(data, country1, country2, hour, dayType){
-  datapreparing <- .prepareDataPlutClusturing(data[idDayType==dayType],  country1, country2, hour)
-  .makeGraph(datapreparing, data[idDayType==dayType]$TypicalDay)
+clusterPlot <- function(data, country1, country2, hour, dayType, 
+                        typicalDayOnly = FALSE, ggplot = FALSE){
+  dataPlot <- .getDataPlotClustering(data[idDayType==dayType],  country1, country2, hour)
+  .makeGraph(dataPlot, data[idDayType==dayType]$TypicalDay, 
+             typicalDayOnly = typicalDayOnly, ggplot = ggplot)
 }
 
 
@@ -62,7 +63,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType){
 
 #' Prepare data for plot
 #'
-.PrepareChull <- function(data, country1, country2){
+.getChull <- function(data, country1, country2){
   data <- data.frame(data)
   if(country1 == "NL"){
     ptctry <- -rowSums(data)
@@ -83,12 +84,12 @@ clusterPlot <- function(data, country1, country2, hour, dayType){
 
 #' Prepare data for plot
 #'
-.prepareDataPlutClusturing <- function(allTypDay, country1, country2, hour)
+.getDataPlotClustering <- function(allTypeDay, country1, country2, hour)
 {
-  tt <- apply(allTypDay$dayIn[[1]][[1]][Period == hour], 1, function(data){
+  tt <- apply(allTypeDay$dayIn[[1]][[1]][Period == hour], 1, function(data){
     ctry1 <- country1
     ctry2 <- country2
-    dataChull <- .PrepareChull(data$out, ctry1, ctry2)
+    dataChull <- .getChull(data$out, ctry1, ctry2)
     dataChull <- data.frame(dataChull)
     names(dataChull) <- c(paste0(data$Date, ctry1), paste0(data$Date, ctry2))
     round(data.table(dataChull), 0)
@@ -105,34 +106,70 @@ clusterPlot <- function(data, country1, country2, hour, dayType){
 
 #' Graph function
 #'
-.makeGraph <- function(data, dateRef){
-  ctry <- unique(substr(names(data), 11, 12))
-  Dates <- unique(substr(names(data), 1, 10))
-  graphS <- sapply(Dates, function(X){
-    columns <- names(data)[grep(X,names(data))]
-    if(X == dateRef){
-      graph <- amGraph(title = X, balloonText =
-                         paste0('<b>',X,'<br>', ctry[1], '</b> :[[x]] <br><b>',ctry[2], '</b> :[[y]]'),
-                       bullet = 'circle', xField = columns[1],yField = columns[2],
-                       lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#FF0000",
-                       lineThickness = 3)
-    }else{
-      graph <-  amGraph(title = X, balloonText =
-                          paste0('<b>',X,'<br>', ctry[1], '</b> :[[x]] <br><b>',ctry[2], '</b> :[[y]]'),
-                        bullet = 'circle', xField = columns[1],yField = columns[2],
-                        lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#D3D3D3",
-                        lineThickness = 1)
-    }
-    graph
-  }, USE.NAMES = FALSE, simplify = FALSE)
-  pipeR::pipeline(
-    amXYChart(dataProvider = data),
-    addTitle(text = paste0("Flow-based  clustering", ctry[1], "/", ctry[2])),
-    setGraphs(graphS),
-    setChartCursor(),
-    addValueAxes(title = paste(ctry[1], "(MW)"), position = "bottom", minimum = -8000, maximum = 8000),
-    addValueAxes(title =  paste(ctry[2], "(MW)"), minimum = -8000, maximum = 8000),
-    setExport(enabled = TRUE)
-  )
+#'@param data : data.frame
+#'@param typicalDayDate : date of typical day
+#'@param typicalDayOnly : plot only typical day ?
+#'@param ggplot : ggplot or amCharts ?
 
+.makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, ggplot = FALSE){
+  ctry <- unique(substr(names(data), 11, 12))
+  if(typicalDayOnly){
+    dates <- typicalDayDate
+  } else {
+    dates <- unique(substr(names(data), 1, 10))
+  }
+  
+  if(!ggplot){
+    graphs <- sapply(dates, function(X){
+      columns <- names(data)[grep(X,names(data))]
+      if(X == typicalDayDate){
+        graph <- amGraph(title = X, balloonText =
+                           paste0('<b>',X,'<br>', ctry[1], '</b> :[[x]] <br><b>',ctry[2], '</b> :[[y]]'),
+                         bullet = 'circle', xField = columns[1],yField = columns[2],
+                         lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#FF0000",
+                         lineThickness = 3)
+      }else{
+        graph <-  amGraph(title = X, balloonText =
+                            paste0('<b>',X,'<br>', ctry[1], '</b> :[[x]] <br><b>',ctry[2], '</b> :[[y]]'),
+                          bullet = 'circle', xField = columns[1],yField = columns[2],
+                          lineAlpha = 1, bullet = "bubble", bulletSize = 4, lineColor = "#D3D3D3",
+                          lineThickness = 1)
+      }
+      graph
+    }, USE.NAMES = FALSE, simplify = FALSE)
+    pipeR::pipeline(
+      amXYChart(dataProvider = data),
+      addTitle(text = paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])),
+      setGraphs(graphs),
+      setChartCursor(),
+      addValueAxes(title = paste(ctry[1], "(MW)"), position = "bottom", minimum = -8000, maximum = 8000),
+      addValueAxes(title =  paste(ctry[2], "(MW)"), minimum = -8000, maximum = 8000),
+      setExport(enabled = TRUE)
+    )
+  } else {
+    
+    gg_data <- do.call("rbind.data.frame", lapply(dates, function(X){
+      columns <- names(data)[grep(X,names(data))]
+      tmp_data <- data[, columns]
+      colnames(tmp_data) <- gsub(X, "", colnames(tmp_data))
+      tmp_data <- tmp_data[!is.na(tmp_data[, 1]), ]
+      tmp_data$date  <- X
+      if(X == typicalDayDate){
+        tmp_data$col <- "0"
+        tmp_data$size <- 1
+      }else {
+        tmp_data$col <- "1"
+        tmp_data$size <- 0.5
+      }
+      tmp_data
+    }))
+    
+    ggplot(data=gg_data, aes(x = BE, y = FR, group = date, colour = col, size = size, linetype = as.character(col))) + geom_path() +
+      geom_point()  + scale_size(range=c(0.1, 2), guide=FALSE) + theme(legend.position="none") + 
+      xlim(-8000, 8000) + ylim(-8000, 8000) + 
+      ggtitle(paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])) +
+      theme(plot.title = element_text(hjust = 0.5)) + ylab(paste(ctry[2], "(MW)")) + 
+      xlab(paste(ctry[1], "(MW)"))
+    
+  }
 }
