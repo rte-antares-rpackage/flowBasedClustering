@@ -8,6 +8,7 @@
 #' @examples
 #'
 #' \dontrun{
+#' sapply(1:12, generateClusteringReport)
 #' generateClusteringReport(dayType = 7)
 #' }
 #' @export

@@ -11,14 +11,16 @@
 #'
 #' classif <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
 #'
-#' MatProb <- getProbability(climat, classif)
+#'
+#' levelsProba <- list(`Conso (J-1)` = c(0.2, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
+#' MatProb <- getProbability(climat, classif, levelsProba = levelsProba)
 #' }
 #' @export
 getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
 {
 
-  ##Control
-  levelsProba <- sort(levelsProba)
+
+
   if(names(climat)[1]!='Date'){
     stop(paste0("First column of climat file must be calls Date and contains dates actually : ",
                 names(climat)[1]))
@@ -49,38 +51,59 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
   #Define all variable to used
   concerneName <- names(climat)[!names(climat)%in%c("Date")]
 
+
+  ##Control
+  if(!is.list(levelsProba)){
+    levelsProba <- sapply(concerneName, function(X){levelsProba}, simplify = FALSE)
+  }
+
+
   ##Merge classif out wich climat table
   climatAssoClasif <- .climAssoClassif(climat, classif, concerneName)
-  levelsProbaCode <- paste0("Q", levelsProba)
 
-  #Calcul quantiles
-  ClimQuantiles <- climatAssoClasif[,lapply(.SD, function(X){
-    quantile(X, levelsProba)
-  }), .SDcols = concerneName, by = c("Class")]
-  ClimQuantiles$Quantiles <- levelsProbaCode
+
+    allQuantile <- sapply(names(levelsProba), function(X){
+      varProba <- levelsProba[[X]]
+      varProba <- sort(varProba)
+      varProbaCode <- paste0("Q", varProba)
+      ClimQuantiles <- climatAssoClasif[,lapply(.SD, function(Y){
+        quantile(Y, varProba)
+      }), .SDcols = X, by = c("Class")]
+      ClimQuantiles$Quantiles <- varProbaCode
+      ClimQuantiles
+    }, simplify = FALSE, USE.NAMES = FALSE)
+    mergeQuantiles <- function(X, Y){merge(x = X, y = Y,  by = c("Class", "Quantiles"),all = TRUE)}
+    ClimQuantiles <-  Reduce(mergeQuantiles,allQuantile)
+
+
+
 
   quantileNonClaire <- NULL
   levelsProbaClair <- levelsProba
 
   #Define all comparaison to do (<q1, >q1 & <q2, ....)
-  for(i in 1:length(levelsProbaClair)){
+  quantileNonClaire <-  lapply(levelsProbaClair, function(levelModa){
+    quantileNonClaire <- NULL
+  for(i in 1:length(levelModa)){
+
     if(i == 1){
-      quantileNonClaire <- c(quantileNonClaire, paste0("I", levelsProbaClair[i]))
+      quantileNonClaire <- c(quantileNonClaire, paste0("I", levelModa[i]))
     }else{
-      quantileNonClaire <- c(quantileNonClaire, paste0("B", levelsProbaClair[i - 1],"&", levelsProbaClair[i]))
+      quantileNonClaire <- c(quantileNonClaire, paste0("B", levelModa[i - 1],"&", levelModa[i]))
     }
 
-    if(i == length(levelsProbaClair)){
-      quantileNonClaire <- c(quantileNonClaire, paste0("S", levelsProbaClair[i]))
+    if(i == length(levelModa)){
+      quantileNonClaire <- c(quantileNonClaire, paste0("S", levelModa[i]))
     }
   }
-
+    quantileNonClaire
+  })
 
   n <- length(concerneName)
-  l <- rep(list(quantileNonClaire), n)
+  #quantileNonClaire <- rep(list(quantileNonClaire), n)
 
   #Extand combinaison to all variables
-  allComb <- expand.grid(l, stringsAsFactors = FALSE)
+  allComb <- expand.grid(quantileNonClaire, stringsAsFactors = FALSE)
 
   nbcomp <- nrow(allComb)
   climQuant <- unique(climatAssoClasif[, .SD, .SDcols =  c("TypicalDay", "idDayType", "Class")])
@@ -148,7 +171,7 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
 
     if(nrow(climatConcern)>0){
 
-    value <- nrow(climatConcern[idDayType ==  StructRaw$idDayType])/nrow(climatConcern)
+      value <- nrow(climatConcern[idDayType ==  StructRaw$idDayType])/nrow(climatConcern)
 
     }else{
       value <- NA
@@ -208,8 +231,8 @@ plotMonotone <- function(climat, classif, hour, dayType, variable){
                                            .SD, .SDcols = variable]),
                    decreasing = TRUE)
   amPlot(-1+1:length(selData), selData, type = "l", xlab = "monotone", ylab = variable, main = paste0(variable, " hour ",
-                                                                                hour - 1,  " day type ",
-                                                                                idDayType))%>>%
+                                                                                                      hour - 1,  " day type ",
+                                                                                                      idDayType))%>>%
     addGuide(value = 0, toValue =  as.numeric(quantile(-1+1:length(selData), 0.333)), fillAlpha = 0.1, fillColor = "#FFFF00")%>>%
     addGuide(value = as.numeric(quantile(-1+1:length(selData), 0.333)), toValue =  as.numeric(quantile(-1+1:length(selData), 0.666)), fillAlpha = 0.1,
              fillColor = "#FF8000")%>>%
