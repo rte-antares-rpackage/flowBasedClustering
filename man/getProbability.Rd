@@ -4,12 +4,15 @@
 \alias{getProbability}
 \title{Get probability and quantiles from climat file and classif}
 \usage{
-getProbability(climat, classif)
+getProbability(climat, classif, levelsProba = c(0.333, 0.666))
 }
 \arguments{
 \item{climat}{\code{data.table} climat file, 2 first columns are Date and Period, others are params files}
 
 \item{classif}{\code{data.table} output of \link{classifTypicalDay}}
+
+\item{levelsProba}{\code{numeric or list}, can be numeric or list, if numeric, all quantiles
+are same for all climat variable, if list, must be names and give quantiles for eatch climat variable.}
 }
 \description{
 Get probability and quantiles from climat file and classif
@@ -18,8 +21,10 @@ Get probability and quantiles from climat file and classif
 
 \dontrun{
 climat <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
+
 classif <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
 
-MatProb <- getProbability(climat, classif)
+levelsProba <- list(`Conso (J-1)` = c(0.2, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
+MatProb <- getProbability(climat, classif, levelsProba = levelsProba)
 }
 }

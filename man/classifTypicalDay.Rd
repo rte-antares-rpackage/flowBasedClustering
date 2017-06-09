@@ -5,10 +5,10 @@
 \title{Generate clusturing of typical day}
 \usage{
 classifTypicalDay(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
-  report = TRUE)
+  report = TRUE, reportPath = setwd())
 }
 \arguments{
-\item{calendar}{\code{list}, vector of date in eatch period can be obtain which \link{cutYear}}
+\item{calendar}{\code{list}, vector of date in eatch period can be obtain which \link{getCalendar}}
 
 \item{vertices}{\code{data.table}, 5 column :
 \itemize{
@@ -22,6 +22,10 @@ classifTypicalDay(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
 \item{nbClustWeek}{\code{numeric} number of cluster for week period}
 
 \item{nbClustWeekend}{\code{numeric} number of cluster for weekend period}
+
+\item{report}{\code{boolean}, generate reports}
+
+\item{reportPath}{\code{character}, patch for reports generation}
 }
 \description{
 Generate clusturing of typical day
@@ -35,7 +39,7 @@ dates <- generateAllDate("2015-11-01", "2017-01-20")
 interSeasonBegin <- c("2016-03-01", "2016-10-01")
 interSeasonEnd <- c("2016-05-15", "2016-10-31")
 dayInWeekend = c(6, 7)
-calendar <- cutYear(dates, interSeasonBegin, interSeasonEnd)
+calendar <- getCalendar(dates, interSeasonBegin, interSeasonEnd)
 myClassif <- classifTypicalDay(calendar, vertices)
 }
 

@@ -2,7 +2,8 @@
 #'
 #' @param climat \code{data.table} climat file, 2 first columns are Date and Period, others are params files
 #' @param classif \code{data.table} output of \link{classifTypicalDay}
-#'
+#' @param levelsProba \code{numeric or list}, can be numeric or list, if numeric, all quantiles
+#' are same for all climat variable, if list, must be names and give quantiles for eatch climat variable.
 #'
 #' @examples
 #'
@@ -10,7 +11,6 @@
 #' climat <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
 #'
 #' classif <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
-#'
 #'
 #' levelsProba <- list(`Conso (J-1)` = c(0.2, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
 #' MatProb <- getProbability(climat, classif, levelsProba = levelsProba)
@@ -56,7 +56,11 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
   if(!is.list(levelsProba)){
     levelsProba <- sapply(concerneName, function(X){levelsProba}, simplify = FALSE)
   }
-
+  if(!all(sort(names(levelsProba)) == sort(concerneName))){
+    stop(paste0("levelsProba list must have same name than climat variable currenty levelsProba names are : ",
+                paste0(sort(names(levelsProba)), collapse = " , "), " And climat are : ",
+                paste0(sort(concerneName), collapse = " , ")))
+  }
 
   ##Merge classif out wich climat table
   climatAssoClasif <- .climAssoClassif(climat, classif, concerneName)
@@ -189,6 +193,7 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
 
 
 #' Data transformation (merge climat and classif files)
+#' @noRd
 .climAssoClassif <- function(climat, classif, concerneName)
 {
 

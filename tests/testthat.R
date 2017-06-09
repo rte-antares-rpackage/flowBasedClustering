@@ -2,6 +2,5 @@
 
 library(testthat)
 library(flowBasedClustering)
-library(antaresRead)
 
 testthat::test_check("flowBasedClustering")

@@ -64,6 +64,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 
 #' Prepare data for plot
 #'
+#' @noRd
 .getChull <- function(data, country1, country2){
   data <- data.frame(data)
   if(country1 == "NL"){
@@ -85,6 +86,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 
 #' Prepare data for plot
 #'
+#' @noRd
 .getDataPlotClustering <- function(allTypeDay, country1, country2, hour)
 {
   tt <- apply(allTypeDay$dayIn[[1]][[1]][Period == hour], 1, function(data){
@@ -107,11 +109,12 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 
 #' Graph function
 #'
-#'@param data : data.frame
-#'@param typicalDayDate : date of typical day
-#'@param typicalDayOnly : plot only typical day ?
-#'@param ggplot : ggplot or amCharts ?
-
+#' @param data : data.frame
+#' @param typicalDayDate : date of typical day
+#' @param typicalDayOnly : plot only typical day ?
+#' @param ggplot : ggplot or amCharts ?
+#'
+#' @noRd
 .makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, ggplot = FALSE){
   ctry <- unique(substr(names(data), 11, 12))
   if(typicalDayOnly){

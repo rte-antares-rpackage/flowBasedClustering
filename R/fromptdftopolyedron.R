@@ -17,7 +17,7 @@
 #' @import parallel
 #'
 #' @export
-fromPtdfToVertices <- function(PTDF = system.file("data/faceAllYear.csv",package = "flowBasedClustering"),
+fromPtdfToVertices <- function(PTDF = system.file("dav/data/faceAllYear.csv",package = "flowBasedClustering"),
                                nbCors = 1)
 {
   PTDF <- fread(PTDF)

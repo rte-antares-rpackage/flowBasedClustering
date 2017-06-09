@@ -23,7 +23,7 @@ generateAllDate <- function(dateBegin, dateEnd){
 #' @param interSeasonEnd \code{character or date}, date, YYYY-MM-DD, end of interSaison
 #' @param dayInWeekend \code{numeric}, indice of weekend day
 #' @param dayExclude  \code{character or date}, date, YYYY-MM-DD, day to exclude
-#' @param holiday \code{character}, holiday day default :
+#' @param holiday \code{character}, see \link[timeDate]{holiday} for holidays names, holidays days default :
 #' NewYearsDay,GoodFriday,EasterSunday,
 #' EasterMonday,LaborDay,FRAscension,Pentecost,PentecostMonday,
 #' FRAssumptionVirginMary,FRAllSaints,FRArmisticeDay,
@@ -36,13 +36,13 @@ generateAllDate <- function(dateBegin, dateEnd){
 #' interSeasonBegin <- c("2017-03-01", "2017-09-01")
 #' interSeasonEnd <- c("2017-05-01", "2017-11-01")
 #' dayInWeekend = c(6, 7)
-#' cutYear(dates, interSeasonBegin, interSeasonEnd)
+#' getCalendar(dates, interSeasonBegin, interSeasonEnd)
 #' }
-#' @import lubridate
+#'
 #' @import timeDate
 #'
 #' @export
-cutYear <- function(dates,
+getCalendar <- function(dates,
                     interSeasonBegin,
                     interSeasonEnd,
                     dayExclude = NULL,
@@ -64,7 +64,7 @@ cutYear <- function(dates,
                     dayInWeekend = c(6, 7)){
 
   weekendDay <- function(day, dayInWeekend, holiday){
-    daywe <- day[ifelse(lubridate::wday(day)==1,7,lubridate::wday(day)-1)%in%dayInWeekend]
+    daywe <- day[ifelse(data.table::wday(day)==1,7,data.table::wday(day)-1)%in%dayInWeekend]
 
 
     allYeay <- unique(year(day))

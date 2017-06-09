@@ -1,6 +1,6 @@
 #' Generate clusturing of typical day
 #'
-#' @param calendar \code{list}, vector of date in eatch period can be obtain which \link{cutYear}
+#' @param calendar \code{list}, vector of date in eatch period can be obtain which \link{getCalendar}
 #' @param vertices \code{data.table}, 5 column :
 #' \itemize{
 #'  \item Date : date (%Y-%M-%D)
@@ -11,6 +11,8 @@
 #' }
 #' @param nbClustWeek \code{numeric} number of cluster for week period
 #' @param nbClustWeekend \code{numeric} number of cluster for weekend period
+#' @param report \code{boolean}, generate reports
+#' @param reportPath \code{character}, patch for reports generation
 #'
 #' @examples
 #'
@@ -21,7 +23,7 @@
 #' interSeasonBegin <- c("2016-03-01", "2016-10-01")
 #' interSeasonEnd <- c("2016-05-15", "2016-10-31")
 #' dayInWeekend = c(6, 7)
-#' calendar <- cutYear(dates, interSeasonBegin, interSeasonEnd)
+#' calendar <- getCalendar(dates, interSeasonBegin, interSeasonEnd)
 #' myClassif <- classifTypicalDay(calendar, vertices)
 #' }
 #'
@@ -120,7 +122,7 @@ classifTypicalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeeken
 #'  \item FR : french vertices
 #' }
 #'
-#'
+#' @noRd
 .getDistMatrix <- function(vertices)
 {
   res_hour <- data.table(t(combn(unique(vertices$Date), 2)))
