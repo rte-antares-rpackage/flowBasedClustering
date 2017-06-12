@@ -2,7 +2,7 @@
 % Please edit documentation in R/getCalendar.R
 \name{getCalendar}
 \alias{getCalendar}
-\title{Define a calender which season}
+\title{Define a calendar with season}
 \usage{
 getCalendar(dates, interSeasonBegin, interSeasonEnd, dayExclude = NULL,
   holiday = c("NewYearsDay", "GoodFriday", "EasterSunday", "EasterMonday",
@@ -11,11 +11,11 @@ getCalendar(dates, interSeasonBegin, interSeasonEnd, dayExclude = NULL,
   "ChristmasDay", "BoxingDay", "DENewYearsEve"), dayInWeekend = c(6, 7))
 }
 \arguments{
-\item{dates}{\code{character or date}, vector of dates YYYY-MM-DD, can be generate which \link{generateAllDate}}
+\item{dates}{\code{character or date}, vector of dates YYYY-MM-DD, can be generate with \link{getSequence}}
 
-\item{interSeasonBegin}{\code{character or date}, date, YYYY-MM-DD, begin of interSaison}
+\item{interSeasonBegin}{\code{character or date}, date, YYYY-MM-DD, begin of interseason}
 
-\item{interSeasonEnd}{\code{character or date}, date, YYYY-MM-DD, end of interSaison}
+\item{interSeasonEnd}{\code{character or date}, date, YYYY-MM-DD, end of interseason}
 
 \item{dayExclude}{\code{character or date}, date, YYYY-MM-DD, day to exclude}
 
@@ -28,15 +28,14 @@ ChristmasEve,ChristmasDay,BoxingDay,DENewYearsEve}
 \item{dayInWeekend}{\code{numeric}, indice of weekend day}
 }
 \description{
-Define a calender which season
+Define a calendar with season
 }
 \examples{
 
 \dontrun{
-dates <- generateAllDate("2017-01-01", "2017-12-31")
+dates <- getSequence("2017-01-01", "2017-12-31")
 interSeasonBegin <- c("2017-03-01", "2017-09-01")
 interSeasonEnd <- c("2017-05-01", "2017-11-01")
-dayInWeekend = c(6, 7)
 getCalendar(dates, interSeasonBegin, interSeasonEnd)
 }
 

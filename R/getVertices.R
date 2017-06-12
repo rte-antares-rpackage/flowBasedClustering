@@ -1,7 +1,7 @@
 #' Get vertices from faces
 #'
-#' @param face \code{data.table}, face for 3 country, BE, DE anf FR
-#' @param b \code{numeric}, extreme points b
+#' @param face \code{data.table}, face for 3 countries (BE, DE and FR)
+#' @param b \code{numeric}, extreme point b
 #'
 #' @import pipeR
 #'
@@ -14,7 +14,7 @@ getVertices <- function(face, b){
   d <- b+1e-6
   res <- apply(grid, 2, function(gridRaw){
     # gridRaw <- grid[, X]
-    Bijk<- rbind(B[gridRaw[1], ], B[gridRaw[1],], B[gridRaw[2], ], B[gridRaw[3], ], Un)
+    Bijk<- rbind(B[gridRaw[1], ], B[gridRaw[1], ], B[gridRaw[2], ], B[gridRaw[3], ], Un)
     bijk <- c(b[gridRaw[1]], b[gridRaw[1]], b[gridRaw[2]], b[gridRaw[3]], 0)
     x <- try({
        qr.solve(Bijk, bijk)
@@ -24,13 +24,12 @@ getVertices <- function(face, b){
       return(NULL)
     }
 
-
     if(all(B%*%x<=d)){
       return(x)
     }
 
-  })%>>%
-    unlist%>>%
+  }) %>>%
+    unlist %>>%
     matrix(ncol = 4, byrow = TRUE)
   res <- res[round(rowSums(res), 2) == 0,]
   DD <- dist(res, method = "euclidean", p = 2, upper = FALSE)

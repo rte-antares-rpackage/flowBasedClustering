@@ -1,12 +1,12 @@
-#' Transforme a PTDF file to vertives file
+#' Transform a PTDF file to vertices file
 #'
 #' @param PTDF \code{character}, path for PTDF file
-#' @param nbCors \code{numeric}, use parallelisation or not. Indicate number of cores use. If 1 (default) a no parallel.
+#' @param nbCore \code{numeric}, use parallel computing or not. Indicate number of cores use. If 1 (default), no parallel.
 #'
 #' @examples
 #'
 #' \dontrun{
-#' fromPtdfToVertices(nbCors = 4)
+#' ptdfToVertices(nbCore = 4)
 #' }
 #'
 #' @import data.table
@@ -17,8 +17,8 @@
 #' @import parallel
 #'
 #' @export
-fromPtdfToVertices <- function(PTDF = system.file("dav/data/faceAllYear.csv",package = "flowBasedClustering"),
-                               nbCors = 1)
+ptdfToVertices <- function(PTDF = system.file("dav/data/faceAllYear.csv",package = "flowBasedClustering"),
+                               nbCore = 1)
 {
   PTDF <- fread(PTDF)
 
@@ -27,8 +27,6 @@ fromPtdfToVertices <- function(PTDF = system.file("dav/data/faceAllYear.csv",pac
                 paste0(names(PTDF)[1:7] , collapse = ", ")))
   }
 
-
-
   calcPoly <- function(X, PTDF){
     data.table::rbindlist(lapply(1:24, function(Y, PTDF){
       resSel <- PTDF[Date == X & Period == Y]
@@ -36,18 +34,6 @@ fromPtdfToVertices <- function(PTDF = system.file("dav/data/faceAllYear.csv",pac
       {
         out <- getVertices(as.matrix(resSel[, .SD, .SDcols = c("BE", "DE", "FR", "NL")]),
                            resSel$RAM_0)
-
-        # # triangulation
-        # tc <- geometry::delaunayn(out, full = F)
-        # # tetramesh(tc,out,alpha=0.7)
-        # # tri
-        # tc_tri <- geometry::surf.tri(out, tc)
-        # # rajout d'une colonne 1
-        # out2 <- cbind(out, rep(1, nrow(out)))
-        # mesh <- rgl::tmesh3d(as.vector(t(out2[as.vector(t(tc_tri)),])),1:(nrow(tc_tri)*3))
-        # # wire3d(mesh)
-        #
-        # data.table(Date = X, Period = Y,  out = list(out), mesh = list(mesh))
         out <- data.table(out)
         names(out) <- c("BE", "DE", "FR")
         data.table(Date = X, Period = Y, out)
@@ -57,7 +43,7 @@ fromPtdfToVertices <- function(PTDF = system.file("dav/data/faceAllYear.csv",pac
     }, PTDF = PTDF))
   }
 
-  if(nbCors == 1)
+  if(nbCore == 1)
   {
     vertices <- data.table::rbindlist(lapply(unique(PTDF$Date)[1:3], function(X){
       calcPoly(X,
@@ -65,7 +51,7 @@ fromPtdfToVertices <- function(PTDF = system.file("dav/data/faceAllYear.csv",pac
       )}, PTDF = PTDF))
   }else{
 
-    cl <- parallel::makeCluster(nbCors)
+    cl <- parallel::makeCluster(nbCore)
     e = new.env()
     e$PTDF <- PTDF
     e$calcPoly = calcPoly

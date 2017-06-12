@@ -1,33 +1,33 @@
-#' Get probability and quantiles from climat file and classif
+#' Get probabilities and quantiles from climat file for a classification
 #'
 #' @param climat \code{data.table} climat file, 2 first columns are Date and Period, others are params files
-#' @param classif \code{data.table} output of \link{classifTypicalDay}
-#' @param levelsProba \code{numeric or list}, can be numeric or list, if numeric, all quantiles
-#' are same for all climat variable, if list, must be names and give quantiles for eatch climat variable.
+#' @param classif \code{data.table} output of \link{clusteringTypicalDays}
+#' @param levelsProba \code{numeric or list}, can be \code{numeric} or \code{list}, if \code{numeric}, all quantiles
+#' are the same for all climat variables, if \code{list}, must be names and give quantiles for each climat variable.
 #'
 #' @examples
 #'
 #' \dontrun{
+#' # climat data
 #' climat <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
 #'
-#' classif <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+#' # classification result
+#' clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
 #'
 #' levelsProba <- list(`Conso (J-1)` = c(0.2, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
-#' MatProb <- getProbability(climat, classif, levelsProba = levelsProba)
+#' MatProb <- getProbability(climat, clusterTD, levelsProba = levelsProba)
 #' }
 #' @export
 getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
 {
 
-
-
   if(names(climat)[1]!='Date'){
-    stop(paste0("First column of climat file must be calls Date and contains dates actually : ",
+    stop(paste0("First column of climat file must be called 'Date'. Current name : ",
                 names(climat)[1]))
   }
 
   if(length(climat$Date)!=length(unique(climat$Date))){
-    stop("Somes dates are present not unique, you must give daily information")
+    stop("Somes dates are not unique, you must give daily information")
   }
 
   allDateInClassif <- unlist(lapply(classif$dayIn, function(X){
@@ -41,31 +41,26 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
 
   datesDeleted <- climat[!climat$Date%in%na.omit(climat)$Date]$Date
   if(length(datesDeleted)>0){
-    warning(paste0("Day(s) dalated due to NA : ",paste0(datesDeleted, collapse = ", ")))
+    warning(paste0("Day(s) deleted due to NA : ",paste0(datesDeleted, collapse = ", ")))
   }
 
+  climat <- na.omit(climat)
 
-
-  climat <-na.omit(climat)
-
-  #Define all variable to used
+  # Define all variable to used
   concerneName <- names(climat)[!names(climat)%in%c("Date")]
 
-
-  ##Control
+  # Control
   if(!is.list(levelsProba)){
     levelsProba <- sapply(concerneName, function(X){levelsProba}, simplify = FALSE)
   }
   if(!all(sort(names(levelsProba)) == sort(concerneName))){
-    stop(paste0("levelsProba list must have same name than climat variable currenty levelsProba names are : ",
-                paste0(sort(names(levelsProba)), collapse = " , "), " And climat are : ",
+    stop(paste0("levelsProba list must have same names than climat variable. Currenty : ",
+                paste0(sort(names(levelsProba)), collapse = " , "), " and climat are : ",
                 paste0(sort(concerneName), collapse = " , ")))
   }
 
-  ##Merge classif out wich climat table
-  climatAssoClasif <- .climAssoClassif(climat, classif, concerneName)
-
-
+  # Merge classification result with climat table
+  climatAssoClasif <- .mergeClimatClassif(climat, classif)
     allQuantile <- sapply(names(levelsProba), function(X){
       varProba <- levelsProba[[X]]
       varProba <- sort(varProba)
@@ -79,13 +74,10 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
     mergeQuantiles <- function(X, Y){merge(x = X, y = Y,  by = c("Class", "Quantiles"),all = TRUE)}
     ClimQuantiles <-  Reduce(mergeQuantiles,allQuantile)
 
-
-
-
   quantileNonClaire <- NULL
   levelsProbaClair <- levelsProba
 
-  #Define all comparaison to do (<q1, >q1 & <q2, ....)
+  # Define all comparaison to do (<q1, >q1 & <q2, ....)
   quantileNonClaire <-  lapply(levelsProbaClair, function(levelModa){
     quantileNonClaire <- NULL
   for(i in 1:length(levelModa)){
@@ -104,24 +96,22 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
   })
 
   n <- length(concerneName)
-  #quantileNonClaire <- rep(list(quantileNonClaire), n)
+  # quantileNonClaire <- rep(list(quantileNonClaire), n)
 
-  #Extand combinaison to all variables
+  # Extand combinaison to all variables
   allComb <- expand.grid(quantileNonClaire, stringsAsFactors = FALSE)
 
   nbcomp <- nrow(allComb)
   climQuant <- unique(climatAssoClasif[, .SD, .SDcols =  c("TypicalDay", "idDayType", "Class")])
 
 
-  #Creat the structure for result
+  # Create the structure for result
   andTableStruct <- data.table(Class = rep(climQuant$Class, each = nbcomp),
                                TypicalDay = rep(climQuant$TypicalDay, each = nbcomp),
                                idDayType = rep(climQuant$idDayType, each = nbcomp),
                                do.call("rbind", rep(list(allComb), nrow(climQuant)))
   )
   names(andTableStruct)[4:ncol(andTableStruct)] <- concerneName
-
-
 
   probaAndEffectifs  <- rbindlist(sapply(1:nrow(andTableStruct), function(VV){
     StructRaw <- andTableStruct[VV]
@@ -170,7 +160,6 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
     exp <- parse(text = paste0(unlist(req), collapse = "&"))
     climatConcern <- climatConcern[eval(exp)]
 
-
     StructRaw$idDayType
 
     if(nrow(climatConcern)>0){
@@ -194,10 +183,8 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
 
 #' Data transformation (merge climat and classif files)
 #' @noRd
-.climAssoClassif <- function(climat, classif, concerneName)
+.mergeClimatClassif <- function(climat, classif)
 {
-
-  #climat[,c(concerneName) :=lapply(.SD, scale), .SDcols = concerneName]
   dayTypeAsso <- unique(rbindlist(sapply(1:nrow(classif), function(X){
     typeDay <- classif[X]
     data.table(TypicalDay = typeDay$TypicalDay, Date = typeDay$dayIn[[1]][[1]]$Date,
@@ -211,36 +198,34 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
 #' Plot monotone
 #'
 #' @param climat \code{data.table} climat file, 2 first columns are Date and Period, others are params files
-#' @param classif \code{data.table} output of \link{classifTypicalDay}
-#' @param hour \code{numeric} hour
+#' @param classif \code{data.table} output of \link{clusteringTypicalDays}
 #' @param dayType \code{numeric} typical day
 #' @param variable \code{character} name of variable to plot
 #'
 #' @examples
 #'
 #' \dontrun{
-#' climat <- fread("D:/Users/titorobe/Desktop/Antares/flowBasedClustering/inst/dev/Climat.txt")
-#' classif <- readRDS("D:/Users/titorobe/Desktop/Antares/flowBasedClustering/inst/dev/ClassifOut.RDS")
+#' # climat data
+#' climat <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
 #'
-#' plotMonotone(climat = climat, classif = classif, hour = 1, dayType = 1, variable = "DE_wind")
+#' # classification result
+#' clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+#'
+#' plotMonotone(climat = climat, classif = clusterTD, dayType = 1, variable = "DE_wind")
 #' }
 #' @export
-plotMonotone <- function(climat, classif, hour, dayType, variable){
-  climat <-na.omit(climat)
-  hour <- hour + 1
-  concerneName <- names(climat)[!names(climat)%in%c("Date", "Period")]
-  climatAssoClasif <- .climAssoClassif(climat, classif, concerneName)
+plotMonotone <- function(climat, classif, dayType, variable){
+  climat <- na.omit(climat)
+  climatAssoClasif <- .mergeClimatClassif(climat, classif)
   idDayTypeTp <- dayType
-  selData <- sort( unlist(climatAssoClasif[Period == hour &
-                                             idDayType == idDayTypeTp,
-                                           .SD, .SDcols = variable]),
-                   decreasing = TRUE)
-  amPlot(-1+1:length(selData), selData, type = "l", xlab = "monotone", ylab = variable, main = paste0(variable, " hour ",
-                                                                                                      hour - 1,  " day type ",
-                                                                                                      idDayType))%>>%
-    addGuide(value = 0, toValue =  as.numeric(quantile(-1+1:length(selData), 0.333)), fillAlpha = 0.1, fillColor = "#FFFF00")%>>%
-    addGuide(value = as.numeric(quantile(-1+1:length(selData), 0.333)), toValue =  as.numeric(quantile(-1+1:length(selData), 0.666)), fillAlpha = 0.1,
-             fillColor = "#FF8000")%>>%
+  selData <- sort( unlist(climatAssoClasif[idDayType == idDayTypeTp,
+                                           .SD, .SDcols = variable]), decreasing = TRUE)
+  
+  amPlot(-1+1:length(selData), selData, type = "l", xlab = "monotone", ylab = variable, 
+         main = paste0(variable, " day type ", idDayTypeTp), export = TRUE, zoom = TRUE) %>>%
+    addGuide(value = 0, toValue = as.numeric(quantile(-1+1:length(selData), 0.333)), fillAlpha = 0.1, fillColor = "#FFFF00") %>>%
+    addGuide(value = as.numeric(quantile(-1+1:length(selData), 0.333)), toValue =  as.numeric(quantile(-1+1:length(selData), 0.666)), 
+             fillAlpha = 0.1, fillColor = "#FF8000")%>>%
     addGuide(value = as.numeric(quantile(-1+1:length(selData), 0.666)), toValue =  length(selData) - 1, fillAlpha = 0.1,
              fillColor = "#FF0000")
 }

@@ -4,14 +4,12 @@
 \alias{plotMonotone}
 \title{Plot monotone}
 \usage{
-plotMonotone(climat, classif, hour, dayType, variable)
+plotMonotone(climat, classif, dayType, variable)
 }
 \arguments{
 \item{climat}{\code{data.table} climat file, 2 first columns are Date and Period, others are params files}
 
-\item{classif}{\code{data.table} output of \link{classifTypicalDay}}
-
-\item{hour}{\code{numeric} hour}
+\item{classif}{\code{data.table} output of \link{clusteringTypicalDays}}
 
 \item{dayType}{\code{numeric} typical day}
 
@@ -23,9 +21,12 @@ Plot monotone
 \examples{
 
 \dontrun{
-climat <- fread("D:/Users/titorobe/Desktop/Antares/flowBasedClustering/inst/dev/Climat.txt")
-classif <- readRDS("D:/Users/titorobe/Desktop/Antares/flowBasedClustering/inst/dev/ClassifOut.RDS")
+# climat data
+climat <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
 
-plotMonotone(climat = climat, classif = classif, hour = 1, dayType = 1, variable = "DE_wind")
+# classification result
+clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+
+plotMonotone(climat = climat, classif = clusterTD, dayType = 1, variable = "DE_wind")
 }
 }

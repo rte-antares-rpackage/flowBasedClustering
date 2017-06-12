@@ -1,23 +1,26 @@
 #' Generate html report
 #'
 #' @param dayType \code{numeric} Typical day
-#' @param output_file \code{character} path of output
-#' @param data \code{data.table} data from \link{classifTypicalDay}
+#' @param outputPath \code{character} path of output
+#' @param data \code{data.table} output of \link{clusteringTypicalDays}
 #'
 #'
 #' @examples
 #'
 #' \dontrun{
-#' sapply(1:12, generateClusteringReport)
-#' generateClusteringReport(dayType = 7)
+#' # classification result
+#' clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+#' 
+#' generateClusteringReport(dayType = 7, data = clusterTD)
+#' 
 #' }
-#'
-#'
+#' 
+#' @export
+#' 
 #' @import rAmCharts
 #' @import pipeR
-#'
-#' @export
-generateClusteringReport <- function(dayType, output_file = NULL,
+#' 
+generateClusteringReport <- function(dayType, outputPath = NULL,
                              data = NULL){
 
   if(is.null(data))
@@ -25,17 +28,17 @@ generateClusteringReport <- function(dayType, output_file = NULL,
     data <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
   }
 
-  if(is.null(output_file)){
-    output_file <- getwd()
+  if(is.null(outputPath)){
+    outputPath <- getwd()
   }
-  output_Dir <- output_file
-  output_file <- paste0(output_file, "/", "FlowBased_clustering",dayType, "_", Sys.Date(), ".html")
+  output_Dir <- outputPath
+  outputPath <- paste0(outputPath, "/", "FlowBased_clustering", dayType, "_", Sys.Date(), ".html")
   e <- environment()
   e$dayType <- dayType
   e$data <- data
 
   rmarkdown::render(system.file("/report/resumeclustflex.Rmd", package = "flowBasedClustering"),
-                    output_file = output_file,
+                    output_file = outputPath,
                     params = list(set_title = paste0("Typical Day ", dayType, " (generated on ", Sys.Date(), ")")),
                     intermediates_dir = output_Dir, envir = e,
                     quiet = TRUE)
@@ -45,7 +48,7 @@ generateClusteringReport <- function(dayType, output_file = NULL,
 
 #' Generate a plot for a typical day cluster
 #'
-#' @param data \code{data.table}, output of \link{classifTypicalDay}
+#' @param data \code{data.table}, output of \link{clusteringTypicalDays}
 #' @param country1 \code{character}, name of first country
 #' @param country2 \code{character}, name of second country
 #' @param hour \code{numeric}, hour
@@ -55,6 +58,20 @@ generateClusteringReport <- function(dayType, output_file = NULL,
 #'
 #' @import rAmCharts
 #'
+#' @examples
+#'
+#' \dontrun{
+#' 
+#' # classification result
+#' clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+#' 
+#' clusterPlot(clusterTD, "FR", "DE", 8, 9, FALSE, FALSE)
+#' clusterPlot(clusterTD, "FR", "DE", 8, 9, FALSE, TRUE)
+#' clusterPlot(clusterTD, "FR", "DE", 8, 9, TRUE, TRUE)
+#' clusterPlot(clusterTD, "FR", "DE", 8, 9, TRUE, FALSE)
+#' 
+#' }
+#' 
 #' @export
 clusterPlot <- function(data, country1, country2, hour, dayType,
                         typicalDayOnly = FALSE, ggplot = FALSE){
@@ -62,10 +79,6 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
   .makeGraph(dataPlot, data[idDayType==dayType]$TypicalDay,
              typicalDayOnly = typicalDayOnly, ggplot = ggplot)
 }
-
-
-# clusterPlot(Myclassif, "FR", "DE", 8, 9)
-
 
 #' Prepare data for plot
 #'
@@ -94,7 +107,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 #' @noRd
 .getDataPlotClustering <- function(allTypeDay, country1, country2, hour)
 {
-  tt <- apply(allTypeDay$dayIn[[1]][[1]][Period == hour], 1, function(data){
+  data_plot <- apply(allTypeDay$dayIn[[1]][[1]][Period == hour], 1, function(data){
     ctry1 <- country1
     ctry2 <- country2
     dataChull <- .getChull(data$out, ctry1, ctry2)
@@ -104,12 +117,12 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
   })
 
 
-  maxRow <- max(unlist(lapply(tt, nrow)))
-  tt <- lapply(tt, function(X){
+  maxRow <- max(unlist(lapply(data_plot, nrow)))
+  data_plot <- lapply(data_plot, function(X){
     rbind(X, data.table(rep(NA, maxRow-nrow(X)), rep(NA, maxRow-nrow(X))), use.names=FALSE)
   })
-  tt <- cbind.data.frame(tt)
-  tt
+  data_plot <- cbind.data.frame(data_plot)
+  data_plot
 }
 
 #' Graph function
@@ -120,6 +133,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 #' @param ggplot : ggplot or amCharts ?
 #'
 #' @noRd
+#' 
 .makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, ggplot = FALSE){
   ctry <- unique(substr(names(data), 11, 12))
   if(typicalDayOnly){
