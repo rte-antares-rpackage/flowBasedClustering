@@ -48,7 +48,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
                                 "winterWe",
                                 "winterWd",
                                 "summerWe","summerWd")) | is.null(names(calendar))){
-    stop("Names of calendar must be 'interSeasonWe', 'interSeasonWd', 'winterWe', 'winterSe', 'summerWe', 'summerSe'")
+    stop("Names of calendar must be 'interSeasonWe', 'interSeasonWd', 'winterWe', 'winterWd', 'summerWe', 'summerWd'")
   }
 
   vertices <- vertices[, list(out = list(cbind(BE, DE, FR))), by = c("Date", "Period")]
