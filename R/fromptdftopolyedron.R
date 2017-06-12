@@ -1,7 +1,7 @@
 #' Transforme a PTDF file to vertives file
 #'
 #' @param PTDF \code{character}, path for PTDF file
-#' @param nbCors \code{numeric}, use parallelisation or not.Indicate number of cores use. If 1 (default) a no parallel.
+#' @param nbCors \code{numeric}, use parallelisation or not. Indicate number of cores use. If 1 (default) a no parallel.
 #'
 #' @examples
 #'

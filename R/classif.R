@@ -27,6 +27,7 @@
 #' myClassif <- classifTypicalDay(calendar, vertices)
 #' }
 #'
+#' @import cluster
 #'
 #' @export
 classifTypicalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,

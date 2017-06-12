@@ -63,19 +63,21 @@ getCalendar <- function(dates,
                                 "DENewYearsEve"),
                     dayInWeekend = c(6, 7)){
 
+
+  #Get weekend day
   weekendDay <- function(day, dayInWeekend, holiday){
-    daywe <- day[ifelse(data.table::wday(day)==1,7,data.table::wday(day)-1)%in%dayInWeekend]
-
-
-    allYeay <- unique(year(day))
+   daywe <- day[ifelse(data.table::wday(day)==1,7,data.table::wday(day)-1)%in%dayInWeekend]
+   allYeay <- unique(year(day))
    HolidayDay <- as.Date(holiday(allYeay, Holiday = holiday))
    dayHilyday <- day[day%in%HolidayDay]
+   unique(sort(c(daywe, dayHilyday)))
+  }
 
-   unique(sort(c(daywe, dayHilyday)))}
 
   interSeasonBegin <- as.Date(interSeasonBegin)
   interSeasonEnd <- as.Date(interSeasonEnd)
 
+  #Control user input
   if(length(interSeasonBegin) != length(interSeasonEnd)){
     stop("You must specify a end begin and end for each intersaison, (interSeasonBegin and interSeasonEnd
          must have same length")}
@@ -85,6 +87,8 @@ getCalendar <- function(dates,
   }
 
   dates <- as.Date(dates)
+
+  #Generate seq of all date, filtering will be apply after
   allDay <- seq(min(dates), max(dates), by = "day")
 
   dayRemoveVectorIn <- allDay[!allDay%in%dates]
@@ -112,6 +116,7 @@ getCalendar <- function(dates,
 
  }
   calendarReturn <- list()
+
 
   intaisaison <- data.frame(begin = as.Date(interSeasonBegin), end = as.Date(interSeasonEnd))
 
