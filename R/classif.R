@@ -49,20 +49,10 @@ classifTypicalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeeken
   }
 
 
-  getMesh <- function(out){
-    tc <- geometry::delaunayn(out, full = F)
-    # tetramesh(tc,out,alpha=0.7)
-    # tri
-    tc_tri <- geometry::surf.tri(out, tc)
-    # rajout d'une colonne 1
-    out2 <- cbind(out, rep(1, nrow(out)))
-    mesh <- rgl::tmesh3d(as.vector(t(out2[as.vector(t(tc_tri)),])),1:(nrow(tc_tri)*3))
-    list(mesh)
-  }
 
   vertices <- vertices[,
                        list(out = list(cbind(BE, DE, FR))), by = c("Date", "Period")]
-  vertices[,mesh := list(getMesh(out[[1]])),by = c("Date", "Period") ]
+  vertices[,mesh := list(.getMesh(out[[1]])),by = c("Date", "Period") ]
 
   We <- rep(FALSE, length(calendar))
   We[grep("We", names(calendar))] <- TRUE
@@ -175,4 +165,16 @@ classifTypicalDay <- function(calendar, vertices, nbClustWeek = 3, nbClustWeeken
 }
 
 
-
+#' add mesh to vertice file
+#'
+#' @noRd
+.getMesh <- function(out){
+  tc <- geometry::delaunayn(out, full = F)
+  # tetramesh(tc,out,alpha=0.7)
+  # tri
+  tc_tri <- geometry::surf.tri(out, tc)
+  # rajout d'une colonne 1
+  out2 <- cbind(out, rep(1, nrow(out)))
+  mesh <- rgl::tmesh3d(as.vector(t(out2[as.vector(t(tc_tri)),])),1:(nrow(tc_tri)*3))
+  list(mesh)
+}
