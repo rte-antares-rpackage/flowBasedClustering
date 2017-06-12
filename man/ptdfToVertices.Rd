@@ -4,7 +4,7 @@
 \alias{ptdfToVertices}
 \title{Transform a PTDF file to vertices file}
 \usage{
-ptdfToVertices(PTDF = system.file("dav/data/faceAllYear.csv", package =
+ptdfToVertices(PTDF = system.file("dev/data/faceAllYear.csv", package =
   "flowBasedClustering"), nbCore = 1)
 }
 \arguments{
