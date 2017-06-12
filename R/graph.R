@@ -11,6 +11,11 @@
 #' sapply(1:12, generateClusteringReport)
 #' generateClusteringReport(dayType = 7)
 #' }
+#'
+#'
+#' @import rAmCharts
+#' @import pipeR
+#'
 #' @export
 generateClusteringReport <- function(dayType, output_file = NULL,
                              data = NULL){
