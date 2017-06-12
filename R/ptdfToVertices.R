@@ -20,13 +20,17 @@
 ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package = "flowBasedClustering"),
                                nbCore = 1)
 {
+
+  # Load PTDF
   PTDF <- fread(PTDF)
 
+  # Control PTFD format
   if(all(names(PTDF)[1:7] != c("Date", "Period", "BE", "DE", "FR", "NL", "RAM_0"))){
     stop(paste0("Names of ptdf file must be : Date, Period, BE, DE, FR, NL, RAM_0 currently : ",
                 paste0(names(PTDF)[1:7] , collapse = ", ")))
   }
 
+  #calcul vertices from PTDF function
   calcPoly <- function(X, PTDF){
     data.table::rbindlist(lapply(1:24, function(Y, PTDF){
       resSel <- PTDF[Date == X & Period == Y]
@@ -43,6 +47,7 @@ ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package
     }, PTDF = PTDF))
   }
 
+  #Not parallel
   if(nbCore == 1)
   {
     vertices <- data.table::rbindlist(lapply(unique(PTDF$Date), function(X){
@@ -50,7 +55,7 @@ ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package
                PTDF = PTDF
       )}, PTDF = PTDF))
   }else{
-
+    # parallel
     cl <- parallel::makeCluster(nbCore)
     e = new.env()
     e$PTDF <- PTDF

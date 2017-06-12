@@ -13,7 +13,7 @@ getVertices <- function(face, b){
   grid <- combn(1:nrow(B), 3)
   d <- b+1e-6
   res <- apply(grid, 2, function(gridRaw){
-    # gridRaw <- grid[, X]
+    # For each ijk raw of face, and b, resolve   qr.solve(Bijk, bijk)
     Bijk<- rbind(B[gridRaw[1], ], B[gridRaw[1], ], B[gridRaw[2], ], B[gridRaw[3], ], Un)
     bijk <- c(b[gridRaw[1]], b[gridRaw[1]], b[gridRaw[2]], b[gridRaw[3]], 0)
     x <- try({
@@ -23,7 +23,7 @@ getVertices <- function(face, b){
     if("try-error" %in% class(x)){
       return(NULL)
     }
-
+    # filtering x who not respect all constaints
     if(all(B%*%x<=d)){
       return(x)
     }
@@ -31,6 +31,7 @@ getVertices <- function(face, b){
   }) %>>%
     unlist %>>%
     matrix(ncol = 4, byrow = TRUE)
+  # filtering point which are duplicated
   res <- res[round(rowSums(res), 2) == 0,]
   DD <- dist(res, method = "euclidean", p = 2, upper = FALSE)
   DD <- as.matrix(DD)

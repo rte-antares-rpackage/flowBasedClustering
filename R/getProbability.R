@@ -113,15 +113,19 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
   )
   names(andTableStruct)[4:ncol(andTableStruct)] <- concerneName
 
+  #Calculate probability for each quantiles
   probaAndEffectifs  <- rbindlist(sapply(1:nrow(andTableStruct), function(VV){
-    StructRaw <- andTableStruct[VV]
-    constructRequest <- paste0("Class =='", StructRaw$Class,"'")
+
+    #Select concern raw
+    selectRaw <- andTableStruct[VV]
+    constructRequest <- paste0("Class =='", selectRaw$Class,"'")
     constructRequest <-  parse(text = constructRequest)
 
-    quantilesConcern <- ClimQuantiles[eval(constructRequest)]
+    selectQuantile <- ClimQuantiles[eval(constructRequest)]
     climatConcern <- climatAssoClasif[eval(constructRequest)]
-    requestQuantile <- StructRaw[, .SD, .SDcols = concerneName]
+    requestQuantile <- selectRaw[, .SD, .SDcols = concerneName]
 
+    #Make request for each quantile, exemple DE_wind < Q1 | Q1 < DE_wind < Q2
     allRequest <- lapply(requestQuantile, function(X){
       sens <- substr(X, 1, 1)
       res <- NULL
@@ -141,11 +145,12 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
     })
 
 
+    #Conversion in query to fromat R
     req <- sapply(names(allRequest), function(X){
       elemReq <- allRequest[[X]]
       converRequest <- function(Y){
         Q <- paste0("Q", Y[2])
-        paste(paste0("`", X, "`"), Y[1], as.numeric(quantilesConcern[Quantiles == Q, .SD, .SDcols = X]))
+        paste(paste0("`", X, "`"), Y[1], as.numeric(selectQuantile[Quantiles == Q, .SD, .SDcols = X]))
       }
 
       if(is.list(elemReq))
@@ -155,17 +160,12 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
         tpreq <- converRequest(elemReq)
       }
     }, simplify = FALSE)
-
-
     exp <- parse(text = paste0(unlist(req), collapse = "&"))
     climatConcern <- climatConcern[eval(exp)]
 
-    StructRaw$idDayType
-
+    #Calculate probability
     if(nrow(climatConcern)>0){
-
-      value <- nrow(climatConcern[idDayType ==  StructRaw$idDayType])/nrow(climatConcern)
-
+      value <- nrow(climatConcern[idDayType ==  selectRaw$idDayType])/nrow(climatConcern)
     }else{
       value <- NA
     }
@@ -220,11 +220,11 @@ plotMonotone <- function(climat, classif, dayType, variable){
   idDayTypeTp <- dayType
   selData <- sort( unlist(climatAssoClasif[idDayType == idDayTypeTp,
                                            .SD, .SDcols = variable]), decreasing = TRUE)
-  
-  amPlot(-1+1:length(selData), selData, type = "l", xlab = "monotone", ylab = variable, 
+
+  amPlot(-1+1:length(selData), selData, type = "l", xlab = "monotone", ylab = variable,
          main = paste0(variable, " day type ", idDayTypeTp), export = TRUE, zoom = TRUE) %>>%
     addGuide(value = 0, toValue = as.numeric(quantile(-1+1:length(selData), 0.333)), fillAlpha = 0.1, fillColor = "#FFFF00") %>>%
-    addGuide(value = as.numeric(quantile(-1+1:length(selData), 0.333)), toValue =  as.numeric(quantile(-1+1:length(selData), 0.666)), 
+    addGuide(value = as.numeric(quantile(-1+1:length(selData), 0.333)), toValue =  as.numeric(quantile(-1+1:length(selData), 0.666)),
              fillAlpha = 0.1, fillColor = "#FF8000")%>>%
     addGuide(value = as.numeric(quantile(-1+1:length(selData), 0.666)), toValue =  length(selData) - 1, fillAlpha = 0.1,
              fillColor = "#FF0000")
