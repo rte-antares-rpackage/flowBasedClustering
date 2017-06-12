@@ -6,11 +6,11 @@
 #' @examples
 #'
 #' \dontrun{
-#' generateAllDate("2017-01-01", "2017-12-31")
+#' getSequence("2017-01-01", "2017-12-31")
 #' }
 #'
 #' @export
-generateAllDate <- function(dateBegin, dateEnd){
+getSequence <- function(dateBegin, dateEnd){
   allDay <- seq(as.Date(dateBegin), as.Date(dateEnd), by = "day")
   allDay
 }
@@ -18,7 +18,7 @@ generateAllDate <- function(dateBegin, dateEnd){
 
 #' Define a calender which season
 #'
-#' @param dates \code{character or date}, vector of dates YYYY-MM-DD, can be generate which \link{generateAllDate}
+#' @param dates \code{character or date}, vector of dates YYYY-MM-DD, can be generate which \link{getSequence}
 #' @param interSeasonBegin \code{character or date}, date, YYYY-MM-DD, begin of interSaison
 #' @param interSeasonEnd \code{character or date}, date, YYYY-MM-DD, end of interSaison
 #' @param dayInWeekend \code{numeric}, indice of weekend day
@@ -32,7 +32,7 @@ generateAllDate <- function(dateBegin, dateEnd){
 #' @examples
 #'
 #' \dontrun{
-#' dates <- generateAllDate("2017-01-01", "2017-12-31")
+#' dates <- getSequence("2017-01-01", "2017-12-31")
 #' interSeasonBegin <- c("2017-03-01", "2017-09-01")
 #' interSeasonEnd <- c("2017-05-01", "2017-11-01")
 #' dayInWeekend = c(6, 7)
