@@ -104,7 +104,8 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   # report generation
   if(report){
     sapply(allTypDay$idDayType, function(X){
-      generateClusteringReport(X, data = allTypDay, output_file = reportPath)})
+      generateClusteringReport(X, data = allTypDay, outputPath = reportPath)})
+
       saveRDS(allTypDay, paste0(reportPath, "/resultClust.RDS"))
   }
   allTypDay
