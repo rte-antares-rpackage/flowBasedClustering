@@ -5,7 +5,8 @@
 \title{Generate clustering of typical days}
 \usage{
 clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
-  nbClustWeekend = 1, report = TRUE, reportPath = getwd())
+  nbClustWeekend = 1, report = TRUE, reportPath = getwd(),
+  hourWeigth = rep(1, 24))
 }
 \arguments{
 \item{calendar}{\code{list}, vector of date for each period. Can be obtain with \link{getCalendar}}
@@ -26,6 +27,8 @@ clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
 \item{report}{\code{boolean}, generate report. Defaut to TRUE}
 
 \item{reportPath}{\code{character}, path of report. Defaut to \code{getwd()}}
+
+\item{hourWeigth}{\code{numeric}, weigth vector of weighting for hours}
 }
 \description{
 Generate clustering of typical days
