@@ -60,8 +60,8 @@ getCalendar <- function(dates,
                                     "BoxingDay",
                                     "DENewYearsEve"),
                         dayInWeekend = c(6, 7)){
-  
-  
+
+
   # Get weekend day
   weekendDay <- function(day, dayInWeekend, holiday){
     daywe <- day[ifelse(data.table::wday(day)==1,7,data.table::wday(day)-1)%in%dayInWeekend]
@@ -70,27 +70,27 @@ getCalendar <- function(dates,
     dayHilyday <- day[day%in%HolidayDay]
     unique(sort(c(daywe, dayHilyday)))
   }
-  
-  
+
+
   interSeasonBegin <- as.Date(interSeasonBegin)
   interSeasonEnd <- as.Date(interSeasonEnd)
-  
+
   # Control user input
   if(length(interSeasonBegin) != length(interSeasonEnd)){
     stop("You must specify a end begin and end for each interseason, (interSeasonBegin and interSeasonEnd
          must have same length")}
-  
+
   if(!(all(interSeasonBegin < interSeasonEnd))){
     stop("All interSeasonBegin must be > to corresponding interSeasonEnd")
   }
-  
+
   dates <- as.Date(dates)
-  
+
   # Generate seq of all date, filtering will be apply after
   allDay <- seq(min(dates), max(dates), by = "day")
-  
+
   dayRemoveVectorIn <- allDay[!allDay%in%dates]
-  
+
   if(length(dates)>0){
     if(is.null(dayExclude))
     {
@@ -98,39 +98,40 @@ getCalendar <- function(dates,
     }else{
       dayExclude <- as.Date(dayExclude)
       dayExclude <- unique(c(dayExclude, dayRemoveVectorIn))
-      
+
     }
   }
-  
+
   # find days with hour changed
-  MarsChangeHour <- max(allDay[which(month(allDay)==3 & wday(allDay) == 1)])
-  OctChangeHour <- max(allDay[which(month(allDay)==10 & wday(allDay) == 1)])
+  MarsChangeHour <- max(allDay[which(month(allDay) == 3 & wday(allDay) == 1)])
+  OctChangeHour <- max(allDay[which(month(allDay) == 10 & wday(allDay) == 1)])
   if(is.null(dayExclude)){
     dayExclude <- c(MarsChangeHour, OctChangeHour)
   }else{
     dayExclude <- as.Date(dayExclude)
     dayExclude <- unique(c(dayExclude, MarsChangeHour, OctChangeHour))
   }
-  
-  calendarReturn <- list()
 
+
+  calendarReturn <- list()
   interSeason <- data.frame(begin = as.Date(interSeasonBegin), end = as.Date(interSeasonEnd))
-  
   interSeasonDay <- sapply(1:nrow(interSeason), function(X){
     Y <- interSeason[X,]
     seq(as.Date(Y[,1]), as.Date(Y[,2]), by = "day")
   }, simplify = FALSE)
-  
-  #Be carefull unlist break date class.
+
+  # Be carefull unlist break date class.
   interSeasonDay <- do.call("c", interSeasonDay)
-  
+
   interSeasonDayWeekend <- weekendDay(interSeasonDay, dayInWeekend, holiday)
   calendarReturn$interSeasonWe <- interSeasonDayWeekend
   calendarReturn$interSeasonWd <- interSeasonDay[!interSeasonDay%in%interSeasonDayWeekend]
-  
-  
+
+  # Select day in interSeason
   saisonDay <- which(!allDay%in%interSeasonDay)
-  
+
+
+  # found breaks for interSeasonDay, create vector for each season
   breakS <- which(diff(saisonDay)!=1)+1
   allSaison <- list()
   saisonAffect <- 0
@@ -140,7 +141,7 @@ getCalendar <- function(dates,
       saisonAffect <- saisonAffect + 1
       allSaison[[saisonAffect]] <- saisonDay[CurrentSaison]
     }else{
-      
+
       if(i == 0){
         CurrentSaison <- 1:(breakS[1]-1)
       }else{
@@ -150,15 +151,17 @@ getCalendar <- function(dates,
       allSaison[[saisonAffect]] <- saisonDay[CurrentSaison]
     }
   }
-  
+
   Saison <- lapply(allSaison, function(X){
     allDay[X]
   })
-  
-  
+
+
+
+  # Dedect winter and summer
   monthSWinter <- c(1:4, 10:12)
   monthSSummer <- 5:9
-  
+
   WS <- unlist(lapply(Saison, function(X){
     nbDayInWinter <- sum(month(X)%in%monthSWinter)
     nbDayInSummer <- sum(month(X)%in%monthSSummer)
@@ -168,19 +171,21 @@ getCalendar <- function(dates,
       "S"
     }
   }))
-  
+
+
+  # Select winter and cut Week and Weekend
   winter <- do.call("c",(Saison[which(WS == "W")]))
-  
   winterWe <- weekendDay(winter, dayInWeekend, holiday)
   calendarReturn$winterWe <- winterWe
   calendarReturn$winterWd <- winter[!winter%in%winterWe]
-  
-  summer <-  do.call("c",(Saison[which(WS == "S")]))
-  
+
+  # Select summer and cut Week and Weekend
+  summer <-  do.call("c", (Saison[which(WS == "S")]))
   summerWe <- weekendDay(summer, dayInWeekend, holiday)
   calendarReturn$summerWe <- summerWe
   calendarReturn$summerWd <- summer[!summer%in%summerWe]
-  
+
+  #Exclude days not choose by user
   calendarReturn <- lapply(calendarReturn, function(X){
     X[!X%in%dayExclude]
   })

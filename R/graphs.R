@@ -10,19 +10,20 @@
 #' \dontrun{
 #' # classification result
 #' clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
-#' 
+#'
 #' generateClusteringReport(dayType = 7, data = clusterTD)
-#' 
+#'
 #' }
-#' 
+#'
 #' @export
-#' 
+#'
 #' @import rAmCharts
 #' @import pipeR
-#' 
+#'
 generateClusteringReport <- function(dayType, outputPath = NULL,
                              data = NULL){
 
+  # If data are not specify by user, load them from package default file
   if(is.null(data))
   {
     data <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
@@ -31,12 +32,14 @@ generateClusteringReport <- function(dayType, outputPath = NULL,
   if(is.null(outputPath)){
     outputPath <- getwd()
   }
+  #Create an environment for the execution of markdown
   output_Dir <- outputPath
   outputPath <- paste0(outputPath, "/", "FlowBased_clustering", dayType, "_", Sys.Date(), ".html")
   e <- environment()
   e$dayType <- dayType
   e$data <- data
 
+  #report creation
   rmarkdown::render(system.file("/report/resumeclustflex.Rmd", package = "flowBasedClustering"),
                     output_file = outputPath,
                     params = list(set_title = paste0("Typical Day ", dayType, " (generated on ", Sys.Date(), ")")),
@@ -61,17 +64,17 @@ generateClusteringReport <- function(dayType, outputPath = NULL,
 #' @examples
 #'
 #' \dontrun{
-#' 
+#'
 #' # classification result
 #' clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
-#' 
+#'
 #' clusterPlot(clusterTD, "FR", "DE", 8, 9, FALSE, FALSE)
 #' clusterPlot(clusterTD, "FR", "DE", 8, 9, FALSE, TRUE)
 #' clusterPlot(clusterTD, "FR", "DE", 8, 9, TRUE, TRUE)
 #' clusterPlot(clusterTD, "FR", "DE", 8, 9, TRUE, FALSE)
-#' 
+#'
 #' }
-#' 
+#'
 #' @export
 clusterPlot <- function(data, country1, country2, hour, dayType,
                         typicalDayOnly = FALSE, ggplot = FALSE){
@@ -133,7 +136,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 #' @param ggplot : ggplot or amCharts ?
 #'
 #' @noRd
-#' 
+#'
 .makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, ggplot = FALSE){
   ctry <- unique(substr(names(data), 11, 12))
   if(typicalDayOnly){
