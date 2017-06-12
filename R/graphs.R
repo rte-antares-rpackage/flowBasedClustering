@@ -19,6 +19,7 @@
 #' 
 #' @import rAmCharts
 #' @import pipeR
+#' @import ggplot2
 #' 
 generateClusteringReport <- function(dayType, outputPath = NULL,
                              data = NULL){

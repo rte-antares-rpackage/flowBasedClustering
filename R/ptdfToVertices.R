@@ -17,7 +17,7 @@
 #' @import parallel
 #'
 #' @export
-ptdfToVertices <- function(PTDF = system.file("dav/data/faceAllYear.csv",package = "flowBasedClustering"),
+ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package = "flowBasedClustering"),
                                nbCore = 1)
 {
   PTDF <- fread(PTDF)
@@ -45,7 +45,7 @@ ptdfToVertices <- function(PTDF = system.file("dav/data/faceAllYear.csv",package
 
   if(nbCore == 1)
   {
-    vertices <- data.table::rbindlist(lapply(unique(PTDF$Date)[1:3], function(X){
+    vertices <- data.table::rbindlist(lapply(unique(PTDF$Date), function(X){
       calcPoly(X,
                PTDF = PTDF
       )}, PTDF = PTDF))
@@ -67,7 +67,7 @@ ptdfToVertices <- function(PTDF = system.file("dav/data/faceAllYear.csv",package
       library(flowBasedClustering)
     })
 
-    vertices <- data.table::rbindlist(parLapplyLB(cl, unique(PTDF$Date)[1:3], function(X){
+    vertices <- data.table::rbindlist(parLapplyLB(cl, unique(PTDF$Date), function(X){
       calcPoly(X,
                PTDF = PTDF
       )}))
