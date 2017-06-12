@@ -13,6 +13,7 @@
 #' @param nbClustWeekend \code{numeric}, number of clusterd for weekend period. Defaut to 1
 #' @param report \code{boolean}, generate report. Defaut to TRUE
 #' @param reportPath \code{character}, path of report. Defaut to \code{getwd()}
+#' @param hourWeigth \code{numeric}, weigth vector of weighting for hours
 #'
 #' @examples
 #'
@@ -34,7 +35,8 @@
 #' @importFrom cluster pam
 #'
 clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
-                              report = TRUE, reportPath = getwd()){
+                              report = TRUE, reportPath = getwd(),
+                              hourWeigth = rep(1, 24)){
 
 
 
@@ -44,6 +46,11 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
          paste0(names(vertices), collapse = ", ")))
   }
 
+
+  #control Weigth
+  if(length(hourWeigth)!=24){
+    stop("Length of hourWeigth must be 24")
+  }
 
   #control names of calendar
   if(any(!names(calendar)%in% c("interSeasonWe",
@@ -67,7 +74,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     nbClust <- ifelse(season$We, nbClustWeekend, nbClustWeek)
     veticesSel <- vertices[Date %in% as.character(season$calendar)]
     # get distance for each day pairs
-    distMat <- .getDistMatrix(veticesSel)
+    distMat <- .getDistMatrix(veticesSel, hourWeigth)
 
     # with hclust
     # vect <- cutree(hclust(distMat), nbClust)
@@ -97,7 +104,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   # report generation
   if(report){
     sapply(allTypDay$idDayType, function(X){
-      generateRaportClustering(X, data = allTypDay, output_file = reportPath)})
+      generateClusteringReport(X, data = allTypDay, output_file = reportPath)})
       saveRDS(allTypDay, paste0(reportPath, "/resultClust.RDS"))
   }
   allTypDay
@@ -123,9 +130,11 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 #' Compute distance matrix
 #'
 #' @param vertices \code{data.table}
+#' @param hourWeigth \code{numeric}, weigth vector of weighting for hours
+
 #'
 #' @noRd
-.getDistMatrix <- function(vertices)
+.getDistMatrix <- function(vertices, hourWeigth)
 {
   res_hour <- data.table(t(combn(unique(vertices$Date), 2)))
 
@@ -158,9 +167,9 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       # y_on_x[which(apply(cbind(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]], -rowSums(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]])), 1, function(X){
       #   all(t(X)%*%
       #         t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM_0)}))] <- 0
-
       d <- mean(x_on_y^2) + mean(y_on_x^2)
-      d
+      weigthPond <- hourWeigth[h]
+      d <- weigthPond * d
       data.table(Date1 = c(date_1, date_2), Date2 = c(date_2, date_1), Period = h, dist = d)
     }))
 
