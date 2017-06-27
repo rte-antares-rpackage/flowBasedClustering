@@ -38,7 +38,9 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
                               report = TRUE, reportPath = getwd(),
                               hourWeigth = rep(1, 24)){
 
+  pb <- txtProgressBar(style = 3)
 
+  setTxtProgressBar(pb, 0)
 
   #control if the format of the vertices file is good
   if(any(names(vertices) != c("Date", "Period", "BE", "DE", "FR"))){
@@ -71,6 +73,9 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 
   # Apply classification for each period in calendar
   allTypDay <- rbindlist(apply(data.table(calendar, We, nn = names(calendar)), 1, function(season){
+    setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/7)
+
+
     nbClust <- ifelse(season$We, nbClustWeekend, nbClustWeek)
     veticesSel <- vertices[Date %in% as.character(season$calendar)]
     # get distance for each day pairs
