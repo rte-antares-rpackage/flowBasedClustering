@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 require(flowBasedClustering)
 ```
 
-``flowBasedClustering`` allows to build and visualize clustering days for a **flow-based** study.
+``flowBasedClustering`` allows to cluster and visualize typical-days of **flow-based** domains.
 
 
 ## 1 - Summary
@@ -30,18 +30,18 @@ calendar <- getCalendar(dates, interSeasonBegin, interSeasonEnd)
 # Transform PTDF data to vertices
 vertices <- ptdfToVertices(PTDF = "faceAllYear.csv", nbCore = 4)
 
-# Generate clustering of typical days
+# Cluster the typical days
 clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3, 
                       nbClustWeekend = 1, report = TRUE)
 
-# Get probabilities and quantiles from climat file for a classification
+# Get probabilities and quantiles from climate file in order to classify the typical days
 climat <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
 getProbability <- function(climat, classif = clusterTD, levelsProba = c(0.333, 0.666)
 ```
 
 ## 2 - Calendar
 
-First, the function ``getSequence()`` can be used to build a date sequence.
+First, the function ``getSequence()`` can be used to build a vector of consecutive dates.
 
 ```{r, eval = TRUE}
 # Specify a repository
@@ -54,11 +54,11 @@ Then, we define the calendar data wanted and needed for the clustering using ``g
 * ``interSeasonBegin`` : date, YYYY-MM-DD, begin of interseason
 * ``interSeasonEnd`` : date, YYYY-MM-DD, end of interseason
 * ``dayInWeekend`` : indice of weekend day. Default to ``c(6,7) (=) saturday and sunday``
-* ``dayExclude`` : date, YYYY-MM-DD, day to exclude. 
-* ``holiday`` : a ``timeDate`` object to identify holidays
+* ``dayExclude`` : date, YYYY-MM-DD, day to exclude (e.g. due to poor quality data)
+* ``holiday`` : a ``timeDate`` object to identify holidays, which will be classified in the same category as weekends.
 
 
-The function returns a list with date for **week-end** and **worrking days** for both **interseason**, **winter** and **summer**.
+The function returns a list with date for **week-end** and **working days** for both **interseason**, **winter** and **summer**.
 
 ```{r, eval = TRUE}
 dates <- getSequence("2017-01-01", "2017-12-31")
@@ -75,7 +75,7 @@ The function ``ptdfToVertices()`` transforms a PTDF file to vertices data. This 
 * ``PTDF`` : path for PTDF file
 * ``nbCore`` : number of cores for parallel computation. Default to one
 
-The PTDF file must contains at least this seven columns *Date*, *Period*, *BE*, *DE*, *FR*, *NL*, *RAM_0* **in order**    :
+The PTDF file must contains at least these seven columns *Date*, *Period*, *BE*, *DE*, *FR*, *NL*, *RAM_0* **in this order**    :
 
 
 ```{r, eval = FALSE}
@@ -94,7 +94,7 @@ head(vertices)
 
 ## 4 - Clustering of typical days
 
-Once we have our **vertices** and our **calendar**, we can launch the clustering with ``clusteringTypicalDays()``. We can control the number of cluster in week and week-end with ``nbClustWeek`` and ``nbClustWeekend`` and build a report using ``report`` and  ``reportPath``
+Once we have our **vertices** and our **calendar**, we can launch the clustering with ``clusteringTypicalDays()``. We can set the number of clusters in week days and week-end with ``nbClustWeek`` and ``nbClustWeekend`` and build a report using ``report`` and  ``reportPath``.
 
 
 ```{r, echo = TRUE, eval = FALSE}
@@ -122,7 +122,7 @@ generateClusteringReport(dayType = 7, data = clusterTD)
 <img src="2.png" alt="Drawing" style="width: 90%; height: 90%">
 </div>
 
-With ``clusterPlot()``, you choose the 2 countries (``country1`` & ``country2``), the ``hour`` and the ``dayType``. In options, you can decide to plot only the typical day (``typicalDayOnly``) and use static or dynamic visualization (``ggplot``)
+With ``clusterPlot()``, one can choose 2 countries (``country1`` & ``country2``), the ``hour`` and the ``dayType``. In options, you can decide to plot only the typical day (``typicalDayOnly``) and use static or dynamic visualization (``ggplot``)
 
 ```{r, echo = TRUE, fig.width= 7, fig.height= 4.5, warning=FALSE}
 # static graphic
@@ -138,15 +138,15 @@ clusterPlot(clusterTD, country1 = "FR", country2 = "DE",
 
 ## 5 - Probabilities and quantiles
 
-Finally, the function ``getProbability()`` can be used to compute and retrieve probabilies and quantiles from a climat file and a classification : 
+Finally, the function ``getProbability()`` can be used to learn the correlations between the occurences of the different clusters and external data (typically climatic data). 
 
-* ``climat`` : climat file, 2 first columns are Date and Period, others are params files
+* ``climat`` : climate file, 2 first columns are Date and Period, others are exogenous variables (e.g. wind speed and temperature)
 * ``classif`` : output of ``clusteringTypicalDays()``
 
 The quantiles are set with ``levelsProba``, and can be : 
 
-* the same for all climat variables using a ``numeric vector``
-* set for each climat variable using a ``named list``
+* the same for all exogenous variables using a ``numeric vector``
+* set for each climate variable using a ``named list``
 
 
 ```{r, echo = TRUE, eval = FALSE}
