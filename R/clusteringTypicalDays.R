@@ -149,6 +149,8 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     date_2 <- res_hour[comb, V2]
     v_hours <- intersect(vertices[Date%in% date_1, Period], vertices[Date%in% date_2, Period])
     hourDist <- data.table::rbindlist(lapply(v_hours, function(h){
+
+      #Dist from X to Y
       x_on_y_All <- vcgClost(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]],
                              vertices[Date%in% date_2 & Period %in% h, ]$mesh[[1]],
                              borderchk = TRUE,
@@ -161,7 +163,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       # x_on_y[which(apply(cbind(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]], -rowSums(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]])), 1, function(X){
       #   all(t(X)%*%
       #          t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM_0)}))] <- 0
-
+      #Dist from Y to X
       y_on_x_All <- vcgClost(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]],
                              vertices[Date%in% date_1 & Period %in% h, ]$mesh[[1]], borderchk = TRUE, sign = TRUE)
 

@@ -30,7 +30,7 @@ hour <- 1
 ```
 
 
-Column {.tabset data-width=500}
+Column {.tabset data-width=400}
 -----------------------------------------------------------------------
 ### All typical day
 ```{r}
@@ -39,12 +39,16 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
 ### Mean typical day
+
+
+
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset data-width=400}
 ------------------------------------------------------------------
 ### All typical day
 ```{r}
@@ -57,8 +61,6 @@ clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
 ```
-
-
 
 
 Hour 2 {data-navmenu="Hour"}
