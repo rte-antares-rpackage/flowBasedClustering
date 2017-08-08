@@ -14,3 +14,4 @@ getVertices(face, b)
 \description{
 Get vertices from faces
 }
+
