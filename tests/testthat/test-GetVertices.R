@@ -3,7 +3,7 @@ library(data.table)
 
 
 test_that("Test that object returned by getVertices is convex and that it fits expected results on a small dataset", {
-  
+  cat("start testgetVertices")
   PTDF <- fread(system.file("testdata/sommets/PTDF.csv",package = "flowBasedClustering"))
   SOMMETS <- fread(system.file("testdata/sommets/sommets_which_solver.csv",package = "flowBasedClustering"), sep = " ", header = TRUE)
 
@@ -29,6 +29,7 @@ test_that("Test that object returned by getVertices is convex and that it fits e
   })
 
   expect_equal(all(tt>=-1) & all(tt<=1), TRUE)
-
+  cat("end testgetVertices")
+  
 })
 
