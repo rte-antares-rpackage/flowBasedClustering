@@ -1,5 +1,5 @@
 context("Function pdtfToVertices")
-
+library(data.table)
 
 test_that("ptdfToVertices works", {
 
@@ -23,31 +23,34 @@ test_that("ptdfToVertices works", {
   tol <- 1 #tolerance on bounds
   is_it_all_good <- sapply(1:nrow(out1), function(i){
       
-      date <- as.character(out1[i, "Date"])
-      period <- as.numeric(out1[i, "Period"])
+      # to speed-up calculation, do not check all i :
+      if(i %% 20 == 0){
       
-      in_domain <- sapply(1:nrow(PTDF[Date == date & Period == period,]), function(j){
-        
-        out1[i, BE] * PTDF[Date == date & Period == period,][j,BE] +
-        out1[i, DE] *PTDF[Date == date & Period == period,][j,DE] +
-        out1[i, FR] *PTDF[Date == date & Period == period,][j,FR] +
-        (-sum(out1[i,c(BE, DE,FR)])) * PTDF[Date == date & Period == period,][j,NL] <= 
-        PTDF[Date == date & Period == period,][j,RAM_0] + tol
-      })
-  
-      expect_true(all(in_domain))
+        date <- as.character(out1[i, "Date"])
+        period <- as.numeric(out1[i, "Period"])
       
-      on_plane <- sapply(1:nrow(PTDF[Date == date & Period == period,]), function(j){
+       in_domain <- sapply(1:nrow(PTDF[Date == date & Period == period,]), function(j){
         
           out1[i, BE] * PTDF[Date == date & Period == period,][j,BE] +
           out1[i, DE] *PTDF[Date == date & Period == period,][j,DE] +
           out1[i, FR] *PTDF[Date == date & Period == period,][j,FR] +
-          (-sum(out1[i,c(BE, DE,FR)])) * PTDF[Date == date & Period == period,][j,NL] >= 
-          PTDF[Date == date & Period == period,][j,RAM_0] - tol
-      })
+          (-sum(out1[i,c(BE, DE,FR)])) * PTDF[Date == date & Period == period,][j,NL] <= 
+          PTDF[Date == date & Period == period,][j,RAM_0] + tol
+        })
+  
+        expect_true(all(in_domain))
       
-      expect_true(length(on_plane[on_plane]) >= 3)
+        on_plane <- sapply(1:nrow(PTDF[Date == date & Period == period,]), function(j){
+        
+            out1[i, BE] * PTDF[Date == date & Period == period,][j,BE] +
+            out1[i, DE] *PTDF[Date == date & Period == period,][j,DE] +
+            out1[i, FR] *PTDF[Date == date & Period == period,][j,FR] +
+            (-sum(out1[i,c(BE, DE,FR)])) * PTDF[Date == date & Period == period,][j,NL] >= 
+            PTDF[Date == date & Period == period,][j,RAM_0] - tol
+        })
       
+        expect_true(length(on_plane[on_plane]) >= 3)
+      }
     })
 })
   
