@@ -87,6 +87,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 
 #' Prepare data for plot
 #'
+#' @importFrom grDevices chull
 #' @noRd
 .getChull <- function(data, country1, country2){
   data <- data.frame(data)

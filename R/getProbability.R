@@ -213,6 +213,7 @@ getProbability <- function(climat, classif, levelsProba = c(0.333, 0.666))
 #'
 #' plotMonotone(climat = climat, classif = clusterTD, dayType = 1, variable = "DE_wind")
 #' }
+#' @importFrom stats quantile na.omit
 #' @export
 plotMonotone <- function(climat, classif, dayType, variable){
   climat <- na.omit(climat)

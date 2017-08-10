@@ -3,4 +3,4 @@
 library(testthat)
 library(flowBasedClustering)
 
-testthat::test_check("flowBasedClustering")
+test_check("flowBasedClustering")

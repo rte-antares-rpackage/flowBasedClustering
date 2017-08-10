@@ -50,10 +50,7 @@ ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package
   #Not parallel
   if(nbCore == 1)
   {
-    vertices <- data.table::rbindlist(lapply(unique(PTDF$Date), function(X){
-      calcPoly(X,
-               PTDF = PTDF
-      )}, PTDF = PTDF))
+    vertices <- data.table::rbindlist(lapply(unique(PTDF$Date), calcPoly, PTDF = PTDF))
   }else{
     # parallel
     cl <- parallel::makeCluster(nbCore)
@@ -76,7 +73,9 @@ ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package
       calcPoly(X,
                PTDF = PTDF
       )}))
+    stopCluster(cl)
+    
   }
-  stopCluster(cl)
+  
   vertices
 }

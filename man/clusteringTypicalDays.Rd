@@ -15,20 +15,21 @@ clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
 \itemize{
  \item Date : date (%Y-%M-%D)
  \item Period : Hour (1:24)
- \item BE : Belgium vertices
- \item DE : deutschland vertices
+ \item BE : belgium vertices
+ \item DE : german vertices
  \item FR : french vertices
-}}
+}
+This parameter can be obtained with the function \code{ptdfToVertices()}.}
 
-\item{nbClustWeek}{\code{numeric}, number of clusterd for week period. Defaut to 3}
+\item{nbClustWeek}{\code{numeric}, number of clusters for week (working days) period. Defaut to 3}
 
-\item{nbClustWeekend}{\code{numeric}, number of clusterd for weekend period. Defaut to 1}
+\item{nbClustWeekend}{\code{numeric}, number of clusters for weekend period. Defaut to 1}
 
 \item{report}{\code{boolean}, generate report. Defaut to TRUE}
 
-\item{reportPath}{\code{character}, path of report. Defaut to \code{getwd()}}
+\item{reportPath}{\code{character}, path where the report is written. Defaut to \code{getwd()}}
 
-\item{hourWeigth}{\code{numeric}, weigth vector of weighting for hours}
+\item{hourWeigth}{\code{numeric}, vector of 24 weights to ponderate differently each hour of the day}
 }
 \description{
 Generate clustering of typical days
@@ -49,3 +50,4 @@ clusterTD <- clusteringTypicalDays(calendar, vertices)
 
 
 }
+

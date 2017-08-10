@@ -5,15 +5,16 @@
 #' \itemize{
 #'  \item Date : date (%Y-%M-%D)
 #'  \item Period : Hour (1:24)
-#'  \item BE : Belgium vertices
-#'  \item DE : deutschland vertices
+#'  \item BE : belgium vertices
+#'  \item DE : german vertices
 #'  \item FR : french vertices
 #' }
-#' @param nbClustWeek \code{numeric}, number of clusterd for week period. Defaut to 3
-#' @param nbClustWeekend \code{numeric}, number of clusterd for weekend period. Defaut to 1
+#' This parameter can be obtained with the function \code{ptdfToVertices()}.
+#' @param nbClustWeek \code{numeric}, number of clusters for week (working days) period. Defaut to 3
+#' @param nbClustWeekend \code{numeric}, number of clusters for weekend period. Defaut to 1
 #' @param report \code{boolean}, generate report. Defaut to TRUE
-#' @param reportPath \code{character}, path of report. Defaut to \code{getwd()}
-#' @param hourWeigth \code{numeric}, weigth vector of weighting for hours
+#' @param reportPath \code{character}, path where the report is written. Defaut to \code{getwd()}
+#' @param hourWeigth \code{numeric}, vector of 24 weights to ponderate differently each hour of the day
 #'
 #' @examples
 #'
@@ -33,6 +34,8 @@
 #' @export
 #'
 #' @importFrom cluster pam
+#' @importFrom utils txtProgressBar getTxtProgressBar setTxtProgressBar
+
 #'
 clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
                               report = TRUE, reportPath = getwd(),
@@ -138,7 +141,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 #' @param vertices \code{data.table}
 #' @param hourWeigth \code{numeric}, weigth vector of weighting for hours
 
-#'
+#' @importFrom stats as.dist
 #' @noRd
 .getDistMatrix <- function(vertices, hourWeigth)
 {
