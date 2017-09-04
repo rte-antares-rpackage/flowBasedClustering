@@ -40,4 +40,3 @@ getCalendar(dates, interSeasonBegin, interSeasonEnd)
 }
 
 }
-
