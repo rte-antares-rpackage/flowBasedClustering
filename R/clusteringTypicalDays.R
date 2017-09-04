@@ -123,8 +123,23 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   for(i in 1:nrow(allTypDay)){
     allTypDay$dayIn[[i]] <- list(merge(allTypDay$dayIn[[i]], vertices[,.SD, .SDcols = 1:3], by = c("Date", "Period")))
   }
+  
+  
+  ##Ordered result
+  
+  orderVect <- c(which(allTypDay$Class == "summerWd"),
+    which(allTypDay$Class == "summerWe"),
+    which(allTypDay$Class == "winterWd"),
+    which(allTypDay$Class == "winterWe"),
+    which(allTypDay$Class == "interSeasonWd"),
+    which(allTypDay$Class == "interSeasonWe"))
+  if(length(orderVect) == nrow(allTypDay)){
+    allTypDay <- allTypDay[orderVect]
+  }
+  
+  
   allTypDay[,idDayType :=1:.N ]
-
+  
   # report generation
   if(report){
     sapply(allTypDay$idDayType, function(X){
