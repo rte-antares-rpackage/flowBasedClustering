@@ -4,7 +4,8 @@
 \alias{plotFlowbased}
 \title{Plot flow-based domain(s)}
 \usage{
-plotFlowbased(PTDF, country1, country2, domainsNames = NULL, main = "")
+plotFlowbased(PTDF, country1, country2, domainsNames = NULL, main = "",
+  xlim = c(-10000, 10000), ylim = c(-10000, 10000))
 }
 \arguments{
 \item{PTDF}{\code{data.frame or list} PTDF file}

@@ -8,7 +8,7 @@ ptdfToVertices(PTDF = system.file("dev/data/faceAllYear.csv", package =
   "flowBasedClustering"), nbCore = 1)
 }
 \arguments{
-\item{PTDF}{\code{character}, path for PTDF file}
+\item{PTDF}{\code{character}, path for PTDF file. This file must have 7 obligatory columns : Id_day, Period, BE, DE, FR, NL, RAM}
 
 \item{nbCore}{\code{numeric}, use parallel computing or not. Indicate number of cores use. If 1 (default), no parallel.}
 }
