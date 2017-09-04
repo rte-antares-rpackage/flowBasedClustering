@@ -15,11 +15,11 @@ test_that("Test that object returned by getVertices is convex and that it fits e
       SOMMETSSel <- as.matrix(SOMMETSSel)
       SOMMETSSel <- round(SOMMETSSel, 0)
       SOMMETSSel <- SOMMETSSel[order(SOMMETSSel[,1], SOMMETSSel[,2],SOMMETSSel[,3]),]
-      res <- flowBasedClustering::getVertices(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR","NL")]), PTDFsel$RAM_0)
+      res <- flowBasedClustering::getVertices(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR","NL")]), PTDFsel$RAM)
 
       #Test convexity
       expect_equal(all(apply(res, 1, function(VV){
-        c(VV, -sum(VV))%*%t(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR", "NL")]))<PTDFsel$RAM_0+2
+        c(VV, -sum(VV))%*%t(as.matrix(PTDFsel[,.SD, .SDcols = c("BE","DE","FR", "NL")]))<PTDFsel$RAM+2
       })), TRUE)
 
       res <- round(res, 0)

@@ -37,7 +37,7 @@ test_that("ptdfToVertices works", {
           out1[i, DE] *PTDF[Date == date & Period == period,][j,DE] +
           out1[i, FR] *PTDF[Date == date & Period == period,][j,FR] +
           (-sum(out1[i,c(BE, DE,FR)])) * PTDF[Date == date & Period == period,][j,NL] <= 
-          PTDF[Date == date & Period == period,][j,RAM_0] + tol
+          PTDF[Date == date & Period == period,][j,RAM] + tol
         })
   
         expect_true(all(in_domain))
@@ -48,7 +48,7 @@ test_that("ptdfToVertices works", {
             out1[i, DE] *PTDF[Date == date & Period == period,][j,DE] +
             out1[i, FR] *PTDF[Date == date & Period == period,][j,FR] +
             (-sum(out1[i,c(BE, DE,FR)])) * PTDF[Date == date & Period == period,][j,NL] >= 
-            PTDF[Date == date & Period == period,][j,RAM_0] - tol
+            PTDF[Date == date & Period == period,][j,RAM] - tol
         })
       
         expect_true(length(on_plane[on_plane]) >= 3)
