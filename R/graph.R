@@ -110,8 +110,10 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 #'@param typicalDayDate : date of typical day
 #'@param typicalDayOnly : plot only typical day ?
 #'@param ggplot : ggplot or amCharts ?
+#'@param xlim : xlim
+#'@param ylim : ylim
 
-.makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, ggplot = FALSE){
+.makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, ggplot = FALSE, xlim = c(-10000, 10000), ylim = c(-10000, 10000)){
   ctry <- unique(substr(names(data), 11, 12))
   if(typicalDayOnly){
     dates <- typicalDayDate
@@ -142,8 +144,8 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
       addTitle(text = paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])),
       setGraphs(graphs),
       setChartCursor(),
-      addValueAxes(title = paste(ctry[1], "(MW)"), position = "bottom", minimum = -8000, maximum = 8000),
-      addValueAxes(title =  paste(ctry[2], "(MW)"), minimum = -8000, maximum = 8000),
+      addValueAxes(title = paste(ctry[1], "(MW)"), position = "bottom", minimum = xlim[1], maximum = xlim[2]),
+      addValueAxes(title =  paste(ctry[2], "(MW)"), minimum = ylim[1], maximum = ylim[2]),
       setExport(enabled = TRUE)
     )
   } else {
@@ -166,7 +168,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
     
     ggplot(data=gg_data, aes(x = BE, y = FR, group = date, colour = col, size = size, linetype = as.character(col))) + geom_path() +
       geom_point()  + scale_size(range=c(0.1, 2), guide=FALSE) + theme(legend.position="none") + 
-      xlim(-8000, 8000) + ylim(-8000, 8000) + 
+      xlim(xlim[1], xlim[2]) + ylim(ylim[1], ylim[2]) + 
       ggtitle(paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])) +
       theme(plot.title = element_text(hjust = 0.5)) + ylab(paste(ctry[2], "(MW)")) + 
       xlab(paste(ctry[1], "(MW)"))

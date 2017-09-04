@@ -171,8 +171,8 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
       addTitle(text = paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])),
       setGraphs(graphs),
       setChartCursor(),
-      addValueAxes(title = paste(ctry[1], "(MW)"), position = "bottom", minimum = -8000, maximum = 8000),
-      addValueAxes(title =  paste(ctry[2], "(MW)"), minimum = -8000, maximum = 8000),
+      addValueAxes(title = paste(ctry[1], "(MW)"), position = "bottom", minimum = -10000, maximum = 10000),
+      addValueAxes(title =  paste(ctry[2], "(MW)"), minimum = -10000, maximum = 10000),
       setExport(enabled = TRUE)
     )
   } else {
@@ -195,7 +195,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 
     ggplot(data=gg_data, aes(x = eval(parse(text=ctry[1])), y = eval(parse(text=ctry[2])), group = date, colour = col, size = size, linetype = as.character(col))) + geom_path() +
       geom_point()  + scale_size(range=c(0.1, 2), guide=FALSE) + theme(legend.position="none") +
-      xlim(-8000, 8000) + ylim(-8000, 8000) +
+      xlim(-10000, 10000) + ylim(-10000, 10000) +
       ggtitle(paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])) +
       theme(plot.title = element_text(hjust = 0.5)) + ylab(paste(ctry[2], "(MW)")) +
       xlab(paste(ctry[1], "(MW)"))
@@ -230,12 +230,22 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 #' }
 #'
 #' @export
-plotFlowbased <- function(PTDF,  country1, country2, domainsNames = NULL, main = ""){
+plotFlowbased <- function(PTDF,
+                          country1,
+                          country2,
+                          domainsNames = NULL,
+                          main = "",
+                          xlim = c(-10000, 10000),
+                          ylim = c(-10000, 10000)){
   #Generate data for plot
   givePlotData <- function(PTDF, country1, country2){
     PTDF <- data.table(PTDF)
+    if("RAM_0" %in% names(PTDF)){
+      setnames(PTDF, "RAM_0", "RAM")
+    }
+    
     vertices <- getVertices(as.matrix(PTDF[, .SD, .SDcols = c("BE", "DE", "FR", "NL")]),
-                            PTDF$RAM_0)
+                            PTDF$RAM)
     vertices <- data.frame(vertices)
     names(vertices) <- c("BE", "DE", "FR")
     res <- .getChull(vertices, country1, country2)
@@ -305,8 +315,8 @@ plotFlowbased <- function(PTDF,  country1, country2, domainsNames = NULL, main =
     addTitle(text = main),
     setGraphs(graphs),
     setChartCursor(),
-    addValueAxes(title = paste(country1, "(MW)"), position = "bottom", minimum = -8000, maximum = 8000),
-    addValueAxes(title =  paste(country2, "(MW)"), minimum = -8000, maximum = 8000),
+    addValueAxes(title = paste(country1, "(MW)"), position = "bottom", minimum = xlim[1], maximum = xlim[2]),
+    addValueAxes(title =  paste(country2, "(MW)"), minimum = ylim[1], maximum = ylim[2]),
     setExport(enabled = TRUE),
     setLegend(enabled = TRUE)
   )
