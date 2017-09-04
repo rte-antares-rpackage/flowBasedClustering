@@ -28,7 +28,7 @@ system.time(vertices <- data.table::rbindlist(lapply(unique(res$Date), function(
 
       # deja des vertices
       # out <- getVertices(as.matrix(resSel[, .SD, .SDcols = c("BE", "DE", "FR", "NL")]),
-      #             resSel$RAM_0)
+      #             resSel$RAM)
 
       # triangulation
       tc <- geometry::delaunayn(out, full = F)
@@ -74,7 +74,7 @@ system.time(res_dist_hour <- data.table::rbindlist(lapply(1:nrow(res_hour), func
     # PTDFTp <- PTDF[Date == date_2 & Period == h]
     # x_on_y[which(apply(cbind(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]], -rowSums(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]])), 1, function(X){
     #   all(t(X)%*%
-    #          t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM_0)}))] <- 0
+    #          t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM)}))] <- 0
 
     y_on_x_All <- vcgClost(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]],
                            vertices[Date%in% date_1 & Period %in% h, ]$mesh[[1]], borderchk = TRUE, sign = TRUE)
@@ -85,7 +85,7 @@ system.time(res_dist_hour <- data.table::rbindlist(lapply(1:nrow(res_hour), func
     # PTDFTp <- PTDF[Date == date_1 & Period == h]
     # y_on_x[which(apply(cbind(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]], -rowSums(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]])), 1, function(X){
     #   all(t(X)%*%
-    #         t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM_0)}))] <- 0
+    #         t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM)}))] <- 0
 
     d <- mean(x_on_y^2) + mean(y_on_x^2)
     d
