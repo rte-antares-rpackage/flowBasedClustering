@@ -35,8 +35,8 @@ clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
                       nbClustWeekend = 1, report = TRUE)
 
 # Get probabilities and quantiles from climate file in order to classify the typical days
-climat <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
-getProbability <- function(climat, classif = clusterTD, levelsProba = c(0.333, 0.666)
+climate <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
+getProbability <- function(climate, cluster = clusterTD, levelsProba = c(0.333, 0.666)
 ```
 
 ## 2 - Calendar
@@ -140,8 +140,8 @@ clusterPlot(clusterTD, country1 = "FR", country2 = "DE",
 
 Finally, the function ``getProbability()`` can be used to learn the correlations between the occurences of the different clusters and external data (typically climatic data). 
 
-* ``climat`` : climate file, 2 first columns are Date and Period, others are exogenous variables (e.g. wind speed and temperature)
-* ``classif`` : output of ``clusteringTypicalDays()``
+* ``climate`` : climate file, 2 first columns are Date and Period, others are exogenous variables (e.g. wind speed and temperature)
+* ``cluster`` : output of ``clusteringTypicalDays()``
 
 The quantiles are set with ``levelsProba``, and can be : 
 
@@ -151,9 +151,9 @@ The quantiles are set with ``levelsProba``, and can be :
 
 ```{r, echo = TRUE, eval = FALSE}
 # same quantiles for each variables 
-MatProb <- getProbability(climat, clusterTD, levelsProba = c(0.333, 0.666))
+MatProb <- getProbability(climate, clusterTD, levelsProba = c(0.333, 0.666))
 
 # diffents quantiles for each variables 
 levelsProba <- list(`Conso (J-1)` = c(0.2, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8))
-MatProb <- getProbability(climat, clusterTD, levelsProba = levelsProba)
+MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba)
 ```
