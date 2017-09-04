@@ -1,6 +1,6 @@
 #' Transform a PTDF file to vertices file
 #'
-#' @param PTDF \code{character}, path for PTDF file
+#' @param PTDF \code{character}, path for PTDF file. This file must have 7 obligatory columns : Id_day, Period, BE, DE, FR, NL, RAM
 #' @param nbCore \code{numeric}, use parallel computing or not. Indicate number of cores use. If 1 (default), no parallel.
 #'
 #' @examples
@@ -22,11 +22,19 @@ ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package
 {
 
   # Load PTDF
+  if(!file.exists(PTDF)){
+    stop(paste0(PTDF, " file not found"))
+  }
+  
   PTDF <- fread(PTDF)
-
+  if("RAM_0" %in% names(PTDF)){
+    setnames(PTDF, "RAM_0", "RAM")
+  }
+  
+  
   # Control PTFD format
-  if(all(names(PTDF)[1:7] != c("Date", "Period", "BE", "DE", "FR", "NL", "RAM_0"))){
-    stop(paste0("Names of ptdf file must be : Date, Period, BE, DE, FR, NL, RAM_0 currently : ",
+  if(all(names(PTDF)[1:7] != c("Date", "Period", "BE", "DE", "FR", "NL", "RAM"))){
+    stop(paste0("Names of ptdf file must be : Date, Period, BE, DE, FR, NL, RAM currently : ",
                 paste0(names(PTDF)[1:7] , collapse = ", ")))
   }
 
@@ -37,7 +45,7 @@ ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package
       if(nrow(resSel)>0)
       {
         out <- getVertices(as.matrix(resSel[, .SD, .SDcols = c("BE", "DE", "FR", "NL")]),
-                           resSel$RAM_0)
+                           resSel$RAM)
         out <- data.table(out)
         names(out) <- c("BE", "DE", "FR")
         data.table(Date = X, Period = Y, out)
