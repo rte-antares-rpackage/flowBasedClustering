@@ -50,6 +50,14 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     stop(paste0("Names of vertices must be 'Date', 'Period', 'BE', 'DE', 'FR', currently : ",
          paste0(names(vertices), collapse = ", ")))
   }
+  if(!is.character(vertices$Date)){
+    vertices$Date <- as.character(vertices$Date)
+  }
+  unVerticeDate <- unique(vertices$Date)
+  testIsDate <- try(as.Date(unVerticeDate), silent = TRUE)
+  if( class( testIsDate ) == "try-error" || is.na( testIsDate ) ){
+    stop( "Date column must have this format : %Y-%m-%d ?as.Date for help")
+  } 
 
 
   #control Weigth
@@ -66,6 +74,14 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     stop("Names of calendar must be 'interSeasonWe', 'interSeasonWd', 'winterWe', 'winterWd', 'summerWe', 'summerWd'")
   }
 
+ sapply(names(calendar), function(X){
+    if(sum(unVerticeDate%in%as.character(calendar[[X]])) == 0){
+      stop(paste0("Intersection between season ", X, "(calendar) and vertices$Date is empty. This job cant be run"))
+    }
+  })
+  
+  
+  
   # generate mesh for each polyhedron, mesh is an object use to calculate distance between polyhedron
   vertices <- vertices[, list(out = list(cbind(BE, DE, FR))), by = c("Date", "Period")]
   vertices[, mesh := list(.getMesh(out[[1]])),by = c("Date", "Period") ]
@@ -102,7 +118,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     }, simplify = FALSE))
     typicalDay
   }))
-
+  setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/7)
   #Generate out data.table
   for(i in 1:nrow(allTypDay)){
     allTypDay$dayIn[[i]] <- list(merge(allTypDay$dayIn[[i]], vertices[,.SD, .SDcols = 1:3], by = c("Date", "Period")))
@@ -165,7 +181,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       # PTDFTp <- PTDF[Date == date_2 & Period == h]
       # x_on_y[which(apply(cbind(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]], -rowSums(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]])), 1, function(X){
       #   all(t(X)%*%
-      #          t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM_0)}))] <- 0
+      #          t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM)}))] <- 0
       #Dist from Y to X
       y_on_x_All <- vcgClost(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]],
                              vertices[Date%in% date_1 & Period %in% h, ]$mesh[[1]], borderchk = TRUE, sign = TRUE)
@@ -177,7 +193,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       # PTDFTp <- PTDF[Date == date_1 & Period == h]
       # y_on_x[which(apply(cbind(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]], -rowSums(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]])), 1, function(X){
       #   all(t(X)%*%
-      #         t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM_0)}))] <- 0
+      #         t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM)}))] <- 0
       d <- mean(x_on_y^2) + mean(y_on_x^2)
       weigthPond <- hourWeigth[h]
       d <- weigthPond * d
