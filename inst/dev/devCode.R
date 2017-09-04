@@ -11,7 +11,7 @@
 #     if(nrow(resSel)>0)
 #     {
 #     out <- getVertices(as.matrix(resSel[, .SD, .SDcols = c("BE", "DE", "FR", "NL")]),
-#                 resSel$RAM_0)
+#                 resSel$RAM)
 #     #tp <- convhulln(out)
 #
 #     data.table(Date = X, Period = Y,  mesh = list(as.mesh3d(deldir::deldir(out[,1],out[,2],z =out[,3]))))
