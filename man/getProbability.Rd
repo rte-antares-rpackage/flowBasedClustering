@@ -2,31 +2,31 @@
 % Please edit documentation in R/getProbability.R
 \name{getProbability}
 \alias{getProbability}
-\title{Get probabilities and quantiles from climat file for a classification}
+\title{Get probabilities and quantiles from climate file for a classification}
 \usage{
-getProbability(climat, classif, levelsProba = c(0.333, 0.666))
+getProbability(climate, cluster, levelsProba = c(0.333, 0.666))
 }
 \arguments{
-\item{climat}{\code{data.table} climat file, 2 first columns are Date and Period, others are params files}
+\item{climate}{\code{data.table} climate file, 2 first columns are Date and Period, others are params files}
 
-\item{classif}{\code{data.table} output of \link{clusteringTypicalDays}}
+\item{cluster}{\code{data.table} output of \link{clusteringTypicalDays}}
 
 \item{levelsProba}{\code{numeric or list}, can be \code{numeric} or \code{list}, if \code{numeric}, all quantiles
-are the same for all climat variables, if \code{list}, must be names and give quantiles for each climat variable.}
+are the same for all climate variables, if \code{list}, must be names and give quantiles for each climate variable.}
 }
 \description{
-Get probabilities and quantiles from climat file for a classification
+Get probabilities and quantiles from climate file for a classification
 }
 \examples{
 
 \dontrun{
-# climat data
-climat <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
+# climate data
+climate <- fread(system.file("dev/climat.txt",package = "flowBasedClustering"))
 
 # classification result
 clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
 
 levelsProba <- list(`Conso (J-1)` = c(0.2, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
-MatProb <- getProbability(climat, clusterTD, levelsProba = levelsProba)
+MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba)
 }
 }
