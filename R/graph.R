@@ -14,14 +14,21 @@
 generateClusteringReport <- function(dayType, output_file = NULL,
                              data = NULL){
 
+  if(is.null(output_file)){
+    output_file <- getwd()
+  }
+  direName <-  as.character(Sys.time())
+  direName <- gsub(" ", "", gsub( ":", "",direName))
+  reportDir <- paste0(output_file, "/", direName)
+  dir.create(reportDir)
+  output_file <- reportDir
+  
   if(is.null(data))
   {
     data <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
   }
 
-  if(is.null(output_file)){
-    output_file <- getwd()
-  }
+
   output_Dir <- output_file
   output_file <- paste0(output_file, "/", "FlowBased_clustering",dayType, "_", Sys.Date(), ".html")
   e <- environment()
@@ -33,6 +40,7 @@ generateClusteringReport <- function(dayType, output_file = NULL,
                     params = list(set_title = paste0("Typical Day ", dayType, " (generated on ", Sys.Date(), ")")),
                     intermediates_dir = output_Dir, envir = e,
                     quiet = TRUE)
+  output_file
 }
 
 

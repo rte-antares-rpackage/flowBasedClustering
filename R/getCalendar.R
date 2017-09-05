@@ -34,7 +34,8 @@ getSequence <- function(dateBegin, dateEnd){
 #' dates <- getSequence("2017-01-01", "2017-12-31")
 #' interSeasonBegin <- c("2017-03-01", "2017-09-01")
 #' interSeasonEnd <- c("2017-05-01", "2017-11-01")
-#' getCalendar(dates, interSeasonBegin, interSeasonEnd)
+#' dayExclude <- dates
+#' getCalendar(dates, interSeasonBegin, interSeasonEnd, dayExclude = dayExclude)
 #' }
 #'
 #' @import timeDate
@@ -71,10 +72,34 @@ getCalendar <- function(dates,
     unique(sort(c(daywe, dayHilyday)))
   }
 
-
+  dates <- as.Date(dates)
+  
+  
+  if(length(interSeasonBegin) == 0){
+    stop("interSeasonBegin must be provide")
+  }
+  if(length(interSeasonEnd) == 0){
+    stop("interSeasonEnd must be provide")
+  }
+  
   interSeasonBegin <- as.Date(interSeasonBegin)
   interSeasonEnd <- as.Date(interSeasonEnd)
-
+  
+  
+  ##Control if intersaisons day are includes in dates
+  if( sum(interSeasonBegin %in% dates) != length(interSeasonBegin) ){
+    erroreseason <- interSeasonBegin[!interSeasonBegin %in% dates]
+    erroreseason <- paste0(erroreseason, collapse = ";")
+    stop(paste0("Intersaison begin : ", erroreseason, " not in date vector"))
+  }
+  if( sum(interSeasonEnd %in% dates) != length(interSeasonEnd) ){
+    erroreseason <- interSeasonEnd[!interSeasonEnd %in% dates]
+    erroreseason <- paste0(erroreseason, collapse = ";")
+    stop(paste0("Intersaison end : ", erroreseason, " not in date vector"))
+  }
+  
+  
+  
   # Control user input
   if(length(interSeasonBegin) != length(interSeasonEnd)){
     stop("You must specify a end begin and end for each interseason, (interSeasonBegin and interSeasonEnd
@@ -189,5 +214,15 @@ getCalendar <- function(dates,
   calendarReturn <- lapply(calendarReturn, function(X){
     X[!X%in%dayExclude]
   })
+  
+  if(length(unlist(calendarReturn)) == 0){
+    stop("All periods are empty")
+  }
+  
+  if(min(unlist(lapply(calendarReturn, length))) == 0){
+    warning("One (or more) period defined is empty. Process like clusteringTypicalDays can't be run")
+  }
+  
+  
   calendarReturn
 }
