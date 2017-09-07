@@ -74,8 +74,11 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
 # clusterPlot(Myclassif, "FR", "DE", 8, 9)
 
 
+
 #' Prepare data for plot
 #'
+#' @importFrom grDevices chull
+#' @noRd
 .getChull <- function(data, country1, country2){
   data <- data.frame(data)
   if(country1 == "NL"){
@@ -94,12 +97,12 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
   res
 }
 
-
 #' Prepare data for plot
 #'
+#' @noRd
 .getDataPlotClustering <- function(allTypeDay, country1, country2, hour)
 {
-  tt <- apply(allTypeDay$dayIn[[1]][[1]][Period == hour], 1, function(data){
+  data_plot <- apply(allTypeDay$dayIn[[1]][[1]][Period == hour], 1, function(data){
     ctry1 <- country1
     ctry2 <- country2
     dataChull <- .getChull(data$out, ctry1, ctry2)
@@ -107,14 +110,14 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
     names(dataChull) <- c(paste0(data$Date, ctry1), paste0(data$Date, ctry2))
     round(data.table(dataChull), 0)
   })
-
-
-  maxRow <- max(unlist(lapply(tt, nrow)))
-  tt <- lapply(tt, function(X){
+  
+  
+  maxRow <- max(unlist(lapply(data_plot, nrow)))
+  data_plot <- lapply(data_plot, function(X){
     rbind(X, data.table(rep(NA, maxRow-nrow(X)), rep(NA, maxRow-nrow(X))), use.names=FALSE)
   })
-  tt <- cbind.data.frame(tt)
-  tt
+  data_plot <- cbind.data.frame(data_plot)
+  data_plot
 }
 
 #' Graph function
@@ -125,7 +128,7 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
 #'@param ggplot : ggplot or amCharts ?
 #'@param xlim : xlim
 #'@param ylim : ylim
-
+#'@noRd
 .makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, ggplot = FALSE, xlim = c(-10000, 10000), ylim = c(-10000, 10000)){
   ctry <- unique(substr(names(data), 11, 12))
   if(typicalDayOnly){
@@ -179,12 +182,15 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
       tmp_data
     }))
     
-    ggplot(data=gg_data, aes(x = BE, y = FR, group = date, colour = col, size = size, linetype = as.character(col))) + geom_path() +
-      geom_point()  + scale_size(range=c(0.1, 2), guide=FALSE) + theme(legend.position="none") + 
+    ggplot(data=gg_data, aes(x = eval(parse(text=ctry[1])), y = eval(parse(text=ctry[2])), group = date, colour = col, size = size, linetype = as.character(col))) + geom_path() +
+      geom_point()  + scale_size(range=c(0.1, 2), guide=FALSE) + theme(legend.position="none") +
       xlim(xlim[1], xlim[2]) + ylim(ylim[1], ylim[2]) + 
       ggtitle(paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])) +
-      theme(plot.title = element_text(hjust = 0.5)) + ylab(paste(ctry[2], "(MW)")) + 
-      xlab(paste(ctry[1], "(MW)"))
+      theme(plot.title = element_text(hjust = 0.5)) + ylab(paste(ctry[2], "(MW)")) +
+      xlab(paste(ctry[1], "(MW)")) + theme(panel.background = element_rect(fill = 'white', colour = 'black'),
+                                           panel.grid.major = element_line(size = 0.5, linetype = 'dashed',
+                                                                           colour = "grey"))
+    
     
   }
 }
