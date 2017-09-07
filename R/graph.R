@@ -26,7 +26,7 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
 
 
   output_Dir <- outputFile
-  outputFile <- paste0(outputFile, "/", "FlowBased_clustering",dayType, "_", Sys.Date(), ".html")
+  outputFile <- paste0(outputFile, "/", gsub(":", "", gsub( " ", "_",as.character(Sys.time()))), "_flowBased_",dayType, "_",data[idDayType == dayType]$Class, ".html")
   e <- environment()
   e$dayType <- dayType
   e$data <- data
