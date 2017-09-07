@@ -17,6 +17,10 @@ plotFlowbased(PTDF, country1, country2, domainsNames = NULL, main = "",
 \item{domainsNames}{\code{character} names for domain(s), use in legend}
 
 \item{main}{\code{character} title}
+
+\item{xlim, }{x lim}
+
+\item{ylim, }{y lim}
 }
 \description{
 Plot flow-based domain(s)

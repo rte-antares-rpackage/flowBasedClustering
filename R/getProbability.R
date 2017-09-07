@@ -178,9 +178,6 @@ getProbability <- function(climate, cluster, levelsProba = c(0.333, 0.666), extr
   }, simplify = FALSE))
   
   
-  
-  
-  
   andTableStruct$Proba <- probaAndEffectifs$value
   andTableStruct$effectifClass <- probaAndEffectifs$V2
   
@@ -189,7 +186,7 @@ getProbability <- function(climate, cluster, levelsProba = c(0.333, 0.666), extr
     ##Apply retro propagation when NA value of probability
     if(length(is.na(andTableStruct$Proba)) > 0){
       rowS <- andTableStruct[is.na(Proba)] 
-      cat(paste0(round(100*nrow(rowS)/nrow(andTableStruct), 1), "% of value extrapolate"))
+      warning(paste0("due to lack of historical record, ", round(100*nrow(rowS)/nrow(andTableStruct), 1), "% of the probability matrix has been extrapolated"))
       andTableStruct[is.na(Proba)]$Proba <- sapply(1:nrow(rowS), function(i){
         selRow <- rowS[i]
         quantSel <- selRow[,.SD, .SDcols = names(quantileNonClaire)]

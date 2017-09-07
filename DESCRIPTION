@@ -27,7 +27,8 @@ Imports:
     rmarkdown(>= 1.4),
     grDevices(>= 3.3),
     stats(>= 3.3),
-    utils(>= 3.3)
+    utils(>= 3.3),
+    DT
 RoxygenNote: 6.0.1
 Suggests:
     testthat(>= 1.0.2),

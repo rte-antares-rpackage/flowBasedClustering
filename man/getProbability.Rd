@@ -4,7 +4,8 @@
 \alias{getProbability}
 \title{Get probabilities and quantiles from climate file for a classification}
 \usage{
-getProbability(climate, cluster, levelsProba = c(0.333, 0.666))
+getProbability(climate, cluster, levelsProba = c(0.333, 0.666),
+  extrapolationNA = TRUE)
 }
 \arguments{
 \item{climate}{\code{data.table} climate file, 2 first columns are Date and Period, others are params files}
@@ -13,6 +14,8 @@ getProbability(climate, cluster, levelsProba = c(0.333, 0.666))
 
 \item{levelsProba}{\code{numeric or list}, can be \code{numeric} or \code{list}, if \code{numeric}, all quantiles
 are the same for all climate variables, if \code{list}, must be names and give quantiles for each climate variable.}
+
+\item{extrapolationNA}{\code{booelan} extrapolate NA value wich neighbours.}
 }
 \description{
 Get probabilities and quantiles from climate file for a classification
@@ -26,7 +29,10 @@ climate <- fread(system.file("dev/climat.txt",package = "flowBasedClustering"))
 # classification result
 clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
 
-levelsProba <- list(`Conso (J-1)` = c(0.2, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
+levelsProba <- list(`Conso (J-1)` = c(0.2, 0.4, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
 MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba)
+
+levelsProba <- list(`Conso (J-1)` = c(0.2,0.25,0.5,0.75,0.90, 0.95), DE_wind = c(0.25,0.5,0.75, 0.9, 0.95),DE_solar = c(0.25,0.5,0.75) )
+MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = TRUE)
 }
 }

@@ -1,8 +1,8 @@
 #' Generate html report
 #'
 #' @param dayType \code{numeric} Typical day
-#' @param output_file \code{character} path of output
-#' @param data \code{data.table} data from \link{classifTypicalDay}
+#' @param outputFile \code{character} path of output
+#' @param data \code{data.table} data from \link{clusteringTypicalDays}
 #'
 #'
 #' @examples
@@ -11,17 +11,13 @@
 #' generateClusteringReport(dayType = 7)
 #' }
 #' @export
-generateClusteringReport <- function(dayType, output_file = NULL,
+generateClusteringReport <- function(dayType, outputFile = NULL,
                              data = NULL){
 
-  if(is.null(output_file)){
-    output_file <- getwd()
+
+  if(is.null(outputFile)){
+    outputFile <- getwd()
   }
-  direName <-  as.character(Sys.time())
-  direName <- gsub(" ", "", gsub( ":", "",direName))
-  reportDir <- paste0(output_file, "/", direName)
-  dir.create(reportDir)
-  output_file <- reportDir
   
   if(is.null(data))
   {
@@ -29,43 +25,52 @@ generateClusteringReport <- function(dayType, output_file = NULL,
   }
 
 
-  output_Dir <- output_file
-  output_file <- paste0(output_file, "/", "FlowBased_clustering",dayType, "_", Sys.Date(), ".html")
+  output_Dir <- outputFile
+  outputFile <- paste0(outputFile, "/", "FlowBased_clustering",dayType, "_", Sys.Date(), ".html")
   e <- environment()
   e$dayType <- dayType
   e$data <- data
-
+  
+  matchingNameTable <- data.table(Class = c("interSaisonWe", "interSaisonSe", "winterWe", "winterSe",
+                                            "summerWe", "summerSe"),
+                                  title = c("inter-season weekend day", "inter-season working day",
+                                            "winter weekend day", "winter working day",
+                                            "summer weekend day", "summer working day"))
+  
+  
+  CompTitle <- matchingNameTable$title[which(data[dayType]$Class == matchingNameTable$Class)]
+  e$CompTitle <- CompTitle
+  
+  
   rmarkdown::render(system.file("/report/resumeclustflex.Rmd", package = "flowBasedClustering"),
-                    output_file = output_file,
-                    params = list(set_title = paste0("Typical Day ", dayType, " (generated on ", Sys.Date(), ")")),
+                    output_file = outputFile,
+                    params = list(set_title = paste0("Typical Day ", dayType, " : ", CompTitle,  " (generated on ", Sys.Date(), ")")),
                     intermediates_dir = output_Dir, envir = e,
                     quiet = TRUE)
-  output_file
+  outputFile
 }
 
 
 
-#' Generate a plot for a typical day cluster
-#'
-#' @param data \code{data.table}, output of \link{classifTypicalDay}
-#' @param country1 \code{character}, name of first country
-#' @param country2 \code{character}, name of second country
-#' @param hour \code{numeric}, hour
-#' @param dayType  \code{numeric}, dayType
-#' @param typicalDayOnly : plot only typical day ?
-#' @param ggplot : ggplot or amCharts ?
-#'
-#' @import rAmCharts
-#'
-#' @export
-clusterPlot <- function(data, country1, country2, hour, dayType, 
-                        typicalDayOnly = FALSE, ggplot = FALSE){
-  dataPlot <- .getDataPlotClustering(data[idDayType==dayType],  country1, country2, hour)
-  .makeGraph(dataPlot, data[idDayType==dayType]$TypicalDay, 
-             typicalDayOnly = typicalDayOnly, ggplot = ggplot)
-}
-
-
+#' #' Generate a plot for a typical day cluster
+#' #'
+#' #' @param data \code{data.table}, output of \link{classifTypicalDay}
+#' #' @param country1 \code{character}, name of first country
+#' #' @param country2 \code{character}, name of second country
+#' #' @param hour \code{numeric}, hour
+#' #' @param dayType  \code{numeric}, dayType
+#' #' @param typicalDayOnly : plot only typical day ?
+#' #' @param ggplot : ggplot or amCharts ?
+#' #'
+#' #' @import rAmCharts
+#' #'
+#' #' @export
+#' clusterPlot <- function(data, country1, country2, hour, dayType, 
+#'                         typicalDayOnly = FALSE, ggplot = FALSE){
+#'   dataPlot <- .getDataPlotClustering(data[idDayType==dayType],  country1, country2, hour)
+#'   .makeGraph(dataPlot, data[idDayType==dayType]$TypicalDay, 
+#'              typicalDayOnly = typicalDayOnly, ggplot = ggplot)
+#' }
 # clusterPlot(Myclassif, "FR", "DE", 8, 9)
 
 
@@ -183,3 +188,6 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
     
   }
 }
+
+
+

@@ -1,57 +1,5 @@
-#' Generate html report
-#'
-#' @param dayType \code{numeric} Typical day
-#' @param outputPath \code{character} path of output
-#' @param data \code{data.table} output of \link{clusteringTypicalDays}
-#'
-#'
-#' @examples
-#'
-#' \dontrun{
-#' # classification result
-#' clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
-#'
-#' generateClusteringReport(dayType = 7, data = clusterTD)
-#'
-#' }
-#'
-#' @export
-#'
-#' @import rAmCharts
-#' @import pipeR
-#' @import ggplot2
-#'
-#'
-generateClusteringReport <- function(dayType, outputPath = NULL,
-                             data = NULL){
-
-  # If data are not specify by user, load them from package default file
-  if(is.null(data))
-  {
-    data <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
-  }
-
-  if(is.null(outputPath)){
-    outputPath <- getwd()
-  }
-  #Create an environment for the execution of markdown
-  output_Dir <- outputPath
-  outputPath <- paste0(outputPath, "/", "FlowBased_clustering", dayType, "_", Sys.Date(), ".html")
-  e <- environment()
-  e$dayType <- dayType
-  e$data <- data
-
-  #report creation
-  rmarkdown::render(system.file("/report/resumeclustflex.Rmd", package = "flowBasedClustering"),
-                    output_file = outputPath,
-                    params = list(set_title = paste0("Typical Day ", dayType, " (generated on ", Sys.Date(), ")")),
-                    intermediates_dir = output_Dir, envir = e,
-                    quiet = TRUE)
-}
-
-
-
 #' Generate a plot for a typical day cluster
+#'
 #'
 #' @param data \code{data.table}, output of \link{clusteringTypicalDays}
 #' @param country1 \code{character}, name of first country
@@ -61,7 +9,7 @@ generateClusteringReport <- function(dayType, outputPath = NULL,
 #' @param typicalDayOnly : plot only typical day ?
 #' @param ggplot : ggplot or amCharts ?
 #'
-#' @import rAmCharts
+#' @import rAmCharts DT
 #'
 #' @examples
 #'
@@ -76,7 +24,7 @@ generateClusteringReport <- function(dayType, outputPath = NULL,
 #' clusterPlot(clusterTD, "FR", "DE", 8, 9, TRUE, FALSE)
 #'
 #' }
-#'
+#' @import ggplot2
 #' @export
 clusterPlot <- function(data, country1, country2, hour, dayType,
                         typicalDayOnly = FALSE, ggplot = FALSE){
@@ -198,7 +146,9 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
       xlim(-10000, 10000) + ylim(-10000, 10000) +
       ggtitle(paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])) +
       theme(plot.title = element_text(hjust = 0.5)) + ylab(paste(ctry[2], "(MW)")) +
-      xlab(paste(ctry[1], "(MW)"))
+      xlab(paste(ctry[1], "(MW)")) + theme(panel.background = element_rect(fill = 'white', colour = 'black'),
+                                           panel.grid.major = element_line(size = 0.5, linetype = 'dashed',
+                                                                           colour = "grey"))
 
   }
 }
@@ -212,6 +162,8 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 #' @param country2 \code{character} country 2 possible values are : BE, DE, FR, NL
 #' @param domainsNames \code{character} names for domain(s), use in legend
 #' @param main \code{character} title
+#' @param xlim, x lim
+#' @param ylim, y lim
 #'
 #' @examples
 #'

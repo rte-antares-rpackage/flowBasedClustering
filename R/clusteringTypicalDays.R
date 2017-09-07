@@ -35,20 +35,19 @@
 #'
 #' @importFrom cluster pam
 #' @importFrom utils txtProgressBar getTxtProgressBar setTxtProgressBar
-
 #'
 clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
-                              report = TRUE, reportPath = getwd(),
-                              hourWeigth = rep(1, 24)){
-
+                                  report = TRUE, reportPath = getwd(),
+                                  hourWeigth = rep(1, 24)){
+  
   pb <- txtProgressBar(style = 3)
-
+  
   setTxtProgressBar(pb, 0)
-
+  
   #control if the format of the vertices file is good
   if(any(names(vertices) != c("Date", "Period", "BE", "DE", "FR"))){
     stop(paste0("Names of vertices must be 'Date', 'Period', 'BE', 'DE', 'FR', currently : ",
-         paste0(names(vertices), collapse = ", ")))
+                paste0(names(vertices), collapse = ", ")))
   }
   if(!is.character(vertices$Date)){
     vertices$Date <- as.character(vertices$Date)
@@ -58,13 +57,13 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   if( class( testIsDate ) == "try-error" || is.na( testIsDate ) ){
     stop( "Date column must have this format : %Y-%m-%d ?as.Date for help")
   } 
-
-
+  
+  
   #control Weigth
   if(length(hourWeigth)!=24){
     stop("Length of hourWeigth must be 24")
   }
-
+  
   #control names of calendar
   if(any(!names(calendar)%in% c("interSeasonWe",
                                 "interSeasonWd",
@@ -73,8 +72,8 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
                                 "summerWe","summerWd")) | is.null(names(calendar))){
     stop("Names of calendar must be 'interSeasonWe', 'interSeasonWd', 'winterWe', 'winterWd', 'summerWe', 'summerWd'")
   }
-
- sapply(names(calendar), function(X){
+  
+  sapply(names(calendar), function(X){
     if(sum(unVerticeDate%in%as.character(calendar[[X]])) == 0){
       stop(paste0("Intersection between season ", X, "(calendar) and vertices$Date is empty. This job cant be run"))
     }
@@ -85,36 +84,38 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   # generate mesh for each polyhedron, mesh is an object use to calculate distance between polyhedron
   vertices <- vertices[, list(out = list(cbind(BE, DE, FR))), by = c("Date", "Period")]
   vertices[, mesh := list(.getMesh(out[[1]])),by = c("Date", "Period") ]
-
+  
   # Detect weekend
   We <- rep(FALSE, length(calendar))
   We[grep("We", names(calendar))] <- TRUE
-
+  
   # Apply classification for each period in calendar
   allTypDay <- rbindlist(apply(data.table(calendar, We, nn = names(calendar)), 1, function(season){
     setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/7)
-
-
+ 
     nbClust <- ifelse(season$We, nbClustWeekend, nbClustWeek)
     veticesSel <- vertices[Date %in% as.character(season$calendar)]
     # get distance for each day pairs
     distMat <- .getDistMatrix(veticesSel, hourWeigth)
-
+    
     # with hclust
     # vect <- cutree(hclust(distMat), nbClust)
-
+    
     # clustering using PAM
     vect <- cluster::pam(distMat, nbClust, diss = TRUE)$clustering
-
+    
     distMat <- as.matrix(distMat)
     typicalDay <- rbindlist(sapply(unique(vect), function(X){
       # Found a representative day for each class
       dateIn <- names(vect[which(vect == X)])
       colSel <- row.names(distMat)%in%dateIn
       #detect day closed to middle of cluster
-      data.table(TypicalDay = names(which.min(rowSums(distMat[colSel, colSel]))),
+      minDay <- which.min(rowSums(distMat[colSel, colSel]))
+      distINfo <- distMat[minDay,colSel]
+      data.table(TypicalDay = names(minDay),
                  Class = season$nn,
-                 dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))))
+                 dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
+                 distance = list(data.table(Date = dateIn, Distance = distINfo)))
     }, simplify = FALSE))
     typicalDay
   }))
@@ -128,11 +129,11 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   ##Ordered result
   
   orderVect <- c(which(allTypDay$Class == "summerWd"),
-    which(allTypDay$Class == "summerWe"),
-    which(allTypDay$Class == "winterWd"),
-    which(allTypDay$Class == "winterWe"),
-    which(allTypDay$Class == "interSeasonWd"),
-    which(allTypDay$Class == "interSeasonWe"))
+                 which(allTypDay$Class == "summerWe"),
+                 which(allTypDay$Class == "winterWd"),
+                 which(allTypDay$Class == "winterWe"),
+                 which(allTypDay$Class == "interSeasonWd"),
+                 which(allTypDay$Class == "interSeasonWe"))
   if(length(orderVect) == nrow(allTypDay)){
     allTypDay <- allTypDay[orderVect]
   }
@@ -142,12 +143,22 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
   # report generation
   if(report){
+    outputFile <- reportPath
+    if(is.null(outputFile)){
+      outputFile <- getwd()
+    }
+    direName <-  as.character(Sys.time())
+    direName <- gsub(" ", "", gsub( ":", "",direName))
+    reportDir <- paste0(outputFile, "/", direName)
+    dir.create(reportDir)
+    outputFile <- reportDir
+    
     sapply(allTypDay$idDayType, function(X){
-      
-      
-      output_file <- generateClusteringReport(X, data = allTypDay, output_file = reportPath)})
-      saveRDS(allTypDay, paste0(output_file, "/resultClust.RDS"))
+      generateClusteringReport(X, data = allTypDay, outputFile = outputFile)})
+    
+    saveRDS(allTypDay, paste0(outputFile, "/resultClust.RDS"))
   }
+  
   allTypDay
 }
 
@@ -158,7 +169,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 .getMesh <- function(out){
   tc <- geometry::delaunayn(out, full = F)
   # visualize : tetramesh(tc,out,alpha=0.7)
-
+  
   # sort
   tc_tri <- geometry::surf.tri(out, tc)
   # add column equal to 1
@@ -178,21 +189,21 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 .getDistMatrix <- function(vertices, hourWeigth)
 {
   res_hour <- data.table(t(combn(unique(vertices$Date), 2)))
-
+  
   distMat <- data.table::rbindlist(lapply(1:nrow(res_hour), function(comb){
     date_1 <- res_hour[comb, V1]
     date_2 <- res_hour[comb, V2]
     v_hours <- intersect(vertices[Date%in% date_1, Period], vertices[Date%in% date_2, Period])
     hourDist <- data.table::rbindlist(lapply(v_hours, function(h){
-
+      
       #Dist from X to Y
       x_on_y_All <- vcgClost(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]],
                              vertices[Date%in% date_2 & Period %in% h, ]$mesh[[1]],
                              borderchk = TRUE,
                              sign = TRUE, facenormals = TRUE, barycentric = TRUE)
-
+      
       x_on_y <- x_on_y_All$quality
-
+      
       # If we want to filter points in domains
       # PTDFTp <- PTDF[Date == date_2 & Period == h]
       # x_on_y[which(apply(cbind(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]], -rowSums(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]])), 1, function(X){
@@ -201,10 +212,10 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       #Dist from Y to X
       y_on_x_All <- vcgClost(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]],
                              vertices[Date%in% date_1 & Period %in% h, ]$mesh[[1]], borderchk = TRUE, sign = TRUE)
-
-
+      
+      
       y_on_x <- y_on_x_All$quality
-
+      
       # If we want to filter points in domains
       # PTDFTp <- PTDF[Date == date_1 & Period == h]
       # y_on_x[which(apply(cbind(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]], -rowSums(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]])), 1, function(X){
@@ -215,13 +226,13 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       d <- weigthPond * d
       data.table(Date1 = c(date_1, date_2), Date2 = c(date_2, date_1), Period = h, dist = d)
     }))
-
+    
     # Hour aggregation
     hourDist <- hourDist[, sqrt(sum(dist)), by = c("Date1", "Date2")]
     setnames(hourDist, "V1", "dayDist")
     hourDist
   }))
-
+  
   # distance matrix creation
   distMat <- dcast(distMat, Date1~Date2,  value.var= "dayDist")
   distMat <- distMat[,.SD, .SDcols = 2:ncol(distMat)]

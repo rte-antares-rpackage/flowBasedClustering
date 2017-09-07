@@ -19,6 +19,23 @@ library(manipulateWidget)
 library(flowBasedClustering)
 library(ggplot2)
 library(pipeR)
+library(DT)
+library(pipeR)
+```
+
+
+Resume {data-navmenu="Hour"}
+=====================================
+```{r}
+day <- data[idDayType == dayType]$TypicalDay
+DT::datatable(data.frame(Date = unique(data[idDayType == dayType]$dayIn[[1]][[1]]$Date)), rownames = FALSE)%>>%
+  formatStyle(
+    'Date',
+    backgroundColor = styleEqual(
+      day, c('lightgrey')
+    ))
+
+
 ```
 
 
@@ -39,8 +56,6 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
 ### Mean typical day
-
-
 
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
