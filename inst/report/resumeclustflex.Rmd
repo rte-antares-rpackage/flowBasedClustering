@@ -28,7 +28,7 @@ Cluster {data-navmenu="Hour"}
 =====================================
 
 
-<h1> Typical day : `r data[idDayType == dayType]$TypicalDay` </h1>
+<h1> Typical day, hour : `r data[idDayType == dayType]$TypicalDay` </h1>
 
 
 Column {data-width=100}
@@ -51,7 +51,7 @@ datatable(data.frame(Date = as.character(unique(data[idDayType == dayType]$dayIn
                                       list(extend = 'csv',
                                            buttons = c('csv'),
                                            text = 'Download data',
-                                           filename = "cluster")
+                                           filename = "cluster_typicalDay")
                        )
         )
   )
@@ -73,13 +73,13 @@ hour <- 1
 
 Column {.tabset data-width=400}
 -----------------------------------------------------------------------
-### Historical domains 1
+### Historical domains, hour 1
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 1
+### Typical day, hour 1
 
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
@@ -89,13 +89,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=400}
 ------------------------------------------------------------------
-### Historical domains 1
+### Historical domains, hour 1
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 1
+### Typical day, hour 1
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -111,13 +111,13 @@ hour <- 2
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 2
+### Historical domains, hour 2
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 2
+### Typical day, hour 2
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -125,13 +125,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 2
+### Historical domains, hour 2
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 2
+### Typical day, hour 2
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -147,13 +147,13 @@ hour <- 3
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 3
+### Historical domains, hour 3
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 3
+### Typical day, hour 3
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -161,13 +161,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 3
+### Historical domains, hour 3
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 3
+### Typical day, hour 3
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -183,13 +183,13 @@ hour <- 4
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 4
+### Historical domains, hour 4
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 4
+### Typical day, hour 4
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -197,13 +197,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 4
+### Historical domains, hour 4
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 4
+### Typical day, hour 4
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -220,13 +220,13 @@ hour <- 5
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 5
+### Historical domains, hour 5
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 5
+### Typical day, hour 5
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -234,13 +234,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 5
+### Historical domains, hour 5
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 5
+### Typical day, hour 5
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -257,13 +257,13 @@ hour <- 6
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 6
+### Historical domains, hour 6
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 6
+### Typical day, hour 6
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -271,13 +271,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 6
+### Historical domains, hour 6
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 6
+### Typical day, hour 6
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -293,13 +293,13 @@ hour <- 7
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 7
+### Historical domains, hour 7
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 7
+### Typical day, hour 7
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -307,13 +307,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 7
+### Historical domains, hour 7
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 7
+### Typical day, hour 7
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -329,13 +329,13 @@ hour <- 8
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 8
+### Historical domains, hour 8
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 8
+### Typical day, hour 8
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -343,13 +343,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 8
+### Historical domains, hour 8
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 8
+### Typical day, hour 8
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -366,13 +366,13 @@ hour <- 9
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 9
+### Historical domains, hour 9
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 9
+### Typical day, hour 9
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -380,13 +380,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 9
+### Historical domains, hour 9
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 9
+### Typical day, hour 9
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -402,13 +402,13 @@ hour <- 10
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 10
+### Historical domains, hour 10
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 10
+### Typical day, hour 10
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -416,13 +416,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 10
+### Historical domains, hour 10
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 10
+### Typical day, hour 10
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -438,13 +438,13 @@ hour <- 11
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 11
+### Historical domains, hour 11
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 11
+### Typical day, hour 11
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -452,13 +452,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 11
+### Historical domains, hour 11
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 11
+### Typical day, hour 11
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -474,13 +474,13 @@ hour <- 12
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 12
+### Historical domains, hour 12
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 12
+### Typical day, hour 12
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -488,13 +488,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 12
+### Historical domains, hour 12
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 12
+### Typical day, hour 12
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -510,13 +510,13 @@ hour <- 13
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 13
+### Historical domains, hour 13
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 13
+### Typical day, hour 13
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -524,13 +524,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 13
+### Historical domains, hour 13
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 13
+### Typical day, hour 13
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -546,13 +546,13 @@ hour <- 14
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 14
+### Historical domains, hour 14
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 14
+### Typical day, hour 14
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -560,13 +560,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 14
+### Historical domains, hour 14
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 14
+### Typical day, hour 14
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -582,13 +582,13 @@ hour <- 15
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 15
+### Historical domains, hour 15
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 15
+### Typical day, hour 15
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -596,13 +596,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 15
+### Historical domains, hour 15
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 15
+### Typical day, hour 15
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -618,13 +618,13 @@ hour <- 16
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 16
+### Historical domains, hour 16
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 16
+### Typical day, hour 16
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -632,13 +632,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 16
+### Historical domains, hour 16
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 16
+### Typical day, hour 16
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -655,13 +655,13 @@ hour <- 17
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 17
+### Historical domains, hour 17
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 17
+### Typical day, hour 17
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -669,13 +669,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 17
+### Historical domains, hour 17
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 17
+### Typical day, hour 17
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -691,13 +691,13 @@ hour <- 18
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 18
+### Historical domains, hour 18
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 18
+### Typical day, hour 18
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -705,13 +705,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 18
+### Historical domains, hour 18
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 18
+### Typical day, hour 18
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -727,13 +727,13 @@ hour <- 19
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 19
+### Historical domains, hour 19
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 19
+### Typical day, hour 19
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -741,13 +741,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 19
+### Historical domains, hour 19
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 19
+### Typical day, hour 19
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -763,13 +763,13 @@ hour <- 20
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 20
+### Historical domains, hour 20
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 20
+### Typical day, hour 20
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -777,13 +777,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 20
+### Historical domains, hour 20
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 20
+### Typical day, hour 20
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -799,13 +799,13 @@ hour <- 21
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 21
+### Historical domains, hour 21
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 21
+### Typical day, hour 21
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -813,13 +813,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 21
+### Historical domains, hour 21
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 21
+### Typical day, hour 21
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -836,13 +836,13 @@ hour <- 22
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 22
+### Historical domains, hour 22
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 22
+### Typical day, hour 22
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -850,13 +850,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 22
+### Historical domains, hour 22
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 22
+### Typical day, hour 22
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -872,13 +872,13 @@ hour <- 23
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 23
+### Historical domains, hour 23
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 23
+### Typical day, hour 23
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -886,13 +886,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 23
+### Historical domains, hour 23
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 23
+### Typical day, hour 23
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -908,13 +908,13 @@ hour <- 24
 
 Column {.tabset data-width=500}
 -----------------------------------------------------------------------
-### Historical domains 24
+### Historical domains, hour 24
 ```{r}
 clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 24
+### Typical day, hour 24
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
@@ -922,13 +922,13 @@ clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TR
 
 Column {.tabset data-width=500}
 ------------------------------------------------------------------
-### Historical domains 24
+### Historical domains, hour 24
 ```{r}
 clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
 ```
 
-### Typical day 24
+### Typical day, hour 24
 ```{r, fig.height=8}
 combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot(),
 clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE)%>>%plot())
