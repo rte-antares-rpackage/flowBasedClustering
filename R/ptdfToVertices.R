@@ -33,7 +33,7 @@ ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package
   
   
   # Control PTFD format
-  if(all(names(PTDF)[1:7] != c("Date", "Period", "BE", "DE", "FR", "NL", "RAM"))){
+  if(any(names(PTDF)[1:7] != c("Date", "Period", "BE", "DE", "FR", "NL", "RAM"))){
     stop(paste0("Names of ptdf file must be : Date, Period, BE, DE, FR, NL, RAM currently : ",
                 paste0(names(PTDF)[1:7] , collapse = ", ")))
   }
