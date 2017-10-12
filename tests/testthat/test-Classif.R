@@ -1,5 +1,6 @@
 context("Function getDistMatrix")
 library(data.table)
+options(rgl.useNULL = TRUE)
 
 
 test_that("Function getDistMatrix works and return appropriate object", {
@@ -13,6 +14,5 @@ test_that("Function getDistMatrix works and return appropriate object", {
   ditMat <- flowBasedClustering:::.getDistMatrix(data, rep(1,24))
   expect_equal(class(ditMat), "dist")
   cat("end .getDistMatrix")
-  
 
 })

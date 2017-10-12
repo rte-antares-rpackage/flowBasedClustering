@@ -18,7 +18,6 @@ Imports:
     geometry(>= 0.3-6),
     timeDate(>= 3012.100),
     rgl(>= 0.98.1),
-    Rvcg(>= 0.15),
     parallel(>= 3.2.3),
     cluster(>= 2.0.5),
     pipeR(>= 0.6.1.3),
@@ -33,5 +32,6 @@ RoxygenNote: 6.0.1
 Suggests:
     testthat(>= 1.0.2),
     knitr,
-    covr
+    covr,
+    Rvcg(>= 0.15)
 VignetteBuilder: knitr
