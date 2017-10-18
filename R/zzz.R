@@ -4,4 +4,3 @@ utils::globalVariables(
     "DE", "FR", "NL", "mesh", "out", "idDayType",
     "Quantiles")
 )
-options(rgl.useNULL = TRUE)
