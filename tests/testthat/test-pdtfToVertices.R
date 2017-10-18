@@ -2,14 +2,15 @@ context("Function pdtfToVertices")
 library(data.table)
 
 test_that("ptdfToVertices works", {
-  cat("start ptdfToVertices")
+
+  PTDF <- fread(system.file("testdata/PTDF6h.csv",package = "flowBasedClustering"))
+  out1 <- ptdfToVertices(PTDF = system.file("testdata/PTDF6h.csv",package = "flowBasedClustering"),  nbCore = 1)
   
-  
-  PTDF <- fread(system.file("testdata/sommets/PTDF6h.csv",package = "flowBasedClustering"))
-  out1 <- ptdfToVertices(PTDF = system.file("testdata/sommets/PTDF6h.csv",package = "flowBasedClustering"),  nbCore = 1)
+  # output file should not be empty
+  expect_false(nrow(out1) == 0)
   
   # Note : This test has been removed as it seems multithreading does not work with Rcmd check
-  out2 <- ptdfToVertices(PTDF = system.file("testdata/sommets/PTDF6h.csv",package = "flowBasedClustering"),  nbCore = 2)
+  out2 <- ptdfToVertices(PTDF = system.file("testdata/PTDF6h.csv",package = "flowBasedClustering"),  nbCore = 2)
   # check that output are similare for nbCore = 1 and 2
   expect_true(all.equal(out1, out2))
   
@@ -54,9 +55,16 @@ test_that("ptdfToVertices works", {
         expect_true(length(on_plane[on_plane]) >= 3)
       }
     })
-  cat("end ptdfToVertices")
-  
+
 })
   
+test_that("ptdfToVertices returns error if file does not exist", {
+  expect_error(ptdfToVertices(NULL))
+})
+
+test_that("ptdfToVertices returns error if header is not correct", {
+  expect_error(
+    ptdfToVertices(PTDF = system.file("testdata/PTDF.csv",package = "flowBasedClustering"),  nbCore = 1))
+})
   
   

@@ -27,11 +27,11 @@ Imports:
     grDevices(>= 3.3),
     stats(>= 3.3),
     utils(>= 3.3),
+    Rvcg(>= 0.15),
     DT
 RoxygenNote: 6.0.1
 Suggests:
     testthat(>= 1.0.2),
     knitr,
-    covr,
-    Rvcg(>= 0.15)
+    covr
 VignetteBuilder: knitr
