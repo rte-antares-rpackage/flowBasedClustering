@@ -30,3 +30,4 @@ clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedCluste
 plotMonotone(climate = climate, cluster = clusterTD, dayType = 1, variable = "DE_wind")
 }
 }
+

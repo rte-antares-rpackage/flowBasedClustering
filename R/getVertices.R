@@ -4,7 +4,8 @@
 #' @param b \code{numeric}, extreme point b
 #'
 #' @import pipeR
-#'
+#' @importFrom utils combn
+#' @importFrom stats dist
 #' @export
 getVertices <- function(face, b){
   B <- as.matrix(face)

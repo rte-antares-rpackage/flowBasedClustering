@@ -50,3 +50,4 @@ clusterTD <- clusteringTypicalDays(calendar, vertices)
 
 
 }
+
