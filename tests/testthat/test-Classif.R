@@ -4,8 +4,7 @@ options(rgl.useNULL = TRUE)
 
 
 test_that("Function getDistMatrix works and return appropriate object", {
-  cat("start .getDistMatrix")
-  
+
   data <- fread(system.file("testdata/VerticesTest.txt",package = "flowBasedClustering"))
 
   data <- data[,list(out = list(cbind(BE, DE, FR))), by = c("Date", "Period")]
@@ -13,6 +12,5 @@ test_that("Function getDistMatrix works and return appropriate object", {
   
   ditMat <- flowBasedClustering:::.getDistMatrix(data, rep(1,24))
   expect_equal(class(ditMat), "dist")
-  cat("end .getDistMatrix")
 
 })
