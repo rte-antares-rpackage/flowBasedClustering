@@ -42,4 +42,4 @@ artifacts:
     name: Bits
 
 on_success:
-  - Rscript -e 'covr::codecov()'    
+  - Rscript -e 'covr::codecov(token = "95f87ccf-6806-460a-a161-9d804c35809c")'    
