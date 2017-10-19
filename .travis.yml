@@ -4,6 +4,10 @@ language: R
 sudo: false
 cache: packages
 
+env:
+  - RGL_USE_NULL = true
+
+
 before_install:
   - Rscript -e "update.packages(ask = FALSE)"
   - Rscript -e "if (!'covr' %in% rownames(installed.packages())) install.packages('covr')"
