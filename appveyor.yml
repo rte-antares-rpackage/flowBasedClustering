@@ -12,6 +12,13 @@ install:
 
 # Adapt as necessary starting from here
 
+
+environment:
+  global:
+    _R_CHECK_FORCE_SUGGESTS_: false
+    CODECOV_TOKEN : "95f87ccf-6806-460a-a161-9d804c35809c"
+
+
 build_script:
   - travis-tool.sh install_deps
 
@@ -26,11 +33,6 @@ on_failure:
 on_success:
   - Rscript -e 'covr::codecov()'  
   
-
-environment:
-  global:
-    _R_CHECK_FORCE_SUGGESTS_: false
-
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
