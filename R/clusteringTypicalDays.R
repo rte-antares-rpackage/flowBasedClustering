@@ -1,4 +1,6 @@
-#' Generate clustering of typical days
+#' 
+#' @title Generate a set of flow-based typical days
+#' @description 
 #'
 #' @param calendar \code{list}, vector of date for each period. Can be obtain with \link{getCalendar}
 #' @param vertices \code{data.table}, 5 columns :
