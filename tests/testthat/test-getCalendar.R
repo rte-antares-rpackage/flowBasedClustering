@@ -15,6 +15,7 @@ test_that("getSequence works", {
 
 test_that("getCalendar works", {
   
+  # run function
   dates <- getSequence("2016-01-01", "2016-12-31")
   interSeasonBegin <- c("2016-03-01", "2016-10-01")
   interSeasonEnd <- c("2016-05-31", "2016-10-31")
@@ -50,5 +51,22 @@ test_that("getCalendar works", {
   calendar_with_3days_WE <- getCalendar(dates, interSeasonBegin, interSeasonEnd,  dayInWeekend = c(1, 6, 7))
   expect_false(as.Date("2016-07-11") %in% calendar$summerWe) # monday
   expect_true(as.Date("2016-07-11") %in% calendar_with_3days_WE$summerWe) # monday
-  
 })
+
+test_that("getCalendar returns error when expected", {
+  dates <- getSequence("2016-01-01", "2016-12-31")
+  # empty arguments
+  expect_error(getCalendar(dates, interSeasonBegin = "2016-03-01", interSeasonEnd = c()))
+  expect_error(getCalendar(dates, interSeasonBegin = c(), interSeasonEnd = "2016-05-30"))
+  # interseason boundaries out of calendar
+  expect_error(getCalendar(dates, interSeasonBegin = "2015-03-01", interSeasonEnd = "2016-05-30"))
+  expect_error(getCalendar(dates, interSeasonBegin = "2016-03-01", interSeasonEnd = "2017-05-30"))
+  # interseason end and beginning have different sizes
+  expect_error(getCalendar(dates, interSeasonBegin = c("2016-03-01", "2016-10-01"), interSeasonEnd = "2016-05-30"))
+  # end before beginning
+  expect_error(getCalendar(dates, interSeasonBegin = c("2016-03-01", "2016-10-01"), interSeasonEnd =  c("2016-05-31", "2016-09-15")))
+  # calendar empty
+  expect_error(getCalendar(dates, interSeasonBegin = c("2016-03-01", "2016-10-01"), interSeasonEnd =  c("2016-05-31", "2016-10-15"), dayExclude = dates))
+  # one season empty
+  expect_warning(getCalendar(dates, interSeasonBegin = c("2016-03-01", "2016-10-01"), interSeasonEnd =  c("2016-05-31", "2016-10-15"), dayExclude = getSequence("2016-04-01", "2016-10-15")))
+})  
