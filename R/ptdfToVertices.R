@@ -10,9 +10,9 @@
 #' }
 #'
 #' @import data.table
-#' @import geometry
-#' @import rgl
-#' @import Rvcg
+# @import geometry
+# @import rgl 
+# @import Rvcg
 #' @import pipeR
 #' @import parallel
 #'
@@ -70,9 +70,9 @@ ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package
 
     clusterEvalQ(cl, {
       library(data.table)
-      library(geometry)
-      library(rgl)
-      library(Rvcg)
+      #library(geometry)
+      #library(rgl)
+      #library(Rvcg)
       library(pipeR)
       library(flowBasedClustering)
     })

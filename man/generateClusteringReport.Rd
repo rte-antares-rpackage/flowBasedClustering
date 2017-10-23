@@ -22,3 +22,4 @@ Generate html report
 generateClusteringReport(dayType = 7)
 }
 }
+

@@ -45,7 +45,7 @@ getProbability <- function(climate, cluster, levelsProba = c(0.333, 0.666), extr
   
   datesDeleted <- climate[!climate$Date%in%na.omit(climate)$Date]$Date
   if(length(datesDeleted)>0){
-    warning(paste0("Day(s) deleted due to NA : ",paste0(datesDeleted, collapse = ", ")))
+    warning(paste0("Day(s) deleted due to NA in climate file : ",paste0(datesDeleted, collapse = ", ")))
   }
   
   climate <- na.omit(climate)

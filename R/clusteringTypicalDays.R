@@ -47,7 +47,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   setTxtProgressBar(pb, 0)
   
   #control if the format of the vertices file is good
-  if(any(names(vertices) != c("Date", "Period", "BE", "DE", "FR"))){
+  if(any(names(vertices)[1:5] != c("Date", "Period", "BE", "DE", "FR"))){
     stop(paste0("Names of vertices must be 'Date', 'Period', 'BE', 'DE', 'FR', currently : ",
                 paste0(names(vertices), collapse = ", ")))
   }
@@ -151,7 +151,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     }
     direName <-  as.character(Sys.time())
     direName <- gsub(" ", "", gsub( ":", "",direName))
-    reportDir <- paste0(outputFile, "/", direName)
+    reportDir <- paste0(outputFile, "/fb-clustering-", direName)
     dir.create(reportDir)
     outputFile <- reportDir
     
@@ -167,6 +167,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 #' function to get mesh3d data from vertices
 #'
 #' @noRd
+#' @importFrom rgl tmesh3d
 #'
 .getMesh <- function(out){
   tc <- geometry::delaunayn(out, full = F)
@@ -187,6 +188,8 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 #' @param hourWeigth \code{numeric}, weigth vector of weighting for hours
 
 #' @importFrom stats as.dist
+#' @importFrom Rvcg vcgClost
+#' @importFrom utils combn
 #' @noRd
 .getDistMatrix <- function(vertices, hourWeigth)
 {

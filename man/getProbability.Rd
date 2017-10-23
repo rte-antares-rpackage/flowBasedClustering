@@ -36,3 +36,4 @@ levelsProba <- list(`Conso (J-1)` = c(0.2,0.25,0.5,0.75,0.90, 0.95), DE_wind = c
 MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = TRUE)
 }
 }
+

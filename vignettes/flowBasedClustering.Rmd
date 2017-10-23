@@ -28,7 +28,7 @@ interSeasonEnd <- c("2016-05-15", "2016-10-31")
 calendar <- getCalendar(dates, interSeasonBegin, interSeasonEnd)
 
 # Transform PTDF data to vertices
-vertices <- ptdfToVertices(PTDF = "faceAllYear.csv", nbCore = 4)
+vertices <- ptdfToVertices(PTDF = system.file("dev/data/faceAllYear.csv", package = "flowBasedClustering"), nbCore = 4)
 
 # Cluster the typical days
 clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3, 
@@ -36,7 +36,7 @@ clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
 
 # Get probabilities and quantiles from climate file in order to classify the typical days
 climate <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
-getProbability <- function(climate, cluster = clusterTD, levelsProba = c(0.333, 0.666)
+probMatrix <- getProbability(climate, cluster = clusterTD, levelsProba = c(0.333, 0.666))
 ```
 
 ## 2 - Calendar

@@ -17,7 +17,6 @@ Imports:
     data.table (>= 1.10.4),
     geometry(>= 0.3-6),
     timeDate(>= 3012.100),
-    rgl(>= 0.98.1),
     parallel(>= 3.2.3),
     cluster(>= 2.0.5),
     pipeR(>= 0.6.1.3),
@@ -27,11 +26,12 @@ Imports:
     grDevices(>= 3.3),
     stats(>= 3.3),
     utils(>= 3.3),
+    Rvcg(>= 0.15),
+    rgl(>= 0.98.1),
     DT
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1
 Suggests:
     testthat(>= 1.0.2),
     knitr,
-    covr,
-    Rvcg(>= 0.15)
+    covr
 VignetteBuilder: knitr
