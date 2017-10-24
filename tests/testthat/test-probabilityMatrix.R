@@ -8,7 +8,7 @@ test_that("clustering getProbability works", {
   # load climate file (with NA)
   climate <- fread(system.file("testdata/climate2016.txt",package = "flowBasedClustering"))
   
-  # load previsouly made typical day selection on year 2016
+  # load previsouly made typical day selection on a few days (cf. test-clustering.R)
   clusterTD <- readRDS(system.file("testdata/clusterTD.RDS",package = "flowBasedClustering"))
   
   # run getProbability function
@@ -49,7 +49,7 @@ test_that("clustering getProbability works", {
   probMatrix2 <- getProbability(climate, clusterTD, levelsProba = levelsProba)
   
   # check if size of outputs are OK 
-  expect_equal(nrow(probMatrix[[1]]), 12*3*3*3) # cluster * load levels * wind levels * solar levels
-  expect_equal(nrow(probMatrix2[[1]]), 12*7*3*2) # cluster * load levels * wind levels * solar levels
+  expect_equal(nrow(probMatrix[[1]]), 9*3*3*3) # cluster * load levels * wind levels * solar levels
+  expect_equal(nrow(probMatrix2[[1]]), 9*7*3*2) # cluster * load levels * wind levels * solar levels
   
 })
