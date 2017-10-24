@@ -28,6 +28,7 @@ Imports:
     utils(>= 3.3),
     Rvcg(>= 0.15),
     rgl(>= 0.98.1),
+    dplyr(>= 0.7.3),
     DT
 RoxygenNote: 5.0.1
 Suggests:
