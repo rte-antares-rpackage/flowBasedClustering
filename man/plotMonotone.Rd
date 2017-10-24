@@ -22,10 +22,10 @@ Plot monotone
 
 \dontrun{
 # climate data
-climate <- fread(system.file("dev/climat.txt",package = "flowBasedClustering"))
+climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
 
 # classification result
-clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 
 plotMonotone(climate = climate, cluster = clusterTD, dayType = 1, variable = "DE_wind")
 }

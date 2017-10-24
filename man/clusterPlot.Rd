@@ -30,7 +30,7 @@ Generate a plot for a typical day cluster
 \dontrun{
 
 # classification result
-clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 
 clusterPlot(clusterTD, "FR", "DE", 8, 9, FALSE, FALSE)
 clusterPlot(clusterTD, "FR", "DE", 8, 9, FALSE, TRUE)

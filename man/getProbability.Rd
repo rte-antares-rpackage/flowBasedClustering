@@ -4,7 +4,7 @@
 \alias{getProbability}
 \title{Get probabilities and quantiles from climate file for a classification}
 \usage{
-getProbability(climate, cluster, levelsProba = c(0.333, 0.666),
+getProbability(climate, cluster, levelsProba = c(1/3, 2/3),
   extrapolationNA = TRUE)
 }
 \arguments{
@@ -23,17 +23,19 @@ Get probabilities and quantiles from climate file for a classification
 \examples{
 
 \dontrun{
-# climate data
-climate <- fread(system.file("dev/climat.txt",package = "flowBasedClustering"))
+# load climate daily time serires
+climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
 
-# classification result
-clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+# load clustering results (or build them with clusteringTypicalDays function())
+clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 
-levelsProba <- list(`Conso (J-1)` = c(0.2, 0.4, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
-MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba)
+# get Probability matrices
+MatProb <- getProbability(climate, clusterTD)
 
-levelsProba <- list(`Conso (J-1)` = c(0.2,0.25,0.5,0.75,0.90, 0.95), DE_wind = c(0.25,0.5,0.75, 0.9, 0.95),DE_solar = c(0.25,0.5,0.75) )
-MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = TRUE)
+# run with specified probability levels, and witout auto-filling the NA cases
+levelsProba <- list(FR_load = c(0.2, 0.4, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
+MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = FALSE)
+
 }
 }
 

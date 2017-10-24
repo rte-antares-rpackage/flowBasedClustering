@@ -4,7 +4,7 @@
 \alias{generateClusteringReport}
 \title{Generate html report}
 \usage{
-generateClusteringReport(dayType, outputFile = NULL, data = NULL)
+generateClusteringReport(dayType, outputFile = NULL, data)
 }
 \arguments{
 \item{dayType}{\code{numeric} Typical day}

@@ -2,11 +2,11 @@
 % Please edit documentation in R/clusteringTypicalDays.R
 \name{clusteringTypicalDays}
 \alias{clusteringTypicalDays}
-\title{Generate clustering of typical days}
+\title{Generate a set of flow-based typical days}
 \usage{
 clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
   nbClustWeekend = 1, report = TRUE, reportPath = getwd(),
-  hourWeigth = rep(1, 24))
+  hourWeight = rep(1, 24))
 }
 \arguments{
 \item{calendar}{\code{list}, vector of date for each period. Can be obtain with \link{getCalendar}}
@@ -29,23 +29,35 @@ This parameter can be obtained with the function \code{ptdfToVertices()}.}
 
 \item{reportPath}{\code{character}, path where the report is written. Defaut to \code{getwd()}}
 
-\item{hourWeigth}{\code{numeric}, vector of 24 weights to ponderate differently each hour of the day}
+\item{hourWeight}{\code{numeric}, vector of 24 weights to ponderate differently each hour of the day}
 }
 \description{
-Generate clustering of typical days
+To complete
 }
 \examples{
 
 \dontrun{
 library(data.table)
-vertices <- fread(system.file("dev/verticesAllDay.txt",package = "flowBasedClustering"))
 
-dates <- getSequence("2015-11-01", "2017-01-20")
-interSeasonBegin <- c("2016-03-01", "2016-10-01")
-interSeasonEnd <- c("2016-05-15", "2016-10-31")
-calendar <- getCalendar(dates, interSeasonBegin, interSeasonEnd)
+# read vertices (from file, or obtained them with ptdfToVertices() function)
+vertices <- fread(system.file("dataset/vertices_example.txt",package = "flowBasedClustering"))
 
-clusterTD <- clusteringTypicalDays(calendar, vertices)
+# build calendar (manually here to adapt to the small dataset in example)
+calendar <- list()
+calendar$interSeasonWe <- c("2016-09-17", "2016-09-18")
+calendar$interSeasonWd <- c("2016-09-19", "2016-09-20", "2016-09-21", "2016-09-22", "2016-09-23")
+calendar$winterWe <- c("2016-12-10", "2016-12-11")
+calendar$winterWd <- c("2016-12-12", "2016-12-13", "2016-12-14", "2016-12-15", "2016-12-16")
+calendar$summerWe <- c("2016-08-06", "2016-08-07")
+calendar$summerWd <- c("2016-08-08", "2016-08-09", "2016-08-10", "2016-08-11", "2016-08-12")
+
+# run clustering algorithm
+clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 2, nbClustWeekend = 1)
+
+# run clustering algorithm with metric based only on hour 18
+w <- rep(0,24)
+w[18] <- 1
+clusterTD <- clusteringTypicalDays(calendar, vertices,  hourWeight = w, report = FALSE)
 }
 
 
