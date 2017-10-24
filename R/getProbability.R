@@ -22,7 +22,7 @@
 #' MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = TRUE)
 #' }
 #' @export
-getProbability <- function(climate, cluster, levelsProba = c(0.333, 0.666), extrapolationNA = TRUE)
+getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapolationNA = TRUE)
 {
   
   if(names(climate)[1]!='Date'){
@@ -62,6 +62,9 @@ getProbability <- function(climate, cluster, levelsProba = c(0.333, 0.666), extr
                 paste0(sort(names(levelsProba)), collapse = " , "), " and climate are : ",
                 paste0(sort(concerneName), collapse = " , ")))
   }
+  
+  # round levelsProba
+  levelsProba <- lapply(levelsProba, FUN = round, digits = 4)
   
   # Merge classification result with climate table
   climateAssoClasif <- .mergeclimateClassif(climate, cluster)
