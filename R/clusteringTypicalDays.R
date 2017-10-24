@@ -112,12 +112,25 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       dateIn <- names(vect[which(vect == X)])
       colSel <- row.names(distMat)%in%dateIn
       #detect day closed to middle of cluster
-      minDay <- which.min(rowSums(distMat[colSel, colSel]))
-      distINfo <- distMat[minDay,colSel]
-      data.table(TypicalDay = names(minDay),
-                 Class = season$nn,
-                 dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
-                 distance = list(data.table(Date = dateIn, Distance = distINfo)))
+      if(length(dateIn) > 1)
+      {
+        minDay <- which.min(rowSums(distMat[colSel, colSel]))
+        distINfo <- distMat[minDay,colSel]
+        data.table(TypicalDay = names(minDay),
+                   Class = season$nn,
+                   dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
+                   distance = list(data.table(Date = dateIn, Distance = distINfo)))
+      }
+      # case where cluster is of size one :
+      else
+      {
+        minDay <- dateIn
+        distINfo <- 0
+        data.table(TypicalDay = minDay,
+                   Class = season$nn,
+                   dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
+                   distance = list(data.table(Date = dateIn, Distance = distINfo)))
+      }
     }, simplify = FALSE))
     typicalDay
   }))
