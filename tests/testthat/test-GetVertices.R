@@ -4,7 +4,7 @@ library(data.table)
 
 test_that("Test that object returned by getVertices is convex and that it fits expected results on a small dataset", {
   PTDF <- fread(system.file("testdata/PTDF.csv",package = "flowBasedClustering"))
-  SOMMETS <- fread(system.file("testdata/sommets/sommets_which_solver.csv",package = "flowBasedClustering"), sep = " ", header = TRUE)
+  SOMMETS <- fread(system.file("testdata/vertices_reference_PNE.csv",package = "flowBasedClustering"), sep = " ", header = TRUE)
 
   tt <- sapply(unique(SOMMETS$Id_day), function(X){
     sapply(unique(SOMMETS$Period),  function(Y){

@@ -12,8 +12,7 @@ test_that("clustering typical days works", {
   calendar$summerWd <- c("2016-08-08", "2016-08-09", "2016-08-10", "2016-08-11", "2016-08-12")
   
   # open vertices
-  #vertices <- fread(system.file("dev/verticesAllDay.txt", package = "flowBasedClustering"))
-  vertices <- fread(system.file("dev/verticesForTest.txt", package = "flowBasedClustering"))
+  vertices <- fread(system.file("testdata/verticesForTestClustering.txt", package = "flowBasedClustering"))
   
   clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 2, 
                                      nbClustWeekend = 1, report = FALSE)
