@@ -9,7 +9,7 @@ test_that("clustering getProbability works", {
   climate <- fread(system.file("testdata/climate2016.txt",package = "flowBasedClustering"))
   
   # load previsouly made typical day selection on a few days (cf. test-clustering.R)
-  clusterTD <- readRDS(system.file("testdata/clusterTD.RDS",package = "flowBasedClustering"))
+  clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
   
   # run getProbability function
   probMatrix <- getProbability(climate, cluster = clusterTD, levelsProba = c(0.333, 0.666))
