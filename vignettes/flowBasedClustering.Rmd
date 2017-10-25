@@ -13,52 +13,54 @@ knitr::opts_chunk$set(echo = TRUE)
 require(flowBasedClustering)
 ```
 
-``flowBasedClustering`` allows to cluster and visualize typical-days of **flow-based** domains.
+``flowBasedClustering`` allows to cluster typical **flow-based** days and to visualize their domains.
 
 
 ## 1 - Summary
 
 ```{r, eval=FALSE}
 
-# Generate calendar
+# Define a calendar (period on which the clustering will be made + distinction of each season)
 dates <- getSequence("2015-11-01", "2017-01-20")
 interSeasonBegin <- c("2016-03-01", "2016-10-01")
 interSeasonEnd <- c("2016-05-15", "2016-10-31")
-# Define a calendar with season
 calendar <- getCalendar(dates, interSeasonBegin, interSeasonEnd)
 
+# Identify PTDF in a csv file
+ptdf_file_path <- system.file("dataset/ptdf_example.csv", package = "flowBasedClustering")
+# (note : this small dataset does not span on all the calendar defined above)
+
 # Transform PTDF data to vertices
-vertices <- ptdfToVertices(PTDF = system.file("dev/data/faceAllYear.csv", package = "flowBasedClustering"), nbCore = 4)
+vertices <- ptdfToVertices(PTDF = ptdf_file_path, nbCore = 4)
 
 # Cluster the typical days
 clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3, 
                       nbClustWeekend = 1, report = TRUE)
 
 # Get probabilities and quantiles from climate file in order to classify the typical days
-climate <- fread(system.file("dev/Climat.txt",package = "flowBasedClustering"))
-probMatrix <- getProbability(climate, cluster = clusterTD, levelsProba = c(0.333, 0.666))
+climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
+probMatrix <- getProbability(climate, cluster = clusterTD, levelsProba = c(1/3, 2*3))
 ```
 
-## 2 - Calendar
+## 2 - Calendar definition
 
 First, the function ``getSequence()`` can be used to build a vector of consecutive dates.
 
 ```{r, eval = TRUE}
-# Specify a repository
 getSequence("2015-11-01", "2015-11-05")
 ```
 
-Then, we define the calendar data wanted and needed for the clustering using ``getCalendar()``. It uses the main following parameters : 
+On this period, the different seasons (winter, summer and interseason) can be identified using the ``getCalendar()`` function. It uses the main following parameters : 
 
-* ``dates`` : vector of dates (YYYY-MM-DD)
-* ``interSeasonBegin`` : date, YYYY-MM-DD, begin of interseason
-* ``interSeasonEnd`` : date, YYYY-MM-DD, end of interseason
-* ``dayInWeekend`` : indice of weekend day. Default to ``c(6,7) (=) saturday and sunday``
-* ``dayExclude`` : date, YYYY-MM-DD, day to exclude (e.g. due to poor quality data)
-* ``holiday`` : a ``timeDate`` object to identify holidays, which will be classified in the same category as weekends.
+* ``dates`` : vector of dates (``YYYY-MM-DD``)
+* ``interSeasonBegin`` : vector of dates (``YYYY-MM-DD``) beginning the interseasons
+* ``interSeasonEnd`` :  vector of dates (``YYYY-MM-DD``) ending the interseasons
+* ``dayInWeekend`` : indices of week days identified as week-end. Default to ``c(6,7) (=) saturday and sunday``
+* ``dayExclude`` : vector of dates (``YYYY-MM-DD``) which will be excludes from the calendar (e.g. due to poor quality data)
+* ``holiday`` : a ``timeDate`` object to identify bank holidays, which will be classified in the same category as weekends.
 
 
-The function returns a list with date for **week-end** and **working days** for both **interseason**, **winter** and **summer**.
+The function returns a list with vectors of dates for **week-end** and **working days** for both **interseason**, **winter** and **summer**.
 
 ```{r, eval = TRUE}
 dates <- getSequence("2017-01-01", "2017-12-31")
@@ -70,16 +72,20 @@ str(cal)
 
 ## 3 - PTDF to vertices
 
-The function ``ptdfToVertices()`` transforms a PTDF file to vertices data. This computation can be quiet expansive, and so be done in parallel.
+PTDF are the equations of the hyperplanes defining the limits of the domain, while the vertices are the coordinnates of the extreme points of the domain.
+
+![](ptdfToVertices.png)
+
+The function ``ptdfToVertices()`` transforms a PTDF file to vertices data. This computation can take some time, and so the function allows to do it on several threads.
 
 * ``PTDF`` : path for PTDF file
 * ``nbCore`` : number of cores for parallel computation. Default to one
 
-The PTDF file must contains at least these seven columns *Date*, *Period*, *BE*, *DE*, *FR*, *NL*, *RAM_0* **in this order**    :
+The PTDF file must contains at least these seven columns ``Date``, ``Period``, ``BE``, ``DE``, ``FR``, ``NL``, ``RAM`` **in this order**    :
 
 
-```{r, eval = FALSE}
-ptdf_data <- fread(system.file("dev/data/faceAllYear.csv",package = "flowBasedClustering"),
+```{r, eval = TRUE, echo = FALSE}
+ptdf_data <- data.table::fread(system.file("dataset/ptdf_example.csv",package = "flowBasedClustering"),
                    data.table = F)
 head(ptdf_data[, 1:7])
 ```
@@ -87,14 +93,14 @@ head(ptdf_data[, 1:7])
 And the result is a ``data.table`` which contains vertices.
 
 ```{r, eval = TRUE, echo = FALSE}
-vertices <- data.table::fread(system.file("dev/verticesAllDay.txt",package = "flowBasedClustering"))
+vertices <- data.table::fread(system.file("dataset/vertices_example.txt",package = "flowBasedClustering"))
 head(vertices)
 ```
 
 
 ## 4 - Clustering of typical days
 
-Once we have our **vertices** and our **calendar**, we can launch the clustering with ``clusteringTypicalDays()``. We can set the number of clusters in week days and week-end with ``nbClustWeek`` and ``nbClustWeekend`` and build a report using ``report`` and  ``reportPath``.
+Once we have the **vertices** and the **calendar**, the clustering algorithm can be run with the function ``clusteringTypicalDays()``. The number of clusters of the different day categories (week days and week-end) can be set with ``nbClustWeek`` and ``nbClustWeekend``. A report can be automaticcaly built using ``report`` and ``reportPath`` arguments.
 
 
 ```{r, echo = TRUE, eval = FALSE}
@@ -103,7 +109,7 @@ clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3, nbClustW
 
 ```
 
-You can also use the output of ``clusteringTypicalDays()`` to generate report later for one or more day type using ``generateClusteringReport()``, or just plot several graphic with ``clusterPlot()`` : 
+One can also use the output of ``clusteringTypicalDays()`` to generate report later for one or more typical day(s) using ``generateClusteringReport()``, or just plot domains with ``clusterPlot()`` : 
 
 ```{r, echo = FALSE}
 clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
@@ -122,7 +128,7 @@ generateClusteringReport(dayType = 7, data = clusterTD)
 <img src="2.png" alt="Drawing" style="width: 90%; height: 90%">
 </div>
 
-With ``clusterPlot()``, one can choose 2 countries (``country1`` & ``country2``), the ``hour`` and the ``dayType``. In options, you can decide to plot only the typical day (``typicalDayOnly``) and use static or dynamic visualization (``ggplot``)
+With ``clusterPlot()``, one can choose 2 countries (``country1`` & ``country2``), the ``hour`` and the ``dayType`` (i.e. typical day identifer). In options, it can be decided whether to plot only the typical day (``typicalDayOnly``) or the full cluster and whether to use static or dynamic visualization (``ggplot``)
 
 ```{r, echo = TRUE, fig.width= 7, fig.height= 4.5, warning=FALSE}
 # static graphic
@@ -140,8 +146,14 @@ clusterPlot(clusterTD, country1 = "FR", country2 = "DE",
 
 Finally, the function ``getProbability()`` can be used to learn the correlations between the occurences of the different clusters and external data (typically climatic data). 
 
-* ``climate`` : climate file, 2 first columns are Date and Period, others are exogenous variables (e.g. wind speed and temperature)
+* ``climate`` : climate file, the first column is the ``Date`` (``YYYY-MM-DD``), other columns are exogenous variables (e.g. wind speed and temperature)
 * ``cluster`` : output of ``clusteringTypicalDays()``
+
+Below, an example of a climate file :
+```{r, eval = TRUE, echo = FALSE}
+vertices <- data.table::fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
+head(vertices)
+```
 
 The quantiles are set with ``levelsProba``, and can be : 
 
@@ -151,7 +163,7 @@ The quantiles are set with ``levelsProba``, and can be :
 
 ```{r, echo = TRUE, eval = FALSE}
 # same quantiles for each variables 
-MatProb <- getProbability(climate, clusterTD, levelsProba = c(0.333, 0.666))
+MatProb <- getProbability(climate, clusterTD, levelsProba = c(1/3, 2/3))
 
 # diffents quantiles for each variables 
 levelsProba <- list(`Conso (J-1)` = c(0.2, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8))
