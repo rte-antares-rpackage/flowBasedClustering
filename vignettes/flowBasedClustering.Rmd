@@ -112,7 +112,7 @@ clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3, nbClustW
 One can also use the output of ``clusteringTypicalDays()`` to generate report later for one or more typical day(s) using ``generateClusteringReport()``, or just plot domains with ``clusterPlot()`` : 
 
 ```{r, echo = FALSE}
-clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 ```
 
 ```{r, eval = FALSE}
