@@ -10,14 +10,14 @@
 #' }
 #'
 #' @import data.table
-#' @import geometry
-#' @import rgl
-#' @import Rvcg
+# @import geometry
+# @import rgl 
+# @import Rvcg
 #' @import pipeR
 #' @import parallel
 #'
 #' @export
-ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package = "flowBasedClustering"),
+ptdfToVertices <- function(PTDF = system.file("dataset/ptdf_example.csv",package = "flowBasedClustering"),
                                nbCore = 1)
 {
 
@@ -33,7 +33,7 @@ ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package
   
   
   # Control PTFD format
-  if(all(names(PTDF)[1:7] != c("Date", "Period", "BE", "DE", "FR", "NL", "RAM"))){
+  if(any(names(PTDF)[1:7] != c("Date", "Period", "BE", "DE", "FR", "NL", "RAM"))){
     stop(paste0("Names of ptdf file must be : Date, Period, BE, DE, FR, NL, RAM currently : ",
                 paste0(names(PTDF)[1:7] , collapse = ", ")))
   }
@@ -70,9 +70,9 @@ ptdfToVertices <- function(PTDF = system.file("dev/data/faceAllYear.csv",package
 
     clusterEvalQ(cl, {
       library(data.table)
-      library(geometry)
-      library(rgl)
-      library(Rvcg)
+      #library(geometry)
+      #library(rgl)
+      #library(Rvcg)
       library(pipeR)
       library(flowBasedClustering)
     })

@@ -12,17 +12,17 @@
 #' }
 #' @export
 generateClusteringReport <- function(dayType, outputFile = NULL,
-                             data = NULL){
+                             data){
 
 
   if(is.null(outputFile)){
     outputFile <- getwd()
   }
   
-  if(is.null(data))
-  {
-    data <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
-  }
+  #if(is.null(data))
+  #{
+  #  data <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
+  #}
 
 
   output_Dir <- outputFile

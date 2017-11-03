@@ -5,7 +5,7 @@ Version: 0.1.1
 Authors@R: c(
     person("Titouan", "ROBERT", , "titouan.robert@rte-france.com", role = c("aut", "cre")),
     person("Baptiste", "SEGUINOT", , "baptiste.seguinot@rte-france.com", role = "ctb"),
-    person("Marion", "LI", , "marion.lie@rte-france.com", role = "ctb"),
+    person("Marion", "LI", , "marion.li@rte-france.com", role = "ctb"),
     person("RTE", role = "cph")
     )
 Maintainer: Baptiste SEGUINOT <baptiste.seguinot@rte-france.com>
@@ -17,8 +17,6 @@ Imports:
     data.table (>= 1.10.4),
     geometry(>= 0.3-6),
     timeDate(>= 3012.100),
-    rgl(>= 0.98.1),
-    Rvcg(>= 0.15),
     parallel(>= 3.2.3),
     cluster(>= 2.0.5),
     pipeR(>= 0.6.1.3),
@@ -28,10 +26,13 @@ Imports:
     grDevices(>= 3.3),
     stats(>= 3.3),
     utils(>= 3.3),
+    Rvcg(>= 0.15),
+    rgl(>= 0.98.1),
     DT
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1
 Suggests:
     testthat(>= 1.0.2),
+    dplyr(>= 0.7.3),
     knitr,
     covr
 VignetteBuilder: knitr

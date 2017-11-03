@@ -6,5 +6,7 @@ library(flowBasedClustering)
 # This follow line allow to perform test on parallel functions
 Sys.unsetenv("R_TESTS")
 Sys.setenv("RGL_USE_NULL"=TRUE)
+options(rgl.useNULL = TRUE)
+
 
 test_check("flowBasedClustering")

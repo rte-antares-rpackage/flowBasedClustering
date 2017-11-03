@@ -9,20 +9,22 @@
 #' @examples
 #'
 #' \dontrun{
-#' # climate data
-#' climate <- fread(system.file("dev/climat.txt",package = "flowBasedClustering"))
+#' # load climate daily time serires
+#' climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
 #'
-#' # classification result
-#' clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+#' # load clustering results (or build them with clusteringTypicalDays function())
+#' clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 #'
-#' levelsProba <- list(`Conso (J-1)` = c(0.2, 0.4, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
-#' MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba)
+#' # get Probability matrices
+#' MatProb <- getProbability(climate, clusterTD)
 #' 
-#' levelsProba <- list(`Conso (J-1)` = c(0.2,0.25,0.5,0.75,0.90, 0.95), DE_wind = c(0.25,0.5,0.75, 0.9, 0.95),DE_solar = c(0.25,0.5,0.75) )
-#' MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = TRUE)
+#' # run with specified probability levels, and witout auto-filling the NA cases
+#' levelsProba <- list(FR_load = c(0.2, 0.4, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
+#' MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = FALSE)
+#' 
 #' }
 #' @export
-getProbability <- function(climate, cluster, levelsProba = c(0.333, 0.666), extrapolationNA = TRUE)
+getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapolationNA = TRUE)
 {
   
   if(names(climate)[1]!='Date'){
@@ -45,7 +47,7 @@ getProbability <- function(climate, cluster, levelsProba = c(0.333, 0.666), extr
   
   datesDeleted <- climate[!climate$Date%in%na.omit(climate)$Date]$Date
   if(length(datesDeleted)>0){
-    warning(paste0("Day(s) deleted due to NA : ",paste0(datesDeleted, collapse = ", ")))
+    warning(paste0("Day(s) deleted due to NA in climate file : ",paste0(datesDeleted, collapse = ", ")))
   }
   
   climate <- na.omit(climate)
@@ -62,6 +64,9 @@ getProbability <- function(climate, cluster, levelsProba = c(0.333, 0.666), extr
                 paste0(sort(names(levelsProba)), collapse = " , "), " and climate are : ",
                 paste0(sort(concerneName), collapse = " , ")))
   }
+  
+  # round levelsProba
+  levelsProba <- lapply(levelsProba, FUN = round, digits = 4)
   
   # Merge classification result with climate table
   climateAssoClasif <- .mergeclimateClassif(climate, cluster)
@@ -265,10 +270,10 @@ getProbability <- function(climate, cluster, levelsProba = c(0.333, 0.666), extr
 #'
 #' \dontrun{
 #' # climate data
-#' climate <- fread(system.file("dev/climat.txt",package = "flowBasedClustering"))
+#' climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
 #'
 #' # classification result
-#' clusterTD <- readRDS(system.file("dev/ClassifOut.RDS",package = "flowBasedClustering"))
+#' clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 #'
 #' plotMonotone(climate = climate, cluster = clusterTD, dayType = 1, variable = "DE_wind")
 #' }

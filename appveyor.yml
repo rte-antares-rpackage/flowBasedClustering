@@ -12,6 +12,13 @@ install:
 
 # Adapt as necessary starting from here
 
+
+environment:
+  global:
+    _R_CHECK_FORCE_SUGGESTS_: false
+    CODECOV_TOKEN : "95f87ccf-6806-460a-a161-9d804c35809c"
+
+
 build_script:
   - travis-tool.sh install_deps
 
@@ -21,6 +28,11 @@ test_script:
 on_failure:
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
+
+
+on_success:
+  - Rscript -e 'covr::codecov()'  
+  
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
@@ -40,3 +52,4 @@ artifacts:
 
   - path: '\*_*.zip'
     name: Bits
+  

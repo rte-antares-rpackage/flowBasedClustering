@@ -1,4 +1,5 @@
-#' Generate clustering of typical days
+#' @title Generate a set of flow-based typical days
+#' @description To complete
 #'
 #' @param calendar \code{list}, vector of date for each period. Can be obtain with \link{getCalendar}
 #' @param vertices \code{data.table}, 5 columns :
@@ -14,20 +15,34 @@
 #' @param nbClustWeekend \code{numeric}, number of clusters for weekend period. Defaut to 1
 #' @param report \code{boolean}, generate report. Defaut to TRUE
 #' @param reportPath \code{character}, path where the report is written. Defaut to \code{getwd()}
-#' @param hourWeigth \code{numeric}, vector of 24 weights to ponderate differently each hour of the day
+#' @param hourWeight \code{numeric}, vector of 24 weights to ponderate differently each hour of the day
 #'
 #' @examples
 #'
 #' \dontrun{
 #' library(data.table)
-#' vertices <- fread(system.file("dev/verticesAllDay.txt",package = "flowBasedClustering"))
+#' 
+#' # read vertices (from file, or obtained them with ptdfToVertices() function)
+#' vertices <- fread(system.file("dataset/vertices_example.txt",package = "flowBasedClustering"))
 #'
-#' dates <- getSequence("2015-11-01", "2017-01-20")
-#' interSeasonBegin <- c("2016-03-01", "2016-10-01")
-#' interSeasonEnd <- c("2016-05-15", "2016-10-31")
-#' calendar <- getCalendar(dates, interSeasonBegin, interSeasonEnd)
+#' # build calendar (manually here to adapt to the small dataset in example)
+#  # (for pratical applications getCalendar() function might be more convenient)
+
+#' calendar <- list()
+#' calendar$interSeasonWe <- c("2016-09-17", "2016-09-18")
+#' calendar$interSeasonWd <- c("2016-09-19", "2016-09-20", "2016-09-21", "2016-09-22", "2016-09-23")
+#' calendar$winterWe <- c("2016-12-10", "2016-12-11")
+#' calendar$winterWd <- c("2016-12-12", "2016-12-13", "2016-12-14", "2016-12-15", "2016-12-16")
+#' calendar$summerWe <- c("2016-08-06", "2016-08-07")
+#' calendar$summerWd <- c("2016-08-08", "2016-08-09", "2016-08-10", "2016-08-11", "2016-08-12")
 #'
-#' clusterTD <- clusteringTypicalDays(calendar, vertices)
+#' # run clustering algorithm
+#' clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 2, nbClustWeekend = 1)
+#' 
+#' # run clustering algorithm with metric based only on hour 18
+#' w <- rep(0,24)
+#' w[18] <- 1
+#' clusterTD <- clusteringTypicalDays(calendar, vertices,  hourWeight = w, report = FALSE)
 #' }
 #'
 #'
@@ -38,14 +53,14 @@
 #'
 clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
                                   report = TRUE, reportPath = getwd(),
-                                  hourWeigth = rep(1, 24)){
+                                  hourWeight = rep(1, 24)){
   
   pb <- txtProgressBar(style = 3)
   
   setTxtProgressBar(pb, 0)
   
   #control if the format of the vertices file is good
-  if(any(names(vertices) != c("Date", "Period", "BE", "DE", "FR"))){
+  if(any(names(vertices)[1:5] != c("Date", "Period", "BE", "DE", "FR"))){
     stop(paste0("Names of vertices must be 'Date', 'Period', 'BE', 'DE', 'FR', currently : ",
                 paste0(names(vertices), collapse = ", ")))
   }
@@ -60,8 +75,8 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
   
   #control Weigth
-  if(length(hourWeigth)!=24){
-    stop("Length of hourWeigth must be 24")
+  if(length(hourWeight)!=24){
+    stop("Length of hourWeight must be 24")
   }
   
   #control names of calendar
@@ -96,7 +111,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     nbClust <- ifelse(season$We, nbClustWeekend, nbClustWeek)
     veticesSel <- vertices[Date %in% as.character(season$calendar)]
     # get distance for each day pairs
-    distMat <- .getDistMatrix(veticesSel, hourWeigth)
+    distMat <- .getDistMatrix(veticesSel, hourWeight)
     
     # with hclust
     # vect <- cutree(hclust(distMat), nbClust)
@@ -110,12 +125,25 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       dateIn <- names(vect[which(vect == X)])
       colSel <- row.names(distMat)%in%dateIn
       #detect day closed to middle of cluster
-      minDay <- which.min(rowSums(distMat[colSel, colSel]))
-      distINfo <- distMat[minDay,colSel]
-      data.table(TypicalDay = names(minDay),
-                 Class = season$nn,
-                 dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
-                 distance = list(data.table(Date = dateIn, Distance = distINfo)))
+      if(length(dateIn) > 1)
+      {
+        minDay <- which.min(rowSums(distMat[colSel, colSel]))
+        distINfo <- distMat[minDay,colSel]
+        data.table(TypicalDay = names(minDay),
+                   Class = season$nn,
+                   dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
+                   distance = list(data.table(Date = dateIn, Distance = distINfo)))
+      }
+      # case where cluster is of size one :
+      else
+      {
+        minDay <- dateIn
+        distINfo <- 0
+        data.table(TypicalDay = minDay,
+                   Class = season$nn,
+                   dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
+                   distance = list(data.table(Date = dateIn, Distance = distINfo)))
+      }
     }, simplify = FALSE))
     typicalDay
   }))
@@ -149,7 +177,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     }
     direName <-  as.character(Sys.time())
     direName <- gsub(" ", "", gsub( ":", "",direName))
-    reportDir <- paste0(outputFile, "/", direName)
+    reportDir <- paste0(outputFile, "/fb-clustering-", direName)
     dir.create(reportDir)
     outputFile <- reportDir
     
@@ -165,6 +193,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 #' function to get mesh3d data from vertices
 #'
 #' @noRd
+#' @importFrom rgl tmesh3d
 #'
 .getMesh <- function(out){
   tc <- geometry::delaunayn(out, full = F)
@@ -182,11 +211,13 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 #' Compute distance matrix
 #'
 #' @param vertices \code{data.table}
-#' @param hourWeigth \code{numeric}, weigth vector of weighting for hours
+#' @param hourWeight \code{numeric}, weigth vector of weighting for hours
 
 #' @importFrom stats as.dist
+#' @importFrom Rvcg vcgClost
+#' @importFrom utils combn
 #' @noRd
-.getDistMatrix <- function(vertices, hourWeigth)
+.getDistMatrix <- function(vertices, hourWeight)
 {
   res_hour <- data.table(t(combn(unique(vertices$Date), 2)))
   
@@ -222,7 +253,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       #   all(t(X)%*%
       #         t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM)}))] <- 0
       d <- mean(x_on_y^2) + mean(y_on_x^2)
-      weigthPond <- hourWeigth[h]
+      weigthPond <- hourWeight[h]
       d <- weigthPond * d
       data.table(Date1 = c(date_1, date_2), Date2 = c(date_2, date_1), Period = h, dist = d)
     }))

@@ -76,10 +76,10 @@ getCalendar <- function(dates,
   
   
   if(length(interSeasonBegin) == 0){
-    stop("interSeasonBegin must be provide")
+    stop("interSeasonBegin must be provided")
   }
   if(length(interSeasonEnd) == 0){
-    stop("interSeasonEnd must be provide")
+    stop("interSeasonEnd must be provided")
   }
   
   interSeasonBegin <- as.Date(interSeasonBegin)
@@ -102,7 +102,7 @@ getCalendar <- function(dates,
   
   # Control user input
   if(length(interSeasonBegin) != length(interSeasonEnd)){
-    stop("You must specify a end begin and end for each interseason, (interSeasonBegin and interSeasonEnd
+    stop("You must specify a begin and end for each interseason, (interSeasonBegin and interSeasonEnd
          must have same length")}
 
   if(!(all(interSeasonBegin < interSeasonEnd))){
