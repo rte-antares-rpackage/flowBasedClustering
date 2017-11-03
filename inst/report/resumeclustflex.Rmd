@@ -14,10 +14,6 @@ title: "`r params$set_title`"
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(rAmCharts)
-<<<<<<< HEAD
-#library(antaresFlowbased)
-=======
->>>>>>> eb5a2fabad2a4e0e41a716534fddac6f74b1023e
 library(manipulateWidget)
 library(flowBasedClustering)
 library(ggplot2)
