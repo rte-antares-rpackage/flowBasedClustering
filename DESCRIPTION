@@ -28,6 +28,7 @@ Imports:
     utils(>= 3.3),
     Rvcg(>= 0.15),
     rgl(>= 0.98.1),
+    backports,
     DT
 RoxygenNote: 5.0.1
 Suggests:
