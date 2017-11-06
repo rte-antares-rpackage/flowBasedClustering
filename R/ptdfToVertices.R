@@ -18,15 +18,36 @@
 #'
 #' @export
 ptdfToVertices <- function(PTDF = system.file("dataset/ptdf_example.csv",package = "flowBasedClustering"),
-                               nbCore = 1)
+                           nbCore = 1)
 {
-
+  
   # Load PTDF
   if(!file.exists(PTDF)){
     stop(paste0(PTDF, " file not found"))
   }
   
+  mths <- c("01", "02", "03", "04", "05" ,"06", "07", "08", "09", "10", "11", "12")
   PTDF <- fread(PTDF)
+  if(grepl("^[[:digit:]]{2}(/){1}[[:digit:]]{2}(/){1}[[:digit:]]{4}$",  PTDF$Date[1])){
+    if(!all(substr(PTDF$Date, 4, 5)%in%mths)){
+      stop("Your date have ambiguous format, waiting is YYYY-MM-DD, you can convert with ?as.Date")
+    }
+    PTDF$Date <- as.Date(PTDF$Date, format = "%d/%m/%Y")
+  }else{
+    if(grepl("^[[:digit:]]{4}(-){1}[[:digit:]]{2}(-){1}[[:digit:]]{2}$",  PTDF$Date[1])){
+      if(!all(substr(PTDF$Date, 6, 7)%in%mths)){
+        stop("Your date have ambiguous format, waiting is YYYY-MM-DD, you can convert with ?as.Date")
+      }
+      
+      PTDF$Date <- as.Date(PTDF$Date)
+    }else{
+      stop("Your date have ambiguous format, waiting is YYYY-MM-DD, you can convert with ?as.Date")
+    }
+  }
+  
+  
+  
+  
   if("RAM_0" %in% names(PTDF)){
     setnames(PTDF, "RAM_0", "RAM")
   }
@@ -37,7 +58,7 @@ ptdfToVertices <- function(PTDF = system.file("dataset/ptdf_example.csv",package
     stop(paste0("Names of ptdf file must be : Date, Period, BE, DE, FR, NL, RAM currently : ",
                 paste0(names(PTDF)[1:7] , collapse = ", ")))
   }
-
+  
   #calcul vertices from PTDF function
   calcPoly <- function(X, PTDF){
     data.table::rbindlist(lapply(1:24, function(Y, PTDF){
@@ -54,7 +75,7 @@ ptdfToVertices <- function(PTDF = system.file("dataset/ptdf_example.csv",package
       }
     }, PTDF = PTDF))
   }
-
+  
   #Not parallel
   if(nbCore == 1)
   {
@@ -67,7 +88,7 @@ ptdfToVertices <- function(PTDF = system.file("dataset/ptdf_example.csv",package
     e$calcPoly = calcPoly
     clusterExport(cl, c("PTDF", "calcPoly"), envir = e)
     rm(e)
-
+    
     clusterEvalQ(cl, {
       library(data.table)
       #library(geometry)
@@ -76,7 +97,7 @@ ptdfToVertices <- function(PTDF = system.file("dataset/ptdf_example.csv",package
       library(pipeR)
       library(flowBasedClustering)
     })
-
+    
     vertices <- data.table::rbindlist(parLapplyLB(cl, unique(PTDF$Date), function(X){
       calcPoly(X,
                PTDF = PTDF
