@@ -3,6 +3,8 @@
 language: R
 sudo: false
 cache: packages
+dist: trusty
+
 
 env:
   - RGL_USE_NULL = true
