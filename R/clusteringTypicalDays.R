@@ -59,6 +59,26 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
   setTxtProgressBar(pb, 0)
   
+  
+  mths <- c("01", "02", "03", "04", "05" ,"06", "07", "08", "09", "10", "11", "12")
+  if(grepl("^[[:digit:]]{2}(/){1}[[:digit:]]{2}(/){1}[[:digit:]]{4}$",  vertices$Date[1])){
+    if(!all(substr(vertices$Date, 4, 5)%in%mths)){
+      stop("Your date have ambiguous format, waiting is YYYY-MM-DD, you can convert with ?as.Date")
+    }
+    vertices$Date <- as.Date(vertices$Date, format = "%d/%m/%Y")
+  }else{
+    if(grepl("^[[:digit:]]{4}(-){1}[[:digit:]]{2}(-){1}[[:digit:]]{2}$",  vertices$Date[1])){
+      if(!all(substr(vertices$Date, 6, 7)%in%mths)){
+        stop("Your date have ambiguous format, waiting is YYYY-MM-DD, you can convert with ?as.Date")
+      }
+      
+      vertices$Date <- as.Date(vertices$Date)
+    }else{
+      stop("Your date have ambiguous format, waiting is YYYY-MM-DD, you can convert with ?as.Date")
+    }
+  }
+  
+  
   #control if the format of the vertices file is good
   if(any(names(vertices)[1:5] != c("Date", "Period", "BE", "DE", "FR"))){
     stop(paste0("Names of vertices must be 'Date', 'Period', 'BE', 'DE', 'FR', currently : ",
