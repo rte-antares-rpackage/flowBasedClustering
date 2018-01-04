@@ -211,6 +211,10 @@ getCalendar <- function(dates,
       "S"
     }
   }))
+  
+  if(length(unique(WS))<2){
+    stop("Cannot identify winter and/or summer as date does not cover a sufficiently long period of time.")
+  }
 
 
   # Select winter and cut Week and Weekend
