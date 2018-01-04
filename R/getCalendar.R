@@ -67,8 +67,12 @@ getCalendar <- function(dates,
   weekendDay <- function(day, dayInWeekend, holiday){
     daywe <- day[ifelse(data.table::wday(day)==1,7,data.table::wday(day)-1)%in%dayInWeekend]
     allYeay <- unique(year(day))
+    dayHilyday <- NULL
+    if(length(holiday) > 0)
+    {
     HolidayDay <- as.Date(holiday(allYeay, Holiday = holiday))
     dayHilyday <- day[day%in%HolidayDay]
+    }
     unique(sort(c(daywe, dayHilyday)))
   }
 
