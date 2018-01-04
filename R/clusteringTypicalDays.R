@@ -153,7 +153,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       #detect day closed to middle of cluster
       if(length(dateIn) > 1)
       {
-        minDay <- which.min(rowSums(distMat[colSel, colSel]))
+        minDay <- which.min(rowSums(distMat[, colSel]))
         distINfo <- distMat[minDay,colSel]
         data.table(TypicalDay = names(minDay),
                    Class = season$nn,
@@ -173,6 +173,8 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     }, simplify = FALSE))
     typicalDay
   }))
+  
+  
   # setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/7)
   #Generate out data.table
   for(i in 1:nrow(allTypDay)){
