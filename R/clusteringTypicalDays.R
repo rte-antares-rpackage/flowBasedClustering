@@ -127,6 +127,10 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   # Apply classification for each period in calendar
   allTypDay <- rbindlist(apply(data.table(calendar, We, nn = names(calendar)), 1, function(season){
     
+    if(length(season$calendar) < 2){
+      stop("A distance cant be compute when season contains less than 2 days")
+    }
+    
     if(report)
     {
     setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/(length(calendar)*2))
