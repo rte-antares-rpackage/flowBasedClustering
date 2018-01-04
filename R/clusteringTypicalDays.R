@@ -59,6 +59,21 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
   setTxtProgressBar(pb, 0)
   
+  allDaysInVertices <- unique(vertices$Date)
+  lapply(calendar, function(X){
+    
+    if(!any(X%in%allDaysInVertices)){
+      stop("Some(s) season(s) are not in vertices data")
+    }
+    
+    if(!all(X%in%allDaysInVertices)){
+      warning("Somes dates in calendar are not in vertices data")
+    }
+    
+    
+  })
+  
+  
   
   mths <- c("01", "02", "03", "04", "05" ,"06", "07", "08", "09", "10", "11", "12")
   if(grepl("^[[:digit:]]{2}(/){1}[[:digit:]]{2}(/){1}[[:digit:]]{4}$",  vertices$Date[1])){
