@@ -63,11 +63,11 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   lapply(calendar, function(X){
     
     if(!any(X%in%allDaysInVertices)){
-      stop("Some(s) season(s) are not in vertices data")
+      stop("Some(s) season(s) are not in vertices data.")
     }
     
     if(!all(X%in%allDaysInVertices)){
-      warning("Somes dates in calendar are not in vertices data")
+      warning("Somes dates in calendar are not in vertices data.")
     }
     
     
