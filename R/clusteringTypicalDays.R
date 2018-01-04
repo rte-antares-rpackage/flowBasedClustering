@@ -26,8 +26,8 @@
 #' vertices <- fread(system.file("dataset/vertices_example.txt",package = "flowBasedClustering"))
 #'
 #' # build calendar (manually here to adapt to the small dataset in example)
-#  # (for pratical applications getCalendar() function might be more convenient)
-
+#'  # (for pratical applications getCalendar() function might be more convenient)
+#'  
 #' calendar <- list()
 #' calendar$interSeasonWe <- c("2016-09-17", "2016-09-18")
 #' calendar$interSeasonWd <- c("2016-09-19", "2016-09-20", "2016-09-21", "2016-09-22", "2016-09-23")
@@ -126,8 +126,14 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   set.seed(925)
   # Apply classification for each period in calendar
   allTypDay <- rbindlist(apply(data.table(calendar, We, nn = names(calendar)), 1, function(season){
-    setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/7)
- 
+    
+    if(report)
+    {
+    setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/(length(calendar)*2))
+    }else{
+      setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/length(calendar))
+      
+    }
     nbClust <- ifelse(season$We, nbClustWeekend, nbClustWeek)
     veticesSel <- vertices[Date %in% as.character(season$calendar)]
     # get distance for each day pairs
@@ -167,7 +173,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     }, simplify = FALSE))
     typicalDay
   }))
-  setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/7)
+  # setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/7)
   #Generate out data.table
   for(i in 1:nrow(allTypDay)){
     allTypDay$dayIn[[i]] <- list(merge(allTypDay$dayIn[[i]], vertices[,.SD, .SDcols = 1:3], by = c("Date", "Period")))
@@ -200,13 +206,16 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     reportDir <- paste0(outputFile, "/fb-clustering-", direName)
     dir.create(reportDir)
     outputFile <- reportDir
-    
+    step <- length(allTypDay$idDayType)*2
     sapply(allTypDay$idDayType, function(X){
-      generateClusteringReport(X, data = allTypDay, outputFile = outputFile)})
+      setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/(step + 1))
+      
+      generateClusteringReport(X, data = allTypDay, outputFile = outputFile)
+      })
     
     saveRDS(allTypDay, paste0(outputFile, "/resultClust.RDS"))
   }
-  
+  setTxtProgressBar(pb, 1)
   allTypDay
 }
 
