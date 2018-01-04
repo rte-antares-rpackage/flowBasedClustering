@@ -123,7 +123,10 @@ getCalendar <- function(dates,
   if(length(dates)>0){
     if(is.null(dayExclude))
     {
+      if(length(dayRemoveVectorIn) > 0)
+      {
       dayExclude <- dayRemoveVectorIn
+      }
     }else{
       dayExclude <- as.Date(dayExclude)
       dayExclude <- unique(c(dayExclude, dayRemoveVectorIn))
@@ -132,15 +135,23 @@ getCalendar <- function(dates,
   }
 
   # find days with hour changed
+  MarsChangeHour <- NULL
+  if(length(allDay[which(month(allDay) == 3 & wday(allDay) == 1)]) > 0)
+  {
   MarsChangeHour <- max(allDay[which(month(allDay) == 3 & wday(allDay) == 1)])
+  }
+  OctChangeHour <- NULL
+  if(length(allDay[which(month(allDay) == 10 & wday(allDay) == 1)]) > 0)
+  {
   OctChangeHour <- max(allDay[which(month(allDay) == 10 & wday(allDay) == 1)])
+  }
+  
   if(is.null(dayExclude)){
     dayExclude <- c(MarsChangeHour, OctChangeHour)
   }else{
     dayExclude <- as.Date(dayExclude)
     dayExclude <- unique(c(dayExclude, MarsChangeHour, OctChangeHour))
   }
-
 
   calendarReturn <- list()
   interSeason <- data.frame(begin = as.Date(interSeasonBegin), end = as.Date(interSeasonEnd))
