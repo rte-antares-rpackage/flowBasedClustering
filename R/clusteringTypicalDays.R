@@ -123,7 +123,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   # Detect weekend
   We <- rep(FALSE, length(calendar))
   We[grep("We", names(calendar))] <- TRUE
-  
+  set.seed(925)
   # Apply classification for each period in calendar
   allTypDay <- rbindlist(apply(data.table(calendar, We, nn = names(calendar)), 1, function(season){
     setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/7)
