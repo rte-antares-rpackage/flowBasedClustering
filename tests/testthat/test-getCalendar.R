@@ -70,3 +70,17 @@ test_that("getCalendar returns error when expected", {
   # one season empty
   expect_warning(getCalendar(dates, interSeasonBegin = c("2016-03-01", "2016-10-01"), interSeasonEnd =  c("2016-05-31", "2016-10-15"), dayExclude = getSequence("2016-04-01", "2016-10-15")))
 })  
+
+
+test_that("getCalendar return logical result with holidays", {
+  
+  calendar <- getCalendar(dates = getSequence("2018-01-01", "2018-12-31"), 
+                          interSeasonBegin = "2018-03-01",
+                          interSeasonEnd = "2018-05-31", holiday = NULL)
+  expect_true(as.Date("2018-01-01")%in%calendar$winterWd)
+  calendar <- getCalendar(dates = getSequence("2018-01-01", "2018-12-31"), 
+                          interSeasonBegin = "2018-03-01",
+                          interSeasonEnd = "2018-05-31", holiday = "NewYearsDay")
+  expect_true(as.Date("2018-01-01")%in%calendar$winterWe)
+  
+})
