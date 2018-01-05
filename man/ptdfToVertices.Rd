@@ -22,4 +22,3 @@ ptdfToVertices(nbCore = 4)
 }
 
 }
-

@@ -27,6 +27,11 @@ test_that("clustering typical days works", {
   expect_true(all(clusterTD[Class == "winterWd"]$TypicalDay %in% calendar$winterWd))
   expect_true(all(clusterTD[Class == "summerWe"]$TypicalDay %in% calendar$summerWe))
   expect_true(all(clusterTD[Class == "summerWd"]$TypicalDay %in% calendar$summerWd))
+  
+  apply(clusterTD, 1, function(X){
+    expect_true(X$TypicalDay == X$distance$Date[which.min(X$distance$Distance)])
+  })
+  
 })
 
 
