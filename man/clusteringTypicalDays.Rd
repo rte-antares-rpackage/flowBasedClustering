@@ -43,6 +43,8 @@ library(data.table)
 vertices <- fread(system.file("dataset/vertices_example.txt",package = "flowBasedClustering"))
 
 # build calendar (manually here to adapt to the small dataset in example)
+ # (for pratical applications getCalendar() function might be more convenient)
+ 
 calendar <- list()
 calendar$interSeasonWe <- c("2016-09-17", "2016-09-18")
 calendar$interSeasonWd <- c("2016-09-19", "2016-09-20", "2016-09-21", "2016-09-22", "2016-09-23")
@@ -62,4 +64,3 @@ clusterTD <- clusteringTypicalDays(calendar, vertices,  hourWeight = w, report =
 
 
 }
-

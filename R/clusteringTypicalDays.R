@@ -59,9 +59,12 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
   setTxtProgressBar(pb, 0)
   
+
+  
+  vertices <- .ctrlVertices(vertices)
+  vertices$Date <- as.character(vertices$Date)
   allDaysInVertices <- unique(vertices$Date)
   lapply(calendar, function(X){
-    
     if(!any(X%in%allDaysInVertices)){
       stop("Some(s) season(s) are not in vertices data.")
     }
@@ -69,33 +72,15 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     if(!all(X%in%allDaysInVertices)){
       warning("Somes dates in calendar are not in vertices data.")
     }
-    
-    
   })
   
-  vertices <- .ctrlVertices(vertices)
-
   
   #control if the format of the vertices file is good
-  if(any(names(vertices)[1:5] != c("Date", "Period", "BE", "DE", "FR"))){
-    stop(paste0("Names of vertices must be 'Date', 'Period', 'BE', 'DE', 'FR', currently : ",
-                paste0(names(vertices), collapse = ", ")))
-  }
-  if(!is.character(vertices$Date)){
-    vertices$Date <- as.character(vertices$Date)
-  }
-  unVerticeDate <- unique(vertices$Date)
-  testIsDate <- try(as.Date(unVerticeDate), silent = TRUE)
-  if( class( testIsDate ) == "try-error" || is.na( testIsDate ) ){
-    stop( "Date column must have this format : %Y-%m-%d ?as.Date for help")
-  } 
+  .ctrlVerticesFormat(vertices)
   
+  .ctrlWeight(hourWeight)
   
-  #control Weigth
-  if(length(hourWeight)!=24){
-    stop("Length of hourWeight must be 24")
-  }
-  
+
   #control names of calendar
   if(any(!names(calendar)%in% c("interSeasonWe",
                                 "interSeasonWd",
@@ -105,6 +90,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     stop("Names of calendar must be 'interSeasonWe', 'interSeasonWd', 'winterWe', 'winterWd', 'summerWe', 'summerWd'")
   }
   
+  unVerticeDate <- unique(vertices$Date)
   sapply(names(calendar), function(X){
     if(sum(unVerticeDate%in%as.character(calendar[[X]])) == 0){
       stop(paste0("Intersection between season ", X, "(calendar) and vertices$Date is empty. This job cant be run"))
@@ -114,9 +100,11 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
   
   # generate mesh for each polyhedron, mesh is an object use to calculate distance between polyhedron
-  vertices <- vertices[, list(out = list(cbind(BE, DE, FR))), by = c("Date", "Period")]
-  vertices[, mesh := list(.getMesh(out[[1]])),by = c("Date", "Period") ]
   
+  #Compute mesh from vertices
+  vertices <- .computeMesh(vertices)
+  
+
   # Detect weekend
   We <- rep(FALSE, length(calendar))
   We[grep("We", names(calendar))] <- TRUE
@@ -198,6 +186,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
   allTypDay[,idDayType :=1:.N ]
   
+  
   # report generation
   if(report){
     outputFile <- reportPath
@@ -218,6 +207,8 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     
     saveRDS(allTypDay, paste0(outputFile, "/resultClust.RDS"))
   }
+  
+  
   setTxtProgressBar(pb, 1)
   allTypDay
 }
@@ -326,3 +317,35 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   }
   vertices
 }
+
+
+.ctrlVerticesFormat <- function(vertices)
+{ 
+  if(any(names(vertices)[1:5] != c("Date", "Period", "BE", "DE", "FR"))){
+    stop(paste0("Names of vertices must be 'Date', 'Period', 'BE', 'DE', 'FR', currently : ",
+                paste0(names(vertices), collapse = ", ")))
+  }
+  if(!is.character(vertices$Date)){
+    vertices$Date <- as.character(vertices$Date)
+  }
+  unVerticeDate <- unique(vertices$Date)
+  testIsDate <- try(as.Date(unVerticeDate), silent = TRUE)
+  if( class( testIsDate ) == "try-error" || is.na( testIsDate ) ){
+    stop( "Date column must have this format : %Y-%m-%d ?as.Date for help")
+  } 
+}
+
+.ctrlWeight <- function(hourWeight){
+  #control Weigth
+  if(length(hourWeight)!=24){
+    stop("Length of hourWeight must be 24")
+  }
+  
+}
+
+.computeMesh <- function(vertices){
+  vertices <- vertices[, list(out = list(cbind(BE, DE, FR))), by = c("Date", "Period")]
+  vertices[, mesh := list(.getMesh(out[[1]])),by = c("Date", "Period") ]
+  vertices
+}
+

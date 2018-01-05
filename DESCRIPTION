@@ -30,7 +30,7 @@ Imports:
     rgl(>= 0.98.1),
     backports,
     DT
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests:
     testthat(>= 1.0.2),
     dplyr(>= 0.7.3),

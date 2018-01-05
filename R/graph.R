@@ -40,8 +40,7 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
   
   CompTitle <- matchingNameTable$title[which(data[dayType]$Class == matchingNameTable$Class)]
   e$CompTitle <- CompTitle
-  
-  
+
   rmarkdown::render(system.file("/report/resumeclustflex.Rmd", package = "flowBasedClustering"),
                     output_file = outputFile,
                     params = list(set_title = paste0("Typical Day ", dayType, " : ", CompTitle,  " (generated on ", Sys.Date(), ")")),
