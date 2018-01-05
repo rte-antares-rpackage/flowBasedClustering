@@ -45,7 +45,7 @@ clusterTypicalDaysForOneClass <- function(dates,
   pb <- txtProgressBar(style = 3)
   
   setTxtProgressBar(pb, 0)
-  
+  set.seed(123456)
 
   
   vertices <- .ctrlVertices(vertices)
