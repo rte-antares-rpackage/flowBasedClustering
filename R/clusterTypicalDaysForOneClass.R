@@ -121,25 +121,30 @@ clusterTypicalDaysForOneClass <- function(dates,
   
   # report generation
   if(report){
-    outputFile <- reportPath
-    if(is.null(outputFile)){
-      outputFile <- getwd()
-    }
-    direName <-  as.character(Sys.time())
-    direName <- gsub(" ", "", gsub( ":", "",direName))
-    reportDir <- paste0(outputFile, "/fb-clustering-", direName)
-    dir.create(reportDir)
-    outputFile <- reportDir
-    step <- length(allTypDay$idDayType)*2
+    outL <- .crtOutFile(allTypDay, reportPath)
+    
     sapply(allTypDay$idDayType, function(X){
-      setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/(step + 1))
-      
-      generateClusteringReport(X, data = allTypDay, outputFile = outputFile)
+      setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/(outL$step + 1))
+      generateClusteringReport(X, data = allTypDay, outputFile = outL$outputFile)
     })
     
-    saveRDS(allTypDay, paste0(outputFile, "/resultClust.RDS"))
+    
+    saveRDS(allTypDay, paste0(outL$outputFile, "/resultClust.RDS"))
   }
   setTxtProgressBar(pb, 1)
   allTypDay
 }
 
+.crtOutFile <- function(allTypDay, reportPath){
+  outputFile <- reportPath
+  if(is.null(outputFile)){
+    outputFile <- getwd()
+  }
+  direName <-  as.character(Sys.time())
+  direName <- gsub(" ", "", gsub( ":", "",direName))
+  reportDir <- paste0(outputFile, "/fb-clustering-", direName)
+  dir.create(reportDir)
+  outputFile <- reportDir
+  step <- length(allTypDay$idDayType)*2
+  list(outputFile = outputFile, step = step)
+}

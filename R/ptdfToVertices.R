@@ -29,13 +29,9 @@ ptdfToVertices <- function(PTDF = system.file("dataset/ptdf_example.csv",package
   PTDF <- fread(PTDF)
   
   
-  
-  PTDF <- .ctrlVertices(PTDF)
-  
   if("RAM_0" %in% names(PTDF)){
     setnames(PTDF, "RAM_0", "RAM")
   }
-  
   
   # Control PTFD format
   if(any(names(PTDF)[1:7] != c("Date", "Period", "BE", "DE", "FR", "NL", "RAM"))){
@@ -43,6 +39,9 @@ ptdfToVertices <- function(PTDF = system.file("dataset/ptdf_example.csv",package
                 paste0(names(PTDF)[1:7] , collapse = ", ")))
   }
   
+  PTDF <- .ctrlVertices(PTDF)
+  
+
   #calcul vertices from PTDF function
   calcPoly <- function(X, PTDF){
     data.table::rbindlist(lapply(1:24, function(Y, PTDF){

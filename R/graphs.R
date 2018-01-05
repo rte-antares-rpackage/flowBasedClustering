@@ -78,9 +78,7 @@ plotFlowbased <- function(PTDF,
   #Generate data for plot
   givePlotData <- function(PTDF, country1, country2){
     PTDF <- data.table(PTDF)
-    if("RAM_0" %in% names(PTDF)){
-      setnames(PTDF, "RAM_0", "RAM")
-    }
+    if("RAM_0" %in% names(PTDF))setnames(PTDF, "RAM_0", "RAM")
     
     vertices <- getVertices(as.matrix(PTDF[, .SD, .SDcols = c("BE", "DE", "FR", "NL")]),
                             PTDF$RAM)

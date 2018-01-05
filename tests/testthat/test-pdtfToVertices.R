@@ -59,10 +59,15 @@ test_that("ptdfToVertices works", {
     })
 
 })
-  
+
 test_that("ptdfToVertices returns error if file does not exist", {
-  expect_error(ptdfToVertices(NULL))
+  expect_error(ptdfToVertices("NotAFile"))
 })
+
+test_that("bad pdtf file", {
+  expect_error(ptdfToVertices(system.file("testdata/testBadFile.csv",package = "flowBasedClustering")))
+})
+
 
 test_that("ptdfToVertices returns error if header is not correct", {
   expect_error(

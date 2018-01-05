@@ -32,6 +32,12 @@ test_that("clustering typical days works", {
     expect_true(X$TypicalDay == X$distance$Date[which.min(X$distance$Distance)])
   })
   
+  
+  expect_true(length(.crtOutFile(data.frame(idDayType = "1"), tempdir()))==2)
+  
+  ov <- .saveRDSS(data.frame(idDayType = "1"), list(outputFile = tempdir()))
+  expect_true(is.null(ov))
+  
 })
 
 
