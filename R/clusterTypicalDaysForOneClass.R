@@ -69,7 +69,7 @@ clusterTypicalDaysForOneClass <- function(dates,
   vertices <- .computeMesh(vertices)
   
   if(length(dates) < 2){
-    stop("A distance cant be compute when season contains less than 2 days")
+    stop("Clustering cannot be performed when class(season/type of day) contains less than 2 days")
   }
   
   veticesSel <- vertices[Date %in% dates]
