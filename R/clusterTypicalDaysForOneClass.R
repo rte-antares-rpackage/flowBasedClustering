@@ -1,4 +1,6 @@
 #' @title Generate a set of flow-based typical days for a season
+#' 
+#' @description To do
 #'
 #' @param dates \code{vector}, vector of date.
 #' @param vertices \code{data.table}, 5 columns :

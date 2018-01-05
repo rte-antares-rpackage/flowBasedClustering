@@ -33,6 +33,9 @@ This parameter can be obtained with the function \code{ptdfToVertices()}.}
 
 \item{id_start}{\code{numeric}, first id of typical days.}
 }
+\description{
+To do
+}
 \examples{
 
 \dontrun{
