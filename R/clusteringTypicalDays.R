@@ -113,7 +113,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   allTypDay <- rbindlist(apply(data.table(calendar, We, nn = names(calendar)), 1, function(season){
     
     if(length(season$calendar) < 2){
-      stop("A distance cant be compute when season contains less than 2 days")
+      stop("Clustering cannot be performed when class(season/type of day) contains less than 2 days")
     }
     
     if(report)
