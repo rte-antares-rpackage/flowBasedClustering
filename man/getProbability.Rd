@@ -38,4 +38,3 @@ MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapo
 
 }
 }
-

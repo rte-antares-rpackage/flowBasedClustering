@@ -41,4 +41,3 @@ getCalendar(dates, interSeasonBegin, interSeasonEnd, dayExclude = dayExclude)
 }
 
 }
-

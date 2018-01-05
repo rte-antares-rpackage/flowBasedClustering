@@ -62,4 +62,3 @@ clusterTD <- clusteringTypicalDays(calendar, vertices,  hourWeight = w, report =
 
 
 }
-
