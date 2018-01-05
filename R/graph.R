@@ -43,7 +43,8 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
 
   rmarkdown::render(system.file("/report/resumeclustflex.Rmd", package = "flowBasedClustering"),
                     output_file = outputFile,
-                    params = list(set_title = paste0("Typical Day ", dayType, " : ", CompTitle,  " (generated on ", Sys.Date(), ")")),
+                    params = list(set_title = paste0("Typical Day ", dayType,
+                                                     " : ", CompTitle,  " (generated on ", Sys.Date(), ")")),
                     intermediates_dir = output_Dir, envir = e,
                     quiet = TRUE)
   outputFile
