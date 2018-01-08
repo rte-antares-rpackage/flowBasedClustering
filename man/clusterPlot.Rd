@@ -2,28 +2,29 @@
 % Please edit documentation in R/graphs.R
 \name{clusterPlot}
 \alias{clusterPlot}
-\title{Generate a plot for a typical day cluster}
+\title{Plot a flow-based domain of a typical day}
 \usage{
 clusterPlot(data, country1, country2, hour, dayType, typicalDayOnly = FALSE,
   ggplot = FALSE)
 }
 \arguments{
-\item{data}{\code{data.table}, output of \link{clusteringTypicalDays}}
+\item{data}{\code{data.table} results from the clustering, output data from \link{clusteringTypicalDays}}
 
-\item{country1}{\code{character}, name of first country}
+\item{country1}{\code{character}, name of the country whose net position is in the x axis}
 
-\item{country2}{\code{character}, name of second country}
+\item{country2}{\code{character}, name of the country whose net position is in the y axis}
 
-\item{hour}{\code{numeric}, hour}
+\item{hour}{\code{numeric}, hour of the plotted domain}
 
-\item{dayType}{\code{numeric}, dayType}
+\item{dayType}{\code{numeric}, typical flow-based day identifier}
 
-\item{typicalDayOnly}{: plot only typical day ?}
+\item{typicalDayOnly}{\code{logical} if TRUE, plot only the domain of the typical day and not the other domains of the cluster}
 
-\item{ggplot}{: ggplot or amCharts ?}
+\item{ggplot}{\code{logical} should ggplot package be used (static graph) instead of ramCharts (dynamic graph)}
 }
 \description{
-Generate a plot for a typical day cluster
+For a given hour, plot the flow-based domain of one typical day along with the other
+flow-based domains it represents (i.e. other domains of the same cluster).
 }
 \examples{
 

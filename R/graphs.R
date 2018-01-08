@@ -1,13 +1,15 @@
-#' Generate a plot for a typical day cluster
+#' Plot a flow-based domain of a typical day
 #'
+#' For a given hour, plot the flow-based domain of one typical day along with the other
+#' flow-based domains it represents (i.e. other domains of the same cluster).
 #'
-#' @param data \code{data.table}, output of \link{clusteringTypicalDays}
-#' @param country1 \code{character}, name of first country
-#' @param country2 \code{character}, name of second country
-#' @param hour \code{numeric}, hour
-#' @param dayType  \code{numeric}, dayType
-#' @param typicalDayOnly : plot only typical day ?
-#' @param ggplot : ggplot or amCharts ?
+#' @param data \code{data.table} results from the clustering, output data from \link{clusteringTypicalDays}
+#' @param country1 \code{character}, name of the country whose net position is in the x axis
+#' @param country2 \code{character}, name of the country whose net position is in the y axis
+#' @param hour \code{numeric}, hour of the plotted domain
+#' @param dayType  \code{numeric}, typical flow-based day identifier
+#' @param typicalDayOnly \code{logical} if TRUE, plot only the domain of the typical day and not the other domains of the cluster
+#' @param ggplot \code{logical} should ggplot package be used (static graph) instead of ramCharts (dynamic graph)
 #'
 #' @import rAmCharts DT
 #'
