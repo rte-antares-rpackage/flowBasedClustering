@@ -123,7 +123,7 @@ clusterTypicalDaysForOneClass <- function(dates,
 
 .ctrlDates <- function(dates, dayInVertices){
   if(!any(dates%in%dayInVertices)){
-    stop("Some(s) season(s) are not in vertices data.")
+    stop("One(some) season(s) are not in vertices data.")
   }
   
   if(!all(dates%in%dayInVertices)){
