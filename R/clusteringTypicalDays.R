@@ -119,7 +119,6 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     typicalDay
   }))
   
-  # setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/7)
   #Generate out data.table
   allTypDay <- .addVerticesToTp(allTypDay, vertices)
   
@@ -128,10 +127,15 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
   allTypDay[,idDayType :=1:.N ]
   
-  setTxtProgressBar(pb, 0)
+  setTxtProgressBar(pb, 1)
+  
   
   # report generation
   if(report){
+    cat("\n")
+    cat("Write report(s)\n")
+    pb <- txtProgressBar(style = 3)
+    setTxtProgressBar(pb, 0)
     outL <- .crtOutFile(allTypDay, reportPath)
     sapply(allTypDay$idDayType, function(X){
       setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/(outL$step + 1))
@@ -139,10 +143,10 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     })
     .saveRDSS(allTypDay, outL)
     
+    setTxtProgressBar(pb, 1)
   }
   
-  
-  setTxtProgressBar(pb, 1)
+
   allTypDay
 }
 
