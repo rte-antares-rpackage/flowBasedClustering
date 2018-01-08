@@ -42,23 +42,17 @@ clusterTypicalDaysForOneClass <- function(dates,
                                           reportPath = getwd(),
                                           report = TRUE, 
                                           id_start = 1){
-  pb <- txtProgressBar(style = 3)
   
+  cat("Compute distances\n")
+  
+  pb <- txtProgressBar(style = 3)
   setTxtProgressBar(pb, 0)
   set.seed(123456)
-
   
   vertices <- .ctrlVertices(vertices)
   
-  dayInVertices <- unique(vertices$Date)
-  
-  if(!any(dates%in%dayInVertices)){
-    stop("Some(s) season(s) are not in vertices data.")
-  }
-  
-  if(!all(dates%in%dayInVertices)){
-    warning("Somes dates in calendar are not in vertices data.")
-  }
+  dates <- as.character(dates)
+  .ctrlDates(dates, unique(vertices$Date))
   
   #control if the format of the vertices file is good
   .ctrlVerticesFormat(vertices)
@@ -67,15 +61,9 @@ clusterTypicalDaysForOneClass <- function(dates,
   
   #Compute mesh from vertices
   vertices <- .computeMesh(vertices)
+ 
   
-  if(length(dates) < 2){
-    stop("Clustering cannot be performed when class(season/type of day) contains less than 2 days")
-  }
-  
-  veticesSel <- vertices[Date %in% dates]
-  veticesSel$Date <- as.character(veticesSel$Date)
-  
-  distMat <- .getDistMatrix(veticesSel, hourWeight)
+  distMat <- .getDistMatrix(veticesSel <- vertices[Date %in% dates], hourWeight)
   vect <- cluster::pam(distMat, nbCluster, diss = TRUE)$clustering
   distMat <- as.matrix(distMat)
   
@@ -85,42 +73,25 @@ clusterTypicalDaysForOneClass <- function(dates,
   
   allTypDay <- rbindlist(sapply(1:nbCluster, function(X){
     # Found a representative day for each class
-    dateIn <- names(vect[which(vect == X)])
-    colSel <- row.names(distMat)%in%dateIn
-    #detect day closed to middle of cluster
-    if(length(dateIn) > 1)
-    {
-      minDay <- which.min(rowSums(distMat[, colSel]))
-      distINfo <- distMat[minDay,colSel]
-      data.table(TypicalDay = names(minDay),
-                 Class = className,
-                 dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
-                 distance = list(data.table(Date = dateIn, Distance = distINfo)))
-    }
-    # case where cluster is of size one :
-    else
-    {
-      minDay <- dateIn
-      distINfo <- 0
-      data.table(TypicalDay = minDay,
-                 Class = className,
-                 dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
-                 distance = list(data.table(Date = dateIn, Distance = distINfo)))
-    }
+    .getDataAndMakeOutput(X, vect, distMat, className)
+
   }, simplify = FALSE))
   
-  vertices$Date <- as.character(vertices$Date)
-  
-  for(i in 1:nrow(allTypDay)){
-    allTypDay$dayIn[[i]] <- list(merge(allTypDay$dayIn[[i]], vertices[,.SD, .SDcols = 1:3], by = c("Date", "Period")))
-  }
+  allTypDay <- .addVerticesToTp(allTypDay, vertices)
   
   nb <- id_start:(id_start+nrow(allTypDay)-1)
+  
+  
   allTypDay[,idDayType :=nb]
-  setTxtProgressBar(pb, 0.5)
+  setTxtProgressBar(pb, 1)
+
   
   # report generation
   if(report){
+    cat("\n")
+    cat("Write report(s)\n")
+    pb <- txtProgressBar(style = 3)
+    setTxtProgressBar(pb, 0)
     outL <- .crtOutFile(allTypDay, reportPath)
     
     sapply(allTypDay$idDayType, function(X){
@@ -128,10 +99,10 @@ clusterTypicalDaysForOneClass <- function(dates,
       generateClusteringReport(X, data = allTypDay, outputFile = outL$outputFile)
     })
     
-    
     saveRDS(allTypDay, paste0(outL$outputFile, "/resultClust.RDS"))
+    setTxtProgressBar(pb, 1)
   }
-  setTxtProgressBar(pb, 1)
+
   allTypDay
 }
 
@@ -145,6 +116,21 @@ clusterTypicalDaysForOneClass <- function(dates,
   reportDir <- paste0(outputFile, "/fb-clustering-", direName)
   dir.create(reportDir)
   outputFile <- reportDir
-  step <- length(allTypDay$idDayType)*2
+  step <- length(allTypDay$idDayType)
   list(outputFile = outputFile, step = step)
+}
+
+.ctrlDates <- function(dates, dayInVertices){
+  if(!any(dates%in%dayInVertices)){
+    stop("Some(s) season(s) are not in vertices data.")
+  }
+  
+  if(!all(dates%in%dayInVertices)){
+    warning("Somes dates in calendar are not in vertices data.")
+  }
+  
+  if(length(dates) < 2){
+    stop("Clustering cannot be performed when class(season/type of day) contains less than 2 days")
+  }
+  
 }

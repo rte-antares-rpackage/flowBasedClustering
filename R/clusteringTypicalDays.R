@@ -55,23 +55,17 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
                                   report = TRUE, reportPath = getwd(),
                                   hourWeight = rep(1, 24)){
   
+  cat("Compute distances\n")
+  
   pb <- txtProgressBar(style = 3)
-  
   setTxtProgressBar(pb, 0)
-  
-
+  set.seed(123456)
   
   vertices <- .ctrlVertices(vertices)
-  vertices$Date <- as.character(vertices$Date)
-  allDaysInVertices <- unique(vertices$Date)
+  calendar <- lapply(calendar, as.character)
+  
   lapply(calendar, function(X){
-    if(!any(X%in%allDaysInVertices)){
-      stop("Some(s) season(s) are not in vertices data.")
-    }
-    
-    if(!all(X%in%allDaysInVertices)){
-      warning("Somes dates in calendar are not in vertices data.")
-    }
+    .ctrlDates(X, unique(vertices$Date))
   })
   
   
@@ -80,125 +74,71 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
   .ctrlWeight(hourWeight)
   
-
   #control names of calendar
-  if(any(!names(calendar)%in% c("interSeasonWe",
-                                "interSeasonWd",
-                                "winterWe",
-                                "winterWd",
-                                "summerWe","summerWd")) | is.null(names(calendar))){
-    stop("Names of calendar must be 'interSeasonWe', 'interSeasonWd', 'winterWe', 'winterWd', 'summerWe', 'summerWd'")
-  }
+  .ctrlCalendar(calendar)
+  
   
   unVerticeDate <- unique(vertices$Date)
   sapply(names(calendar), function(X){
     if(sum(unVerticeDate%in%as.character(calendar[[X]])) == 0){
-      stop(paste0("Intersection between season ", X, "(calendar) and vertices$Date is empty. This job cant be run"))
+      stop(paste0("Intersection between season ", X, "(calendar) and vertices$Date is empty.
+                  This job cant be run"))
     }
   })
-  
-  
   
   # generate mesh for each polyhedron, mesh is an object use to calculate distance between polyhedron
   
   #Compute mesh from vertices
   vertices <- .computeMesh(vertices)
   
-
   # Detect weekend
   We <- rep(FALSE, length(calendar))
   We[grep("We", names(calendar))] <- TRUE
-  set.seed(925)
+  
   # Apply classification for each period in calendar
-  allTypDay <- rbindlist(apply(data.table(calendar, We, nn = names(calendar)), 1, function(season){
+  allTypDay <- rbindlist(apply(data.table(calendar, We, nn = names(calendar)),
+                               1, function(season){
     
-    if(length(season$calendar) < 2){
-      stop("Clustering cannot be performed when class(season/type of day) contains less than 2 days")
-    }
-    
-    if(report)
-    {
-    setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/(length(calendar)*2))
-    }else{
-      setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/length(calendar))
-      
-    }
+    setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/length(calendar))
     nbClust <- ifelse(season$We, nbClustWeekend, nbClustWeek)
-    veticesSel <- vertices[Date %in% as.character(season$calendar)]
     # get distance for each day pairs
-    distMat <- .getDistMatrix(veticesSel, hourWeight)
-    
-    # with hclust
-    # vect <- cutree(hclust(distMat), nbClust)
+    distMat <- .getDistMatrix(vertices[Date %in% as.character(season$calendar)],
+                              hourWeight)
     
     # clustering using PAM
     vect <- cluster::pam(distMat, nbClust, diss = TRUE)$clustering
     
     distMat <- as.matrix(distMat)
+    
+    
     typicalDay <- rbindlist(sapply(unique(vect), function(X){
       # Found a representative day for each class
-      dateIn <- names(vect[which(vect == X)])
-      colSel <- row.names(distMat)%in%dateIn
-      #detect day closed to middle of cluster
-      if(length(dateIn) > 1)
-      {
-        minDay <- which.min(rowSums(distMat[, colSel]))
-        distINfo <- distMat[minDay,colSel]
-        data.table(TypicalDay = names(minDay),
-                   Class = season$nn,
-                   dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
-                   distance = list(data.table(Date = dateIn, Distance = distINfo)))
-      }
-      # case where cluster is of size one :
-      else
-      {
-        minDay <- dateIn
-        distINfo <- 0
-        data.table(TypicalDay = minDay,
-                   Class = season$nn,
-                   dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
-                   distance = list(data.table(Date = dateIn, Distance = distINfo)))
-      }
+      .getDataAndMakeOutput(X, vect, distMat, season$nn)
+      
     }, simplify = FALSE))
     typicalDay
   }))
   
-  
   # setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/7)
   #Generate out data.table
-  for(i in 1:nrow(allTypDay)){
-    allTypDay$dayIn[[i]] <- list(merge(allTypDay$dayIn[[i]], vertices[,.SD, .SDcols = 1:3], by = c("Date", "Period")))
-  }
-  
+  allTypDay <- .addVerticesToTp(allTypDay, vertices)
   
   ##Ordered result
-  
-  orderVect <- c(which(allTypDay$Class == "summerWd"),
-                 which(allTypDay$Class == "summerWe"),
-                 which(allTypDay$Class == "winterWd"),
-                 which(allTypDay$Class == "winterWe"),
-                 which(allTypDay$Class == "interSeasonWd"),
-                 which(allTypDay$Class == "interSeasonWe"))
-  if(length(orderVect) == nrow(allTypDay)){
-    allTypDay <- allTypDay[orderVect]
-  }
-  
+  allTypDay <- .orderResult(allTypDay)
   
   allTypDay[,idDayType :=1:.N ]
   
+  setTxtProgressBar(pb, 0)
   
   # report generation
   if(report){
     outL <- .crtOutFile(allTypDay, reportPath)
-    
     sapply(allTypDay$idDayType, function(X){
       setTxtProgressBar(pb, getTxtProgressBar(pb) + 1/(outL$step + 1))
-      
       generateClusteringReport(X, data = allTypDay, outputFile = outL$outputFile)
-      })
-    
+    })
     .saveRDSS(allTypDay, outL)
-
+    
   }
   
   
@@ -308,6 +248,8 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       stop("Your date have ambiguous format, waiting is YYYY-MM-DD, you can convert with ?as.Date")
     }
   }
+  vertices$Date <- as.character(vertices$Date)
+  
   vertices
 }
 
@@ -342,8 +284,75 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   vertices
 }
 
-
+.addVerticesToTp <- function(allTypDay, vertices)
+{
+  for(i in 1:nrow(allTypDay)){
+    allTypDay$dayIn[[i]] <- list(merge(allTypDay$dayIn[[i]],
+                                       vertices[,.SD, .SDcols = 1:3],
+                                       by = c("Date", "Period")))
+  }
+  allTypDay
+}
 
 .saveRDSS <- function(allTypDay, outL){
   saveRDS(allTypDay, paste0(outL$outputFile, "/resultClust.RDS"))
+}
+
+
+.getDataAndMakeOutput <- function(X, vect, distMat, className)
+{
+  dateIn <- names(vect[which(vect == X)])
+  colSel <- row.names(distMat)%in%dateIn
+  
+  #detect day closed to middle of cluster
+  if(length(dateIn) > 1)
+  {
+    minDay <- which.min(rowSums(distMat[, colSel]))
+    distINfo <- distMat[minDay,colSel]
+    data.table(TypicalDay = names(minDay),
+               Class = className,
+               dayIn = list(data.table(Date = rep(dateIn, each = 24), Period = rep(1:24, length(dateIn)))),
+               distance = list(data.table(Date = dateIn, Distance = distINfo)))
+  }
+  # case where cluster is of size one :
+  else
+  {
+    minDay <- dateIn
+    distINfo <- 0
+    data.table(TypicalDay = minDay,
+               Class = className,
+               dayIn = list(data.table(Date = rep(dateIn, each = 24),
+                                       Period = rep(1:24, length(dateIn)))),
+               distance = list(data.table(Date = dateIn, Distance = distINfo)))
+  }
+}
+
+.ctrlCalendar <- function(calendar){
+  
+  if(any(!names(calendar)%in% c("interSeasonWe",
+                                "interSeasonWd",
+                                "winterWe",
+                                "winterWd",
+                                "summerWe",
+                                "summerWd")) | is.null(names(calendar))){
+    
+    stop("Names of calendar must be 'interSeasonWe',
+         'interSeasonWd', 'winterWe',
+         'winterWd', 'summerWe', 'summerWd'")
+  }
+  
+}
+
+.orderResult <- function(allTypDay)
+{
+  orderVect <- c(which(allTypDay$Class == "summerWd"),
+                 which(allTypDay$Class == "summerWe"),
+                 which(allTypDay$Class == "winterWd"),
+                 which(allTypDay$Class == "winterWe"),
+                 which(allTypDay$Class == "interSeasonWd"),
+                 which(allTypDay$Class == "interSeasonWe"))
+  if(length(orderVect) == nrow(allTypDay)){
+    allTypDay <- allTypDay[orderVect]
+  }
+  allTypDay
 }
