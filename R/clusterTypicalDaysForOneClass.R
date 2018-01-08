@@ -47,7 +47,6 @@ clusterTypicalDaysForOneClass <- function(dates,
   
   pb <- txtProgressBar(style = 3)
   setTxtProgressBar(pb, 0)
-  set.seed(123456)
   
   vertices <- .ctrlVertices(vertices)
   
@@ -64,6 +63,8 @@ clusterTypicalDaysForOneClass <- function(dates,
  
   
   distMat <- .getDistMatrix(veticesSel <- vertices[Date %in% dates], hourWeight)
+  
+  set.seed(123456)
   vect <- cluster::pam(distMat, nbCluster, diss = TRUE)$clustering
   distMat <- as.matrix(distMat)
   

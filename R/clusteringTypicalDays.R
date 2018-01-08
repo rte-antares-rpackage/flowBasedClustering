@@ -66,7 +66,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
   pb <- txtProgressBar(style = 3)
   setTxtProgressBar(pb, 0)
-  set.seed(123456)
+
   
   vertices <- .ctrlVertices(vertices)
   calendar <- lapply(calendar, as.character)
@@ -113,6 +113,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
                               hourWeight)
     
     # clustering using PAM
+    set.seed(123456)
     vect <- cluster::pam(distMat, nbClust, diss = TRUE)$clustering
     
     distMat <- as.matrix(distMat)
