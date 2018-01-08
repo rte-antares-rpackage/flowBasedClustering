@@ -10,9 +10,9 @@ clusterPlot(data, country1, country2, hour, dayType, typicalDayOnly = FALSE,
 \arguments{
 \item{data}{\code{data.table} results from the clustering, output data from \link{clusteringTypicalDays}}
 
-\item{country1}{\code{character}, name of the country whose net position is in the x axis}
+\item{country1}{\code{character}, name of the country whose net position is in the x axis (BE, FR, DE or NL)}
 
-\item{country2}{\code{character}, name of the country whose net position is in the y axis}
+\item{country2}{\code{character}, name of the country whose net position is in the y axis (BE, FR, DE or NL)}
 
 \item{hour}{\code{numeric}, hour of the plotted domain}
 
