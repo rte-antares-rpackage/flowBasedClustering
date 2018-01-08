@@ -1,5 +1,11 @@
 #' @title Generate a set of flow-based typical days
-#' @description To complete
+#' @description Run a clustering algorithm on the different classes of the calendar (\link{getCalendar}).
+#' Its principle is to create clusters by
+#' gathering the most similar days of each class before choosing among them the best
+#' representative: it will be a so-called typical day. The metric used to determine the similarity of two days is
+#' a weighted sum of 24 hourly distances, meaning the distances between the domains of the two
+#' days at the same hour. This distance is defined by projecting all the vertices of each domain
+#' on the second one and adding the differences.
 #'
 #' @param calendar \code{list}, vector of date for each period. Can be obtain with \link{getCalendar}
 #' @param vertices \code{data.table}, 5 columns :
@@ -10,12 +16,13 @@
 #'  \item DE : german vertices
 #'  \item FR : french vertices
 #' }
-#' This parameter can be obtained with the function \code{ptdfToVertices()}.
-#' @param nbClustWeek \code{numeric}, number of clusters for week (working days) period. Defaut to 3
+#' This parameter can be obtained with the function \link{ptdfToVertices}.
+#' @param nbClustWeek \code{numeric}, number of clusters for week period(working days). Defaut to 3
 #' @param nbClustWeekend \code{numeric}, number of clusters for weekend period. Defaut to 1
-#' @param report \code{boolean}, generate report. Defaut to TRUE
+#' @param report \code{boolean}, should a .html report be generated with the results of the clustering. Defaut to TRUE
 #' @param reportPath \code{character}, path where the report is written. Defaut to \code{getwd()}
-#' @param hourWeight \code{numeric}, vector of 24 weights to ponderate differently each hour of the day
+#' @param hourWeight \code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
+#' will be more accurate for the flow-based domains of the hours with a relatively higher weight. 
 #'
 #' @examples
 #'
@@ -39,7 +46,7 @@
 #' # run clustering algorithm
 #' clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 2, nbClustWeekend = 1)
 #' 
-#' # run clustering algorithm with metric based only on hour 18
+#' # run clustering algorithm distinguishing the days only with the flow-based domains of hour 18
 #' w <- rep(0,24)
 #' w[18] <- 1
 #' clusterTD <- clusteringTypicalDays(calendar, vertices,  hourWeight = w, report = FALSE)

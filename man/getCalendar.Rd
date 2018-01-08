@@ -2,7 +2,7 @@
 % Please edit documentation in R/getCalendar.R
 \name{getCalendar}
 \alias{getCalendar}
-\title{Define a calendar with season}
+\title{Build a calendar}
 \usage{
 getCalendar(dates, interSeasonBegin, interSeasonEnd, dayExclude = NULL,
   holiday = c("NewYearsDay", "GoodFriday", "EasterSunday", "EasterMonday",
@@ -13,22 +13,26 @@ getCalendar(dates, interSeasonBegin, interSeasonEnd, dayExclude = NULL,
 \arguments{
 \item{dates}{\code{character or date}, vector of dates YYYY-MM-DD, can be generate with \link{getSequence}}
 
-\item{interSeasonBegin}{\code{character or date}, date, YYYY-MM-DD, begin of interseason}
+\item{interSeasonBegin}{\code{character or date}, date or vector of dates, YYYY-MM-DD, begin of interseason}
 
-\item{interSeasonEnd}{\code{character or date}, date, YYYY-MM-DD, end of interseason}
+\item{interSeasonEnd}{\code{character or date}, date or vector of dates, YYYY-MM-DD, end of interseason}
 
-\item{dayExclude}{\code{character or date}, date, YYYY-MM-DD, day to exclude}
+\item{dayExclude}{\code{character or date}, date or vector of dates, YYYY-MM-DD, day(s) to exclude from the calendar}
 
-\item{holiday}{\code{character}, see \link[timeDate]{holiday} for holidays names, holidays days default :
+\item{holiday}{\code{character}, see \link[timeDate]{holiday} for holidays names, holidays will be considered as weekends. Holidays days by default are :
 NewYearsDay,GoodFriday,EasterSunday,
 EasterMonday,LaborDay,FRAscension,Pentecost,PentecostMonday,
 FRAssumptionVirginMary,FRAllSaints,FRArmisticeDay,
 ChristmasEve,ChristmasDay,BoxingDay,DENewYearsEve}
 
-\item{dayInWeekend}{\code{numeric}, indice of weekend day}
+\item{dayInWeekend}{\code{numeric}, indice of weekend days. By default \code{c(6,7)} for saturdays and sundays}
+}
+\value{
+A list of vector of dates. The name of each element of the list is a so-called "class" (season x type of day, e.g. summerWd).
 }
 \description{
-Define a calendar with season
+Define a calendar, with three different "seasons" (winter, summer and interseason) and two types
+of days (working days and weekends)
 }
 \examples{
 
@@ -36,7 +40,7 @@ Define a calendar with season
 dates <- getSequence("2017-01-01", "2017-12-31")
 interSeasonBegin <- c("2017-03-01", "2017-09-01")
 interSeasonEnd <- c("2017-05-01", "2017-11-01")
-dayExclude <- dates
+dayExclude <- c("2017-06-15", "2017-06-16")
 getCalendar(dates, interSeasonBegin, interSeasonEnd, dayExclude = dayExclude)
 }
 
