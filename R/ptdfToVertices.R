@@ -3,10 +3,15 @@
 #' PTDF are the equations of the hyperplanes defining the limits of flow-based domains, 
 #' while the vertices are the coordinnates of the extreme points of the domains.
 #'
-#' @param PTDF \code{character}, path for PTDF file. 
+#' @param PTDF \code{character}, path of a PTDF file. 
 #' The PTDF file must contains at least these seven columns : Date, Period, BE, DE, FR, NL and RAM - in this order.
+#' It must be a .csv file with ";" as column separator and "." as decimal separator.
+#' The names of the seven columns (Date, Period, ...) must be included in the header (first line)
+#' of the .csv file.
 #' 
-#' @param nbCore \code{numeric}, number of cores for parallel computation. Default to one
+#' @param nbCore \code{numeric}, number of cores for parallel computation. Default to one.
+#'
+#' @return A data table with the vertices of the flow-based domains.
 #'
 #' @examples
 #'

@@ -4,14 +4,19 @@
 \alias{ptdfToVertices}
 \title{Convert a PTDF file into a table of vertices}
 \usage{
-ptdfToVertices(PTDF = system.file("dataset/ptdf_example.csv", package =
-  "flowBasedClustering"), nbCore = 1)
+ptdfToVertices(PTDF, nbCore = 1)
 }
 \arguments{
-\item{PTDF}{\code{character}, path for PTDF file. 
-The PTDF file must contains at least these seven columns Date, Period, BE, DE, FR, NL, RAM in this order.}
+\item{PTDF}{\code{character}, path of a PTDF file. 
+The PTDF file must contains at least these seven columns : Date, Period, BE, DE, FR, NL and RAM - in this order.
+It must be a .csv file with ";" as column separator and "." as decimal separator.
+The names of the seven columns (Date, Period, ...) must be included in the header (first line)
+of the .csv file.}
 
-\item{nbCore}{\code{numeric}, number of cores for parallel computation. Default to one}
+\item{nbCore}{\code{numeric}, number of cores for parallel computation. Default to one.}
+}
+\value{
+A data table with the vertices of the flow-based domains.
 }
 \description{
 PTDF are the equations of the hyperplanes defining the limits of flow-based domains, 
@@ -25,7 +30,7 @@ data.table = F)
 
 head(ptdf_data[, 1:7])
 
-vertices <- data.table::fread(system.file("dataset/vertices_example.txt",package = "flowBasedClustering"))
+vertices <- ptdfToVertices(system.file("dataset/ptdf_example.csv",package = "flowBasedClustering"))
 
 head(vertices)
 
