@@ -8,19 +8,20 @@ plotFlowbased(PTDF, country1, country2, domainsNames = NULL, main = "",
   xlim = c(-10000, 10000), ylim = c(-10000, 10000))
 }
 \arguments{
-\item{PTDF}{\code{data.frame or list} PTDF file}
+\item{PTDF}{\code{data.frame or list} (list of) data.frame(s) with the PTDF of one time step. 
+The data.frame must have the same columns as the input file of \link{ptdfToVertices}}
 
-\item{country1}{\code{character} country 1 possible values are : BE, DE, FR, NL}
+\item{country1}{\code{character}, name of the country whose net position is in the x axis (BE, FR, DE or NL)}
 
-\item{country2}{\code{character} country 2 possible values are : BE, DE, FR, NL}
+\item{country2}{\code{character}, name of the country whose net position is in the y axis (BE, FR, DE or NL)}
 
-\item{domainsNames}{\code{character} names for domain(s), use in legend}
+\item{domainsNames}{\code{character} names of the domain(s), used as legend of the graph}
 
-\item{main}{\code{character} title}
+\item{main}{\code{character} title of the graph}
 
-\item{xlim, }{x lim}
+\item{xlim}{\code{numeric} x axis limits, vector with two values (min and max)}
 
-\item{ylim, }{y lim}
+\item{ylim}{\code{numeric} y axis limits, vector with two values (min and max)}
 }
 \description{
 Plot flow-based domain(s)

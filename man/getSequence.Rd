@@ -2,7 +2,7 @@
 % Please edit documentation in R/getCalendar.R
 \name{getSequence}
 \alias{getSequence}
-\title{Create a vector of date from a being date begin to a end date}
+\title{Return a vector of consecutive dates}
 \usage{
 getSequence(dateBegin, dateEnd)
 }
@@ -11,8 +11,11 @@ getSequence(dateBegin, dateEnd)
 
 \item{dateEnd}{\code{character or date}, date, YYYY-MM-DD}
 }
+\value{
+a vector of dates
+}
 \description{
-Create a vector of date from a being date begin to a end date
+Return a vector of consecutive dates
 }
 \examples{
 

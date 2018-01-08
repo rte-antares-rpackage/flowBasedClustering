@@ -6,7 +6,8 @@
 #' @import pipeR
 #' @importFrom utils combn
 #' @importFrom stats dist
-#' @export
+#' @noRd
+#' 
 getVertices <- function(face, b){
   B <- as.matrix(face)
   IDfin <- 1:nrow(B)

@@ -1,13 +1,15 @@
-#' Generate a plot for a typical day cluster
+#' Plot a flow-based domain of a typical day
 #'
+#' For a given hour, plot the flow-based domain of one typical day along with the other
+#' flow-based domains it represents (i.e. other domains of the same cluster).
 #'
-#' @param data \code{data.table}, output of \link{clusteringTypicalDays}
-#' @param country1 \code{character}, name of first country
-#' @param country2 \code{character}, name of second country
-#' @param hour \code{numeric}, hour
-#' @param dayType  \code{numeric}, dayType
-#' @param typicalDayOnly : plot only typical day ?
-#' @param ggplot : ggplot or amCharts ?
+#' @param data \code{data.table} results from the clustering, output data from \link{clusteringTypicalDays}
+#' @param country1 \code{character}, name of the country whose net position is in the x axis (BE, FR, DE or NL)
+#' @param country2 \code{character}, name of the country whose net position is in the y axis (BE, FR, DE or NL)
+#' @param hour \code{numeric}, hour of the plotted domain
+#' @param dayType  \code{numeric}, typical flow-based day identifier
+#' @param typicalDayOnly \code{logical} if TRUE, plot only the domain of the typical day and not the other domains of the cluster
+#' @param ggplot \code{logical} should ggplot package be used (static graph) instead of ramCharts (dynamic graph)
 #'
 #' @import rAmCharts DT
 #'
@@ -43,13 +45,14 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 
 #' Plot flow-based domain(s)
 #'
-#' @param PTDF \code{data.frame or list} PTDF file
-#' @param country1 \code{character} country 1 possible values are : BE, DE, FR, NL
-#' @param country2 \code{character} country 2 possible values are : BE, DE, FR, NL
-#' @param domainsNames \code{character} names for domain(s), use in legend
-#' @param main \code{character} title
-#' @param xlim, x lim
-#' @param ylim, y lim
+#' @param PTDF \code{data.frame or list} (list of) data.frame(s) with the PTDF of one time step. 
+#' The data.frame must have the same columns as the input file of \link{ptdfToVertices}
+#' @param country1 \code{character}, name of the country whose net position is in the x axis (BE, FR, DE or NL)
+#' @param country2 \code{character}, name of the country whose net position is in the y axis (BE, FR, DE or NL)
+#' @param domainsNames \code{character} names of the domain(s), used as legend of the graph
+#' @param main \code{character} title of the graph
+#' @param xlim \code{numeric} x axis limits, vector with two values (min and max)
+#' @param ylim \code{numeric} y axis limits, vector with two values (min and max)
 #'
 #' @examples
 #'

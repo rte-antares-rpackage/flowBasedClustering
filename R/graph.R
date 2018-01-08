@@ -1,14 +1,20 @@
 #' Generate html report
 #'
-#' @param dayType \code{numeric} Typical day
-#' @param outputFile \code{character} path of output
-#' @param data \code{data.table} data from \link{clusteringTypicalDays}
+#' Write and save a report with the results of the clustering of the flow-based domains. For one typical day,
+#' the report contains the representation of all the 24 hourly flow-based domains and their comparison
+#' with the domains of the other historical days it represents.
+#'
+#' @param dayType \code{numeric} Typical day identifier
+#' @param outputFile \code{character} a folder where the html report is saved
+#' @param data \code{data.table} results from the clustering, output data from \link{clusteringTypicalDays}
 #'
 #'
 #' @examples
 #'
 #' \dontrun{
-#' generateClusteringReport(dayType = 7)
+#' 
+#' clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
+#' generateClusteringReport(dayType = 7, data = clusterTD)
 #' }
 #' @export
 generateClusteringReport <- function(dayType, outputFile = NULL,
