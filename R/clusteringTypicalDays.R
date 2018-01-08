@@ -62,7 +62,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
                                   report = TRUE, reportPath = getwd(),
                                   hourWeight = rep(1, 24)){
   
-  cat("Compute distances\n")
+  cat("run clustering of flow-based domains\n")
   
   pb <- txtProgressBar(style = 3)
   setTxtProgressBar(pb, 0)

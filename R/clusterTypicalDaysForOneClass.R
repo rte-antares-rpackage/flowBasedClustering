@@ -43,7 +43,7 @@ clusterTypicalDaysForOneClass <- function(dates,
                                           report = TRUE, 
                                           id_start = 1){
   
-  cat("Compute distances\n")
+  cat("run clustering of flow-based domains\n")
   
   pb <- txtProgressBar(style = 3)
   setTxtProgressBar(pb, 0)
