@@ -3,7 +3,6 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: scroll
-    css: styles_flex.css
 params: 
     set_title: ""
 title: "`r params$set_title`"
@@ -19,7 +18,6 @@ library(flowBasedClustering)
 library(ggplot2)
 library(pipeR)
 library(DT)
-library(pipeR)
 ```
 
 
