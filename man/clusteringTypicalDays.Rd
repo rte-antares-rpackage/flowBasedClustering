@@ -35,11 +35,10 @@ will be more accurate for the flow-based domains of the hours with a relatively 
 \description{
 Run a clustering algorithm on the different classes of the calendar (\link{getCalendar}).
 Its principle is to create clusters by
-gathering the most similar days of each class before choosing among them the best
+gathering the most similar days of each class and to choose among them the best
 representative: it will be a so-called typical day. The metric used to determine the similarity of two days is
 a weighted sum of 24 hourly distances, meaning the distances between the domains of the two
-days at the same hour. This distance is defined by projecting all the vertices of each domain
-on the second one and adding the differences.
+days at the same hour.
 }
 \examples{
 

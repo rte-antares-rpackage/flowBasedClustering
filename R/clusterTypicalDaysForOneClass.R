@@ -1,8 +1,12 @@
-#' @title Generate a set of flow-based typical days for a season
+#' @title Generate a set of flow-based typical days on one time period
 #' 
-#' @description To do
+#' @description Run a clustering algorithm for a given historical period. It creates clusters by
+#' gathering the most similar days and chooses among them the best
+#' representative: it will be a so-called typical day. The metric used to determine the similarity of two days is
+#' a weighted sum of 24 hourly distances, meaning the distances between the domains of the two
+#' days at the same hour.
 #'
-#' @param dates \code{vector}, vector of date.
+#' @param dates \code{character}, vector of date (format YYYY-MM-DD).
 #' @param vertices \code{data.table}, 5 columns :
 #' \itemize{
 #'  \item Date : date (%Y-%M-%D)
@@ -11,12 +15,13 @@
 #'  \item DE : german vertices
 #'  \item FR : french vertices
 #' }
-#' This parameter can be obtained with the function \code{ptdfToVertices()}.
-#' @param nbCluster \code{numeric}, number of clusters.
-#' @param className \code{character}, name of class.
-#' @param id_start \code{numeric}, first id of typical days.
+#' This parameter can be obtained with the function \link{ptdfToVertices}.
+#' @param nbCluster \code{numeric}, number of clusters
+#' @param className \code{character}, name of the class characterizing the studied time period
+#' @param id_start \code{numeric}, first identifier of the returned typical days. Default value is 1
 #' @param reportPath \code{character}, path where the report is written. Defaut to \code{getwd()}
-#' @param hourWeight \code{numeric}, vector of 24 weights to ponderate differently each hour of the day
+#' @param hourWeight \code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
+#' will be more accurate for the flow-based domains of the hours with a relatively higher weight. 
 #' @param report \code{boolean}, if TRUE, reports are generated.
 #'
 #' @examples
@@ -43,11 +48,10 @@ clusterTypicalDaysForOneClass <- function(dates,
                                           report = TRUE, 
                                           id_start = 1){
   
-  cat("Compute distances\n")
+  cat("run clustering of flow-based domains\n")
   
   pb <- txtProgressBar(style = 3)
   setTxtProgressBar(pb, 0)
-  set.seed(123456)
   
   vertices <- .ctrlVertices(vertices)
   
@@ -64,6 +68,8 @@ clusterTypicalDaysForOneClass <- function(dates,
  
   
   distMat <- .getDistMatrix(veticesSel <- vertices[Date %in% dates], hourWeight)
+  
+  set.seed(123456)
   vect <- cluster::pam(distMat, nbCluster, diss = TRUE)$clustering
   distMat <- as.matrix(distMat)
   
@@ -122,7 +128,7 @@ clusterTypicalDaysForOneClass <- function(dates,
 
 .ctrlDates <- function(dates, dayInVertices){
   if(!any(dates%in%dayInVertices)){
-    stop("Some(s) season(s) are not in vertices data.")
+    stop("One(some) season(s) are not in vertices data.")
   }
   
   if(!all(dates%in%dayInVertices)){

@@ -1,11 +1,10 @@
 #' @title Generate a set of flow-based typical days
 #' @description Run a clustering algorithm on the different classes of the calendar (\link{getCalendar}).
 #' Its principle is to create clusters by
-#' gathering the most similar days of each class before choosing among them the best
+#' gathering the most similar days of each class and to choose among them the best
 #' representative: it will be a so-called typical day. The metric used to determine the similarity of two days is
 #' a weighted sum of 24 hourly distances, meaning the distances between the domains of the two
-#' days at the same hour. This distance is defined by projecting all the vertices of each domain
-#' on the second one and adding the differences.
+#' days at the same hour. 
 #'
 #' @param calendar \code{list}, vector of date for each period. Can be obtain with \link{getCalendar}
 #' @param vertices \code{data.table}, 5 columns :
@@ -62,11 +61,11 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
                                   report = TRUE, reportPath = getwd(),
                                   hourWeight = rep(1, 24)){
   
-  cat("Compute distances\n")
+  cat("run clustering of flow-based domains\n")
   
   pb <- txtProgressBar(style = 3)
   setTxtProgressBar(pb, 0)
-  set.seed(123456)
+
   
   vertices <- .ctrlVertices(vertices)
   calendar <- lapply(calendar, as.character)
@@ -113,6 +112,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
                               hourWeight)
     
     # clustering using PAM
+    set.seed(123456)
     vect <- cluster::pam(distMat, nbClust, diss = TRUE)$clustering
     
     distMat <- as.matrix(distMat)
