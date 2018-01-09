@@ -134,8 +134,13 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
 #'@param ggplot : ggplot or amCharts ?
 #'@param xlim : xlim
 #'@param ylim : ylim
+#'@param width \code{character}, for rAmCharts only. Default to "420px" (set to "100%" for dynamic resize)
+#'@param height \code{character}, for rAmCharts only. Default to "410px" (set to "100%" for dynamic resize)
+#' 
 #'@noRd
-.makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, ggplot = FALSE, xlim = c(-10000, 10000), ylim = c(-10000, 10000)){
+.makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, ggplot = FALSE, 
+                       xlim = c(-10000, 10000), ylim = c(-10000, 10000),
+                       width = "420px", height = "410px"){
   ctry <- unique(substr(names(data), 11, 12))
   if(typicalDayOnly){
     dates <- typicalDayDate
@@ -166,9 +171,12 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
       addTitle(text = paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])),
       setGraphs(graphs),
       setChartCursor(),
-      addValueAxes(title = paste(ctry[1], "(MW)"), position = "bottom", minimum = xlim[1], maximum = xlim[2]),
-      addValueAxes(title =  paste(ctry[2], "(MW)"), minimum = ylim[1], maximum = ylim[2]),
-      setExport(enabled = TRUE)
+      addValueAxes(title = paste(ctry[1], "(MW)"), position = "bottom", minimum = xlim[1], 
+                   maximum = xlim[2], minHorizontalGap = 35, minVerticalGap = 35),
+      addValueAxes(title =  paste(ctry[2], "(MW)"), minimum = ylim[1], 
+                   maximum = ylim[2], minHorizontalGap = 35, minVerticalGap = 35),
+      setExport(enabled = TRUE),
+      plot(width = width, height = height)
     )
   } else {
     
