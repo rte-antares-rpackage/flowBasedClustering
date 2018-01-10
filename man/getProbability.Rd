@@ -33,7 +33,9 @@ clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBa
 MatProb <- getProbability(climate, clusterTD)
 
 # run with specified probability levels, and witout auto-filling the NA cases
-levelsProba <- list(FR_load = c(0.2, 0.4, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8) )
+levelsProba <- list(summerWd = list(FR_load = c(0.5), DE_wind = c(1/3, 2/3), DE_solar = .5),
+                    summerWe = list(FR_load = c(0.5, 0.7), DE_wind = c(.5))
+)
 MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = FALSE)
 
 }
