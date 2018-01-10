@@ -37,6 +37,7 @@ levelsProba <- list(summerWd = list(FR_load = c(0.5), DE_wind = c(1/3, 2/3), DE_
                     summerWe = list(FR_load = c(0.5, 0.7), DE_wind = c(.5))
 )
 MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = FALSE)
+MatProb2 <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = TRUE)
 
 }
 }

@@ -23,6 +23,7 @@
 #'                     summerWe = list(FR_load = c(0.5, 0.7), DE_wind = c(.5))
 #' )
 #' MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = FALSE)
+#' MatProb2 <- getProbability(climate, clusterTD, levelsProba = levelsProba, extrapolationNA = TRUE)
 #' 
 #' }
 #' @export
@@ -81,7 +82,23 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
   
   
   #If no extrapolation return result
-  if(!extrapolationNA)return(list(probaNotExtrapol, ClimQuantiles))
+  
+  
+  
+  
+  if(!extrapolationNA){
+    setnames(ClimQuantiles, "Class", "class")
+    setnames(ClimQuantiles, "Quantiles", "quantiles")
+    
+    setnames(probaNotExtrapol, "Class", "class")
+    setnames(probaNotExtrapol, "TypicalDay", "typicalDay")
+    setnames(probaNotExtrapol, "idDayType", "idDayType")
+    setnames(probaNotExtrapol, "Proba", "probability")
+    setnames(probaNotExtrapol, "V2", "sizeClass")
+    
+    
+    return(list(probaNotExtrapol, ClimQuantiles))
+    }
   
   
   if(extrapolationNA)
@@ -140,6 +157,16 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
       newValue
     })
   }
+  
+  setnames(ClimQuantiles, "Class", "class")
+  setnames(ClimQuantiles, "Quantiles", "quantiles")
+  
+  setnames(probaNotExtrapol, "Class", "class")
+  setnames(probaNotExtrapol, "TypicalDay", "typicalDay")
+  setnames(probaNotExtrapol, "idDayType", "idDayType")
+  setnames(probaNotExtrapol, "Proba", "probability")
+  setnames(probaNotExtrapol, "V2", "sizeClass")
+  
   return(list(probaNotExtrapol, ClimQuantiles))
   
 }

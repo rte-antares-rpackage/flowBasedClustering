@@ -20,7 +20,7 @@ test_that("Prepare data", {
   expect_true("ggplot"%in%class(out))
   
   out <- clusterPlot(clusterTD, "BE", "FR", 1, 1, ggplot = FALSE)
-  expect_true("AmChart"%in%class(out))
+  expect_true("htmlwidget"%in%class(out))
   
   
   

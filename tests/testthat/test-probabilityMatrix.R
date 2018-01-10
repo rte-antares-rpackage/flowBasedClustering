@@ -20,22 +20,22 @@ test_that("clustering getProbability works", {
   # check that : for a combinaison of class AND levels of each variable,
   # the sum of the probabilities for each typical day is one
   
-  shoubBeOne <- probMatrix[[1]][,sum(Proba), by = c("Class", "FR_load", "DE_wind", "DE_solar")]
+  shoubBeOne <- probMatrix[[1]][,sum(probability), by = c("class", "FR_load", "DE_wind", "DE_solar")]
   
   expect_true(all(abs(shoubBeOne$V1 - 1) < 0.00001))
 
   # check that there is no NA in output :
-  expect_false(any(is.na(probMatrix[[1]]$Proba)))
+  expect_false(any(is.na(probMatrix[[1]]$probability)))
   
   # getProbability without NA extrapolation
   probMatrixWithNA <- getProbability(climate, cluster = clusterTD, levelsProba = c(0.333, 0.666), extrapolationNA = FALSE)
   
   # check that there is a NA when there is no historical record
-  expect_true(all(is.na(probMatrixWithNA[[1]][V2 == 0]$Proba)))
+  expect_true(all(is.na(probMatrixWithNA[[1]][sizeClass == 0]$probability)))
   
   # check that non-NA values are similar
-  pNA <- probMatrixWithNA[[1]]$Proba
-  p <- probMatrix[[1]]$Proba
+  pNA <- probMatrixWithNA[[1]]$probability
+  p <- probMatrix[[1]]$probability
   expect_true(length(pNA) == length(p))
   expect_true(all(pNA[!is.na(pNA)] == p[!is.na(pNA)]))
   
@@ -52,7 +52,7 @@ test_that("clustering getProbability works", {
   probMatrixWithNA <- getProbability(climate, cluster = clusterTD,
                                      levelsProba = levelsProba, extrapolationNA = TRUE)
   
-  shoubBeOne <- probMatrixWithNA[[1]][,sum(Proba), by = c("Class", "FR_load", "DE_wind", "DE_solar")]
+  shoubBeOne <- probMatrixWithNA[[1]][,sum(probability), by = c("class", "FR_load", "DE_wind", "DE_solar")]
   
   expect_true(all(abs(shoubBeOne$V1 - 1) < 0.00001))
   
@@ -299,8 +299,9 @@ test_that("clustering old and new version", {
     ram[[1]]$DE_solar <- gsub("0.1_1", "S0.1", ram[[1]]$DE_solar )
     ram[[1]]$DE_solar <- gsub("0_0.1", "I0.1", ram[[1]]$DE_solar )
     
-    ctrl <- merge(rem[[1]], ram[[1]], by = c("Class",
-                                             "TypicalDay",
+    names(rem[[1]])[1:2] <- c("class", "typicalDay")
+    ctrl <- merge(rem[[1]], ram[[1]], by = c("class",
+                                             "typicalDay",
                                              "idDayType",
                                              "FR_load",
                                              "DE_wind",
