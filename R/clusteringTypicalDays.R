@@ -130,7 +130,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   allTypDay <- .addVerticesToTp(allTypDay, vertices)
   
   ##Ordered result
-  allTypDay <- .orderResult(allTypDay)
+  allTypDay <- .orderResult(allTypDay, hourWeight)
   
   allTypDay[,idDayType :=1:.N ]
   
@@ -354,7 +354,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   
 }
 
-.orderResult <- function(allTypDay)
+.orderResult <- function(allTypDay, hourWeight)
 {
   orderVect <- c(which(allTypDay$Class == "summerWd"),
                  which(allTypDay$Class == "summerWe"),
@@ -364,6 +364,18 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
                  which(allTypDay$Class == "interSeasonWe"))
   if(length(orderVect) == nrow(allTypDay)){
     allTypDay <- allTypDay[orderVect]
+    
+    od1 <- unique(allTypDay[,.SD, .SDcols = "Class"])[,od1 := 1:.N]
+    allTypDay <- merge(allTypDay, od1, by = "Class")
+    allTypDay[,od2 := .orderTpDay(allTypDay, hourWeight)]
+    allTypDay <- allTypDay[order(od1, od2)]
+    allTypDay[,od1 :=NULL]
+    allTypDay[,od2 :=NULL]
+    allTypDay <- allTypDay[,.SD, .SDcols = c(2,1,3,4)]
+    allTypDay
+    
   }
+
+  
   allTypDay
 }

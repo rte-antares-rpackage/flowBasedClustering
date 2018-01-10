@@ -84,6 +84,7 @@ clusterTypicalDaysForOneClass <- function(dates,
   }, simplify = FALSE))
   
   allTypDay <- .addVerticesToTp(allTypDay, vertices)
+  allTypDay <- allTypDay[.orderTpDay(allTypDay, hourWeight = hourWeight)]
   
   nb <- id_start:(id_start+nrow(allTypDay)-1)
   
@@ -111,6 +112,20 @@ clusterTypicalDaysForOneClass <- function(dates,
 
   allTypDay
 }
+
+
+.orderTpDay <- function(allTypDay, hourWeight){
+    order(sapply(1:nrow(allTypDay), function(TP){
+      tp <- allTypDay[TP]
+      myTpD <- tp$dayIn[[1]][[1]]$out[which(tp$dayIn[[1]][[1]]$Date==tp$TypicalDay)]
+      
+      sum(unlist(lapply(myTpD, function(X){
+        sum(apply(X, 2, max) - apply(X, 2, min))
+      }))*hourWeight)
+      
+    }), decreasing = TRUE)
+}
+
 
 .crtOutFile <- function(allTypDay, reportPath){
   outputFile <- reportPath
