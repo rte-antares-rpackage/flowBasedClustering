@@ -27,14 +27,20 @@
 #' @examples
 #'
 #' \dontrun{
-#' library(data.table) 
+#' library(data.table)
 #' vertices <- fread(system.file("dataset/vertices_example.txt",package = "flowBasedClustering"))
 #' dates <- seq(as.Date("2016-08-09"), as.Date("2018-09-01"), by = "day")
 #' hourWeight = rep(1, 24)
 #' 
-#' clusterTypicalDaysForOneClass(vertices = vertices,
-#'                               dates = dates, nbCluster = 2,
-#'                               className = "myName", id_start = 5)
+#' out1 <- clusterTypicalDaysForOneClass(vertices = vertices,
+#'                                       dates = dates, nbCluster = 2,
+#'                                       className = "myName", id_start = 5, report = FALSE)
+#' 
+#' out2 <- clusterTypicalDaysForOneClass(vertices = vertices,
+#'                                       dates = dates, nbCluster = 4,
+#'                                       className = "myName2", id_start = 7, report = FALSE)
+#' 
+#' rbindlist(list(out1, out2))
 #' }
 #'
 #'
