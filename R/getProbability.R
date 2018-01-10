@@ -27,6 +27,10 @@
 getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapolationNA = TRUE)
 {
   
+  class <- unique(cluster$Class)
+  clVar <- names(climate)[!names(climate)%in%"Date"]
+  # Compute quantiles
+  
   if(names(climate)[1]!='Date'){
     stop(paste0("First column of climate file must be called 'Date'. Current name : ",
                 names(climate)[1]))
@@ -55,194 +59,266 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
   # Define all variable to used
   concerneName <- names(climate)[!names(climate)%in%c("Date")]
   
-  # Control
-  if(!is.list(levelsProba)){
-    levelsProba <- sapply(concerneName, function(X){levelsProba}, simplify = FALSE)
-  }
-  if(!all(sort(names(levelsProba)) == sort(concerneName))){
-    stop(paste0("levelsProba list must have same names than climate variable. Currenty : ",
-                paste0(sort(names(levelsProba)), collapse = " , "), " and climate are : ",
-                paste0(sort(concerneName), collapse = " , ")))
-  }
   
-  # round levelsProba
-  levelsProba <- lapply(levelsProba, FUN = round, digits = 4)
+  levelsProba <- .ctrlAndMergeLevelsProba(levelsProba,clVar, class, cluster )
   
   # Merge classification result with climate table
   climateAssoClasif <- .mergeclimateClassif(climate, cluster)
-  allQuantile <- sapply(names(levelsProba), function(X){
-    varProba <- levelsProba[[X]]
-    varProba <- sort(varProba)
-    varProbaCode <- paste0("Q", varProba)
-    ClimQuantiles <- climateAssoClasif[,lapply(.SD, function(Y){
-      quantile(Y, varProba)
-    }), .SDcols = X, by = c("Class")]
-    ClimQuantiles$Quantiles <- varProbaCode
-    ClimQuantiles
-  }, simplify = FALSE, USE.NAMES = FALSE)
-  mergeQuantiles <- function(X, Y){merge(x = X, y = Y,  by = c("Class", "Quantiles"),all = TRUE)}
-  ClimQuantiles <-  Reduce(mergeQuantiles,allQuantile)
   
-  quantileNonClaire <- NULL
-  levelsProbaClair <- levelsProba
+  ##Compute quantiles for eatch season / variable
+  ClimQuantiles <- .calclQuantiles(levelsProba, climateAssoClasif)
   
-  # Define all comparaison to do (<q1, >q1 & <q2, ....)
-  quantileNonClaire <-  lapply(levelsProbaClair, function(levelModa){
-    quantileNonClaire <- NULL
-    for(i in 1:length(levelModa)){
-      
-      if(i == 1){
-        quantileNonClaire <- c(quantileNonClaire, paste0("I", levelModa[i]))
-      }else{
-        quantileNonClaire <- c(quantileNonClaire, paste0("B", levelModa[i - 1],"&", levelModa[i]))
-      }
-      
-      if(i == length(levelModa)){
-        quantileNonClaire <- c(quantileNonClaire, paste0("S", levelModa[i]))
-      }
-    }
-    quantileNonClaire
-  })
+  allComb <- .givequantilesOperation(levelsProba)
+  climStru <- unique(climateAssoClasif[,.SD, .SDcols = 2:4])
+  allComb <- merge(climStru, allComb, by = "Class", allow.cartesian=TRUE)
   
-  n <- length(concerneName)
-  # quantileNonClaire <- rep(list(quantileNonClaire), n)
+  #Calcul proba for eatch combinaison
+  probaNotExtrapol <- .calcProbByComb(allComb, ClimQuantiles, clVar, climateAssoClasif)
   
-  # Extand combinaison to all variables
-  allComb <- expand.grid(quantileNonClaire, stringsAsFactors = FALSE)
-  
-  nbcomp <- nrow(allComb)
-  climQuant <- unique(climateAssoClasif[, .SD, .SDcols =  c("TypicalDay", "idDayType", "Class")])
+  setnames(probaNotExtrapol, "value", "Proba")
   
   
-  # Create the structure for result
-  andTableStruct <- data.table(Class = rep(climQuant$Class, each = nbcomp),
-                               TypicalDay = rep(climQuant$TypicalDay, each = nbcomp),
-                               idDayType = rep(climQuant$idDayType, each = nbcomp),
-                               do.call("rbind", rep(list(allComb), nrow(climQuant)))
-  )
-  names(andTableStruct)[4:ncol(andTableStruct)] <- concerneName
+  #If no extrapolation return result
+  if(!extrapolationNA)return(list(probaNotExtrapol, ClimQuantiles))
   
-  #Calculate probability for each quantiles
-  probaAndEffectifs  <- rbindlist(sapply(1:nrow(andTableStruct), function(VV){
-    
-    #Select concern raw
-    selectRaw <- andTableStruct[VV]
-    constructRequest <- paste0("Class =='", selectRaw$Class,"'")
-    constructRequest <-  parse(text = constructRequest)
-    
-    selectQuantile <- ClimQuantiles[eval(constructRequest)]
-    climateConcern <- climateAssoClasif[eval(constructRequest)]
-    requestQuantile <- selectRaw[, .SD, .SDcols = concerneName]
-    
-    #Make request for each quantile, exemple DE_wind < Q1 | Q1 < DE_wind < Q2
-    allRequest <- lapply(requestQuantile, function(X){
-      sens <- substr(X, 1, 1)
-      res <- NULL
-      if(sens == "I"){
-        res <- c("<", substr(X, 2, nchar(X)))
-      }
-      if(sens == "S"){
-        res <- c(">=", substr(X, 2, nchar(X)))
-      }
-      if(sens == "B"){
-        X <- gsub("B", "", X)
-        X <- strsplit(X, "&")[[1]]
-        res <- list(c(">", X[1]), c("<=", X[2]))
-      }
-      
-      res
-    })
-    
-    
-    #Conversion in query to fromat R
-    req <- sapply(names(allRequest), function(X){
-      elemReq <- allRequest[[X]]
-      converRequest <- function(Y){
-        Q <- paste0("Q", Y[2])
-        paste(paste0("`", X, "`"), Y[1], as.numeric(selectQuantile[Quantiles == Q, .SD, .SDcols = X]))
-      }
-      
-      if(is.list(elemReq))
-      {
-        tpreq <- paste(unlist(lapply(elemReq, converRequest)), collapse = " & ")
-      }else{
-        tpreq <- converRequest(elemReq)
-      }
-    }, simplify = FALSE)
-    exp <- parse(text = paste0(unlist(req), collapse = "&"))
-    climateConcern <- climateConcern[eval(exp)]
-    
-    #Calculate probability
-    if(nrow(climateConcern)>0){
-      value <- nrow(climateConcern[idDayType ==  selectRaw$idDayType])/nrow(climateConcern)
-    }else{
-      value <- NA
-    }
-    
-    data.table(value, nrow(climateConcern))
-  }, simplify = FALSE))
-  
-  
-  andTableStruct$Proba <- probaAndEffectifs$value
-  andTableStruct$effectifClass <- probaAndEffectifs$V2
   
   if(extrapolationNA)
   {
     ##Apply retro propagation when NA value of probability
-    if(length(is.na(andTableStruct$Proba)) > 0){
-      rowS <- andTableStruct[is.na(Proba)] 
-      warning(paste0("due to lack of historical record, ", round(100*nrow(rowS)/nrow(andTableStruct), 1), "% of the probability matrix has been extrapolated"))
-      andTableStruct[is.na(Proba)]$Proba <- sapply(1:nrow(rowS), function(i){
-        selRow <- rowS[i]
-        quantSel <- selRow[,.SD, .SDcols = names(quantileNonClaire)]
-        preparedRequest <- sapply(names(quantSel), function(X){
-          quantClaire <- quantileNonClaire[[X]]
-          quantClaireBeg <- quantClaire
-          placeQuantile <- which(unlist(quantSel[, .SD, .SDcols = X]) == quantClaire)
-          placeQuantileBeg <- placeQuantile
-          if(length(quantClaire) > 1){
-            if(placeQuantile == 1){
-              placeQuantile <- c( 2)
-            }else if(placeQuantile == length(quantClaire)){
-              placeQuantile <- c(placeQuantile - 1)
-            }else{
-              placeQuantile <- c(placeQuantile - 1, placeQuantile + 1)
-            }
-          }
-          quantRequest <- quantClaire[placeQuantile]
-          quantBeg <- quantClaire[placeQuantileBeg]
-          list(Beg = quantBeg, New = quantRequest)
-        }, simplify = FALSE)
-        
-        allRequest <- rbindlist(sapply(1:length(preparedRequest), function(j){
-          Mv <- which(1:length(preparedRequest) == j)
-          data.table(expand.grid(sapply(1:length(preparedRequest), function(k){
-            if(Mv == k){
-              preparedRequest[[k]]$New
-            }else{
-              preparedRequest[[k]]$Beg
-            }
-          }, simplify = FALSE)))
-        }, simplify = FALSE))
-        
-        names(allRequest) <- names(quantSel)
-        allRequest$idDayType <- selRow$idDayType
-        result <- merge(allRequest, andTableStruct)
-        if(length(which(result$effectifClass == 0)) > nrow(result) / 3){
-          result <- 1/nrow(unique(andTableStruct[Class == selRow$Class, .SD, .SDcols = c("Class", "idDayType")]))
-        }else{
-          result <- mean(result$Proba, na.rm = TRUE)
-        }
-        
-        if(is.nan(result))result <- NA
-        result
-      })
-      
+    if(length(is.na(probaNotExtrapol$Proba)) > 0){
+      probaToExtrapol <- probaNotExtrapol[is.na(Proba)] 
+      warning(paste0("due to lack of historical record, ",
+                     round(100*nrow(probaToExtrapol)/nrow(probaNotExtrapol), 1),
+                     "% of the probability matrix has been extrapolated"))
     }
+    
+    
+    probaNotExtrapol$Proba <- sapply(1:nrow(probaNotExtrapol),function(roo){
+      rowForFile <- probaNotExtrapol[roo]
+      if(is.na(rowForFile$Proba)){
+        pbForExtrapol <- probaNotExtrapol[idDayType == rowForFile$idDayType]
+        probPbTpDay <- probaToExtrapol[idDayType == rowForFile$idDayType]
+        levelsProbaSeason <- levelsProba[[probPbTpDay$Class[1]]]
+        
+        initial <- lapply(strsplit(unlist(rowForFile[, .SD, .SDcols = clVar]), "_"), as.numeric)
+        maxireq <- paste0(sapply(names(levelsProbaSeason), function(i){
+          initI <- initial[[i]]
+          lvlI <- levelsProbaSeason[[i]]
+          
+          clVal <- .getClosedValue(initI, lvlI)
+          
+          miniReq <- paste("(", paste(paste0(i, "=='", unlist(sapply(1:(length(clVal)-1), function(j){
+            paste0(clVal[j], "_", clVal[j + 1], "'")
+          }))), collapse = "|"), ")")
+          
+          otherReq <- unlist(rowForFile[, .SD, .SDcols = clVar[!clVar%in%i]])
+          paste("(", paste(c(miniReq, paste0(names(otherReq), "=='", otherReq, "'")), collapse = "&"), ")")
+          
+        }), collapse = "|")
+        
+        newRow <- pbForExtrapol[eval(parse(text = maxireq))]
+        newRow <- newRow[!rowForFile, on=c(names(rowForFile))]
+        
+        if(length(which(newRow$V2 == 0)) > nrow(newRow) / 3){
+          newValue <- 1/nrow(unique(probaNotExtrapol[Class == newRow$Class[1], .SD, .SDcols = c("Class", "idDayType")]))
+        }else{
+          newRow <- newRow[!is.na(Proba)]
+          
+          
+          if(nrow(newRow) > 0){
+            newValue <- mean(newRow$Proba)#Here mean 
+          }else{
+            newValue <- NA
+          }
+        }
+      }else{
+        newValue <- rowForFile$Proba
+      }
+      
+      newValue
+    })
   }
-  return(list(andTableStruct, ClimQuantiles))
+  return(list(probaNotExtrapol, ClimQuantiles))
   
 }
+
+
+
+.getClosedValue <- function(initI, lvlI){
+  witchI <- which(initI%in%lvlI)
+  endW <- witchI
+  if(witchI[1]!=1){
+    endW <- c(endW, witchI[1] - 1)
+  }
+  if(witchI[2]!= length(lvlI)){
+    endW <- c(endW, witchI[2] + 1)
+    
+  }
+  lvlI[sort(unique(c(endW, witchI[1]+1, witchI[2]-1)))]
+  
+}
+
+
+.calcProbByComb <- function(allComb, ClimQuantiles, clVar, climateAssoClasif){
+  
+  cbind(allComb, rbindlist(sapply(1:nrow(allComb), function(j)
+  {
+    tpComb <- allComb[j]
+    ClimQuantilesSel <- ClimQuantiles[Class == tpComb$Class]
+    
+    exp <- paste(sapply(clVar, function(i)
+    {
+      quantToRequest <- paste0("Q", unlist(strsplit(tpComb[[i]], "_")))
+      quantilesValue <- sort(unlist(ClimQuantilesSel[Quantiles %in% quantToRequest, .SD, .SDcols = i]))
+      if(quantToRequest[1] == "Q0"){
+        paste0(i , "<=", quantilesValue[2]  )
+      }else{
+        if(quantToRequest[2] == "Q1"){
+          paste0(i , ">=", quantilesValue[1]  )
+          
+        }else{
+          paste0(i , ">=", quantilesValue[1] , "&",i , "<", quantilesValue[2]  )
+          
+        }
+      }
+    }), collapse = "&")
+    
+    
+    climCsrn <- climateAssoClasif[Class == tpComb$Class]
+    climCsrn <- climCsrn[eval(parse(text =exp))]
+    
+    #Calculate probability
+    if(nrow(climCsrn)>0){
+      value <- nrow(climCsrn[idDayType ==  tpComb$idDayType])/nrow(climCsrn)
+    }else{
+      value <- NA
+    }
+    data.table(value, nrow(climCsrn))
+  }, simplify = FALSE)))
+}
+
+
+.ctrlAndMergeLevelsProba <- function(levelsProba, clVar, class, cluster){
+  if(!is.list(levelsProba)){
+    levelsProba <- sapply(class, function(X){
+      sapply(clVar, function(Y){
+        levelsProba
+      }, simplify = FALSE)
+    }, simplify = FALSE)
+  }
+  #Control levelsProba format
+  .ctrlvlPb(levelsProba, clVar, class)
+  
+  #Round
+  levelsProba <- sapply(levelsProba, function(X)sapply(X, function(Y)round(Y, 4), simplify = FALSE), simplify = FALSE)
+  
+  classNotIn <- class[!class%in%names(levelsProba)]
+  if(length(classNotIn)>0)
+  {
+    for(i in classNotIn){ levelsProba[[i]] <- list()}
+  }
+  for(i in names(levelsProba)){
+    for(j in clVar){
+      if(is.null(levelsProba[[i]][[j]])){
+        levelsProba[[i]][[j]] <- c(0,1)
+      }else{
+        levelsProba[[i]][[j]] <- c(0, levelsProba[[i]][[j]], 1)
+        
+      }
+    }
+  }
+  
+  tabCl <- table(cluster$Class)
+  cl1 <- names(tabCl)[tabCl == 1]
+  if(length(cl1) > 0){
+    for(i in cl1){
+      totest <- levelsProba[[i]]
+      if(!all(unlist(lapply(totest, function(X){
+        X == c(0, 1)
+      })))){
+        warning(paste0("Somes probabilities are defined for season : ",
+                       i, " which only contains one typical day. They have been pass to NULL"))
+        
+        for(j in names(levelsProba[[i]])){
+          levelsProba[[i]][[j]] <- c(0, 1)
+        }
+      }
+    }
+  }
+  levelsProba
+}
+
+
+
+
+.ctrlvlPb <- function(levelsProba, clVar, class){
+  if(!all(unlist(levelsProba)>0) | ! all(unlist(levelsProba)<1) ){
+    stop("All levelsProba must be between 0 ans 1")
+  }
+  if(!all(names(levelsProba) %in% class)){
+    stop("Names of levelsProba must be contains in names of cluster data, missings :",
+         paste0(names(levelsProba)[!names(levelsProba) %in% class], collapse = ";"))
+  }
+  
+  lapply(levelsProba, function(X){
+    if(!all(names(X)%in%clVar)){
+      stop("All names of eatch levelProba members must be contain in names of climate data, missings :",
+           paste0(names(X)[!names(X) %in% clVar], collapse = ";"))
+    }
+  })
+  NULL
+}
+
+
+
+
+.givequantilesOperation <- function(levelsProba)
+{
+  # Define all comparaison to do (<q1, >q1 & <q2, ....)
+  quantileNonClaire <-  lapply(levelsProba, function(season){
+    lapply(season, function(var){
+      allOut <- NULL
+      for(i in 1:(length(var)-1)){
+        allOut <- c(allOut, paste0(var[i], "_", var[i+1]))
+      }
+      allOut
+    })
+    
+  })
+  
+  # quantileNonClaire <- rep(list(quantileNonClaire), n)
+  
+  # Extand combinaison to all variables
+  allComb <- lapply(quantileNonClaire, function(X){expand.grid(X, stringsAsFactors = FALSE)})
+  for(i in names(allComb)){
+    allComb[[i]]["Class"] <- i
+  }
+  allComb <- rbindlist(allComb)
+  allComb
+}
+
+.calclQuantiles <- function(levelsProba, climateAssoClasif)
+{
+  mergeQuantiles <- function(X, Y){merge(x = X, y = Y,  by = c("Class", "Quantiles"),all = TRUE)}
+  rbindlist(sapply(names(levelsProba), function(X){
+    Reduce(mergeQuantiles, sapply(names(levelsProba[[X]]), function(Y){
+      varProba <- levelsProba[[X]][[Y]]
+      varProba <- sort(varProba)
+      varProbaCode <- paste0("Q", varProba)
+      ClimQuantiles <- climateAssoClasif[Class == X,lapply(.SD, function(Y){
+        quantile(Y, varProba)
+      }), .SDcols = Y]
+      ClimQuantiles$Class <- X
+      ClimQuantiles$Quantiles <- varProbaCode
+      
+      ClimQuantiles
+    }, simplify = FALSE, USE.NAMES = FALSE))
+  }, simplify = FALSE, USE.NAMES = FALSE))
+  
+}
+
+
+
 
 
 #' Data transformation (merge climate and cluster files)
@@ -294,3 +370,69 @@ plotMonotone <- function(climate, cluster, dayType, variable){
     addGuide(value = as.numeric(quantile(-1+1:length(selData), 0.666)), toValue =  length(selData) - 1, fillAlpha = 0.1,
              fillColor = "#FF0000")
 }
+
+
+
+# climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
+# 
+# # load clustering results (or build them with clusteringTypicalDays function())
+# clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
+# 
+# extrapolationNA <- TRUE
+# 
+# levelsProba <- list(
+#   winterWd = list(FR_load = c(1/3, 2/3),
+#                   DE_wind = c(1/3, 2/3)),
+#   interSeasonWd = list(FR_load = c(1/3, 2/3),
+#                        DE_wind = c(1/3, 2/3),
+#                        DE_solar = c(1/2))
+# )
+# rem <- getProbability2(climate, clusterTD, levelsProba =levelsProba, extrapolationNA = TRUE)
+# ram <- getProbability(climate, clusterTD, levelsProba = c(.1, 0.9), extrapolationNA = FALSE)
+# 
+# 
+# 
+# 
+# 
+# microbenchmark(getProbability2(climate, clusterTD, levelsProba = c(.1, 0.9), extrapolationNA = FALSE),
+#                getProbability(climate, clusterTD, levelsProba = c(.1, 0.9), extrapolationNA = FALSE))
+# 
+# microbenchmark(getProbability2(climate, clusterTD, levelsProba = c(.1, 0.9), extrapolationNA = TRUE),
+#                getProbability(climate, clusterTD, levelsProba = c(.1, 0.9), extrapolationNA = TRUE))
+# 
+# 
+# rem <- getProbability2(climate, clusterTD, levelsProba =c(.1, 0.9), extrapolationNA = TRUE)
+# ram <- getProbability(climate, clusterTD, levelsProba = c(.1, 0.9), extrapolationNA = TRUE)
+# 
+# 
+# 
+# 
+# ram[[1]]
+# rem[[1]]$FR_load <- gsub("0.1_1", "S0.1", rem[[1]]$FR_load )
+# rem[[1]]$FR_load <- gsub("0_0.1", "I0.1", rem[[1]]$FR_load )
+# rem[[1]]$DE_wind <- gsub("0.1_1", "S0.1", rem[[1]]$DE_wind )
+# rem[[1]]$DE_wind <- gsub("0_0.1", "I0.1", rem[[1]]$DE_wind )
+# rem[[1]]$DE_solar <- gsub("0.1_1", "S0.1", rem[[1]]$DE_solar )
+# rem[[1]]$DE_solar <- gsub("0_0.1", "I0.1", rem[[1]]$DE_solar )
+# 
+# ctrl <- merge(rem[[1]], ram[[1]], by = c("Class",
+#                                          "TypicalDay",
+#                                          "idDayType",
+#                                          "FR_load",
+#                                          "DE_wind",
+#                                          "DE_solar"))
+# identical(ctrl$Proba.x, ctrl$Proba.y)
+# 
+# ctrl
+# 
+# identical(ctrl$V2, ctrl$effectifClass)
+# 
+# 
+# 
+# climate[Date%in%c(clusterTD[Class=="interSeasonWd"]$dayIn[[1]][[1]]$Date, clusterTD[Class=="interSeasonWd"]$dayIn[[2]][[1]]$Date)]
+# 
+# 
+# 
+# getProbability2(climate, clusterTD)
+# 
+
