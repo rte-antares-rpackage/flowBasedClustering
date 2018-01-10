@@ -2,14 +2,14 @@
 % Please edit documentation in R/clusterTypicalDaysForOneClass.R
 \name{clusterTypicalDaysForOneClass}
 \alias{clusterTypicalDaysForOneClass}
-\title{Generate a set of flow-based typical days for a season}
+\title{Generate a set of flow-based typical days on one time period}
 \usage{
 clusterTypicalDaysForOneClass(dates, vertices, nbCluster, hourWeight = rep(1,
   24), className = NULL, reportPath = getwd(), report = TRUE,
   id_start = 1)
 }
 \arguments{
-\item{dates}{\code{vector}, vector of date.}
+\item{dates}{\code{character}, vector of date (format YYYY-MM-DD).}
 
 \item{vertices}{\code{data.table}, 5 columns :
 \itemize{
@@ -19,22 +19,27 @@ clusterTypicalDaysForOneClass(dates, vertices, nbCluster, hourWeight = rep(1,
  \item DE : german vertices
  \item FR : french vertices
 }
-This parameter can be obtained with the function \code{ptdfToVertices()}.}
+This parameter can be obtained with the function \link{ptdfToVertices}.}
 
-\item{nbCluster}{\code{numeric}, number of clusters.}
+\item{nbCluster}{\code{numeric}, number of clusters}
 
-\item{hourWeight}{\code{numeric}, vector of 24 weights to ponderate differently each hour of the day}
+\item{hourWeight}{\code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
+will be more accurate for the flow-based domains of the hours with a relatively higher weight.}
 
-\item{className}{\code{character}, name of class.}
+\item{className}{\code{character}, name of the class characterizing the studied time period}
 
 \item{reportPath}{\code{character}, path where the report is written. Defaut to \code{getwd()}}
 
 \item{report}{\code{boolean}, if TRUE, reports are generated.}
 
-\item{id_start}{\code{numeric}, first id of typical days.}
+\item{id_start}{\code{numeric}, first identifier of the returned typical days. Default value is 1}
 }
 \description{
-To do
+Run a clustering algorithm for a given historical period. It creates clusters by
+gathering the most similar days and chooses among them the best
+representative: it will be a so-called typical day. The metric used to determine the similarity of two days is
+a weighted sum of 24 hourly distances, meaning the distances between the domains of the two
+days at the same hour.
 }
 \examples{
 

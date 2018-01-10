@@ -5,7 +5,8 @@
 \title{Plot flow-based domain(s)}
 \usage{
 plotFlowbased(PTDF, country1, country2, domainsNames = NULL, main = "",
-  xlim = c(-10000, 10000), ylim = c(-10000, 10000))
+  xlim = c(-10000, 10000), ylim = c(-10000, 10000), width = "420px",
+  height = "410px")
 }
 \arguments{
 \item{PTDF}{\code{data.frame or list} (list of) data.frame(s) with the PTDF of one time step. 
@@ -22,6 +23,10 @@ The data.frame must have the same columns as the input file of \link{ptdfToVerti
 \item{xlim}{\code{numeric} x axis limits, vector with two values (min and max)}
 
 \item{ylim}{\code{numeric} y axis limits, vector with two values (min and max)}
+
+\item{width}{\code{character}, for rAmCharts only. Default to "420px" (set to "100%" for dynamic resize)}
+
+\item{height}{\code{character}, for rAmCharts only. Default to "410px" (set to "100%" for dynamic resize)}
 }
 \description{
 Plot flow-based domain(s)

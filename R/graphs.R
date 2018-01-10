@@ -9,8 +9,10 @@
 #' @param hour \code{numeric}, hour of the plotted domain
 #' @param dayType  \code{numeric}, typical flow-based day identifier
 #' @param typicalDayOnly \code{logical} if TRUE, plot only the domain of the typical day and not the other domains of the cluster
-#' @param ggplot \code{logical} should ggplot package be used (static graph) instead of ramCharts (dynamic graph)
-#'
+#' @param ggplot \code{logical} should ggplot package be used (static graph) instead of rAmCharts (dynamic graph)
+#' @param width \code{character}, for rAmCharts only. Default to "420px" (set to "100%" for dynamic resize)
+#' @param height \code{character}, for rAmCharts only. Default to "410px" (set to "100%" for dynamic resize)
+#' 
 #' @import rAmCharts DT
 #'
 #' @examples
@@ -29,10 +31,10 @@
 #' @import ggplot2
 #' @export
 clusterPlot <- function(data, country1, country2, hour, dayType,
-                        typicalDayOnly = FALSE, ggplot = FALSE){
+                        typicalDayOnly = FALSE, ggplot = FALSE, width = "420px", height = "410px"){
   dataPlot <- .getDataPlotClustering(data[idDayType==dayType],  country1, country2, hour)
   .makeGraph(dataPlot, data[idDayType==dayType]$TypicalDay,
-             typicalDayOnly = typicalDayOnly, ggplot = ggplot)
+             typicalDayOnly = typicalDayOnly, ggplot = ggplot, width = width, height = height)
 }
 
 
@@ -53,7 +55,9 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 #' @param main \code{character} title of the graph
 #' @param xlim \code{numeric} x axis limits, vector with two values (min and max)
 #' @param ylim \code{numeric} y axis limits, vector with two values (min and max)
-#'
+#' @param width \code{character}, for rAmCharts only. Default to "420px" (set to "100%" for dynamic resize)
+#' @param height \code{character}, for rAmCharts only. Default to "410px" (set to "100%" for dynamic resize)
+#' 
 #' @examples
 #'
 #' \dontrun{
@@ -77,7 +81,8 @@ plotFlowbased <- function(PTDF,
                           domainsNames = NULL,
                           main = "",
                           xlim = c(-10000, 10000),
-                          ylim = c(-10000, 10000)){
+                          ylim = c(-10000, 10000), 
+                          width = "420px", height = "410px"){
   #Generate data for plot
   givePlotData <- function(PTDF, country1, country2){
     PTDF <- data.table(PTDF)
@@ -154,10 +159,13 @@ plotFlowbased <- function(PTDF,
     addTitle(text = main),
     setGraphs(graphs),
     setChartCursor(),
-    addValueAxes(title = paste(country1, "(MW)"), position = "bottom", minimum = xlim[1], maximum = xlim[2]),
-    addValueAxes(title =  paste(country2, "(MW)"), minimum = ylim[1], maximum = ylim[2]),
+    addValueAxes(title = paste(country1, "(MW)"), position = "bottom", minimum = xlim[1], 
+                 maximum = xlim[2], minHorizontalGap = 35, minVerticalGap = 35),
+    addValueAxes(title =  paste(country2, "(MW)"), minimum = ylim[1], 
+                 maximum = ylim[2], minHorizontalGap = 35, minVerticalGap = 35),
     setExport(enabled = TRUE),
-    setLegend(enabled = TRUE)
+    setLegend(enabled = TRUE),
+    plot(width = width, height = height)
   )
 
 }
