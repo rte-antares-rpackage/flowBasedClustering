@@ -22,9 +22,9 @@ clusterPlot(data, country1, country2, hour, dayType, typicalDayOnly = FALSE,
 
 \item{ggplot}{\code{logical} should ggplot package be used (static graph) instead of rAmCharts (dynamic graph)}
 
-\item{width}{\code{character}, for rAmCharts only. Default to "420px" (set to "100%" for dynamic resize)}
+\item{width}{\code{character}, for rAmCharts only. Default to "420px" (set to "100/100" for dynamic resize)}
 
-\item{height}{\code{character}, for rAmCharts only. Default to "410px" (set to "100%" for dynamic resize)}
+\item{height}{\code{character}, for rAmCharts only. Default to "410px" (set to "100/100" for dynamic resize)}
 }
 \description{
 For a given hour, plot the flow-based domain of one typical day along with the other

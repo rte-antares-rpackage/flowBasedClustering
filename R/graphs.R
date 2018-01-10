@@ -1,6 +1,6 @@
-#' Plot a flow-based domain of a typical day
-#'
-#' For a given hour, plot the flow-based domain of one typical day along with the other
+#' @title Plot a flow-based domain of a typical day
+#' 
+#' @description For a given hour, plot the flow-based domain of one typical day along with the other
 #' flow-based domains it represents (i.e. other domains of the same cluster).
 #'
 #' @param data \code{data.table} results from the clustering, output data from \link{clusteringTypicalDays}
@@ -10,8 +10,8 @@
 #' @param dayType  \code{numeric}, typical flow-based day identifier
 #' @param typicalDayOnly \code{logical} if TRUE, plot only the domain of the typical day and not the other domains of the cluster
 #' @param ggplot \code{logical} should ggplot package be used (static graph) instead of rAmCharts (dynamic graph)
-#' @param width \code{character}, for rAmCharts only. Default to "420px" (set to "100%" for dynamic resize)
-#' @param height \code{character}, for rAmCharts only. Default to "410px" (set to "100%" for dynamic resize)
+#' @param width \code{character}, for rAmCharts only. Default to "420px" (set to "100/100" for dynamic resize)
+#' @param height \code{character}, for rAmCharts only. Default to "410px" (set to "100/100" for dynamic resize)
 #' 
 #' @import rAmCharts DT
 #'
@@ -29,6 +29,7 @@
 #'
 #' }
 #' @import ggplot2
+#' 
 #' @export
 clusterPlot <- function(data, country1, country2, hour, dayType,
                         typicalDayOnly = FALSE, ggplot = FALSE, width = "420px", height = "410px"){
@@ -55,8 +56,8 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 #' @param main \code{character} title of the graph
 #' @param xlim \code{numeric} x axis limits, vector with two values (min and max)
 #' @param ylim \code{numeric} y axis limits, vector with two values (min and max)
-#' @param width \code{character}, for rAmCharts only. Default to "420px" (set to "100%" for dynamic resize)
-#' @param height \code{character}, for rAmCharts only. Default to "410px" (set to "100%" for dynamic resize)
+#' @param width \code{character}, for rAmCharts only. Default to "420px" (set to "100/100" for dynamic resize)
+#' @param height \code{character}, for rAmCharts only. Default to "410px" (set to "100/100" for dynamic resize)
 #' 
 #' @examples
 #'

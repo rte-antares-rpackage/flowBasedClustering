@@ -24,9 +24,9 @@ The data.frame must have the same columns as the input file of \link{ptdfToVerti
 
 \item{ylim}{\code{numeric} y axis limits, vector with two values (min and max)}
 
-\item{width}{\code{character}, for rAmCharts only. Default to "420px" (set to "100%" for dynamic resize)}
+\item{width}{\code{character}, for rAmCharts only. Default to "420px" (set to "100/100" for dynamic resize)}
 
-\item{height}{\code{character}, for rAmCharts only. Default to "410px" (set to "100%" for dynamic resize)}
+\item{height}{\code{character}, for rAmCharts only. Default to "410px" (set to "100/100" for dynamic resize)}
 }
 \description{
 Plot flow-based domain(s)
