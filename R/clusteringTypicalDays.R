@@ -367,10 +367,10 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
     
     od1 <- unique(allTypDay[,.SD, .SDcols = "Class"])[,od1 := 1:.N]
     allTypDay <- merge(allTypDay, od1, by = "Class")
-    allTypDay[,od2 := .orderTpDay(allTypDay, hourWeight)]
-    allTypDay <- allTypDay[order(od1, od2)]
-    allTypDay[,od1 :=NULL]
-    allTypDay[,od2 :=NULL]
+    allTypDay[,"od2" := .orderTpDay(allTypDay, hourWeight)]
+    allTypDay <- allTypDay[order(allTypDay$od1, allTypDay$od2)]
+    allTypDay[,"od1" :=NULL]
+    allTypDay[,"od2" :=NULL]
     allTypDay <- allTypDay[,.SD, .SDcols = c(2,1,3,4)]
     allTypDay
     
