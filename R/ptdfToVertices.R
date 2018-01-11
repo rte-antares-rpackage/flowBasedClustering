@@ -28,9 +28,6 @@
 #' }
 #'
 #' @import data.table
-# @import geometry
-# @import rgl 
-# @import Rvcg
 #' @import pipeR
 #' @import parallel
 #'

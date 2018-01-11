@@ -136,7 +136,7 @@ clusterPlot(clusterTD, country1 = "FR", country2 = "DE",
             hour = 8, dayType = 9, typicalDayOnly = FALSE, ggplot = TRUE)
 ```
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, eval = FALSE}
 # dynamic graphic
 clusterPlot(clusterTD, country1 = "FR", country2 = "DE", 
             hour = 8, dayType = 9, typicalDayOnly = TRUE, ggplot = FALSE)
