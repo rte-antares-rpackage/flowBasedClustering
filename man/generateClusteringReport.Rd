@@ -24,5 +24,6 @@ with the domains of the other historical days it represents.
 
 clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 generateClusteringReport(dayType = 7, data = clusterTD)
+
 }
 }

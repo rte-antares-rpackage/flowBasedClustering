@@ -18,24 +18,10 @@
 #' 
 #' }
 #' @export
+#' 
+#' @import rmarkdown flexdashboard manipulateWidget gridExtra
+#' @importFrom shiny tags
 generateClusteringReport <- function(dayType, outputFile = NULL, data){
-  
-  
-  if(!requireNamespace("flexdashboard", quietly = TRUE)){
-    stop("This function need 'flexdashboard'. Please install it before.")
-  }
-  
-  if(!requireNamespace("manipulateWidget", quietly = TRUE)){
-    stop("This function need 'manipulateWidget'. Please install it before.")
-  }
-  
-  if(!requireNamespace("shiny", quietly = TRUE)){
-    stop("This function need 'shiny'. Please install it before.")
-  }
-  
-  if(!requireNamespace("gridExtra", quietly = TRUE)){
-    stop("This function need 'gridExtra'. Please install it before.")
-  }
   
   if(is.null(outputFile)){
     outputFile <- getwd()
