@@ -72,7 +72,7 @@ hour <- 1
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 1
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -114,7 +114,7 @@ hour <- 2
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 2
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -156,7 +156,7 @@ hour <- 3
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 3
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -198,7 +198,7 @@ hour <- 4
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 4
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -240,7 +240,7 @@ hour <- 5
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 5
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -282,7 +282,7 @@ hour <- 6
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 6
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -324,7 +324,7 @@ hour <- 7
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 7
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -366,7 +366,7 @@ hour <- 8
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 8
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -408,7 +408,7 @@ hour <- 9
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 9
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -450,7 +450,7 @@ hour <- 10
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 10
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -492,7 +492,7 @@ hour <- 11
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 11
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -534,7 +534,7 @@ hour <- 12
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 12
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -576,7 +576,7 @@ hour <- 13
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 13
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -618,7 +618,7 @@ hour <- 14
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 14
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -660,7 +660,7 @@ hour <- 15
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 15
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -702,7 +702,7 @@ hour <- 16
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 16
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -744,7 +744,7 @@ hour <- 17
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 17
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -786,7 +786,7 @@ hour <- 18
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 18
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -828,7 +828,7 @@ hour <- 19
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 19
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -870,7 +870,7 @@ hour <- 20
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 20
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -912,7 +912,7 @@ hour <- 21
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 21
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -954,7 +954,7 @@ hour <- 22
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 22
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -996,7 +996,7 @@ hour <- 23
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 23
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
@@ -1038,7 +1038,7 @@ hour <- 24
 Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 24
-```{r, fig.width=9.5, fig.height=8.5}
+```{r, fig.width=8.5, fig.height=8}
 
 grid.arrange(
   clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
