@@ -10,36 +10,38 @@ Authors@R: c(
     )
 Maintainer: Baptiste SEGUINOT <baptiste.seguinot@rte-france.com>
 Description: Cluster and visualize typical-days of flow-based domains.
+URL: https://github.com/rte-antares-rpackage/flowBasedClustering
+BugReports: https://github.com/rte-antares-rpackage/flowBasedClustering/issues
 License: GPL (>= 2) | file LICENSE
-Encoding: UTF-8
 LazyData: true
 Imports:
-    data.table (>= 1.10.4),
-    geometry(>= 0.3-6),
-    timeDate(>= 3012.100),
-    parallel(>= 3.2.3),
-    cluster(>= 2.0.5),
-    pipeR(>= 0.6.1.3),
-    rAmCharts(>= 2.1.3),
-    ggplot2(>= 2.2.1),
-    grDevices(>= 3.3),
-    stats(>= 3.3),
-    utils(>= 3.3),
-    Rvcg(>= 0.15),
-    rgl(>= 0.98.1),
+    geometry (>= 0.3-6),
+    data.table (>= 1.10.4.3),
+    timeDate (>= 3012.100),
+    parallel (>= 3.2.3),
+    cluster (>= 2.0.5),
+    pipeR (>= 0.6.1.3),
+    rAmCharts (>= 2.1.3),
+    ggplot2 (>= 2.2.1),
+    grDevices (>= 3.3),
+    stats (>= 3.3),
+    utils (>= 3.3),
+    Rvcg (>= 0.15),
+    rgl (>= 0.98.1),
     backports,
     DT,
-    rmarkdown(>= 1.4),
-    flexdashboard(>= 0.5.1),
-    manipulateWidget(>= 0.8.0),
-    shiny(>= 1.0.5),
-    gridExtra(>= 2.3)
-RoxygenNote: 6.0.1
+    rmarkdown (>= 1.4),
+    flexdashboard (>= 0.5.1),
+    manipulateWidget (>= 0.8.0),
+    shiny (>= 1.0.5),
+    gridExtra (>= 2.3)
 Suggests:
-    testthat(>= 1.0.2),
+    testthat (>= 1.0.2),
     knitr,
     webshot,
     covr
+RoxygenNote: 6.0.1
 VignetteBuilder: knitr,
     rmarkdown,
     webshot
+Encoding: UTF-8

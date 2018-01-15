@@ -5,6 +5,10 @@ sudo: false
 cache: packages
 dist: trusty
 
+include:
+  - r: release
+  - r: oldrel
+  - r: devel
 
 env:
   - RGL_USE_NULL = true
