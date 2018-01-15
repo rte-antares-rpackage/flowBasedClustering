@@ -15,22 +15,32 @@
 #' 
 #' clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 #' generateClusteringReport(dayType = 7, data = clusterTD)
+#' 
 #' }
 #' @export
-generateClusteringReport <- function(dayType, outputFile = NULL,
-                             data){
-
-
+generateClusteringReport <- function(dayType, outputFile = NULL, data){
+  
+  
+  if(!requireNamespace("flexdashboard", quietly = TRUE)){
+    stop("This function need 'flexdashboard'. Please install it before.")
+  }
+  
+  if(!requireNamespace("manipulateWidget", quietly = TRUE)){
+    stop("This function need 'manipulateWidget'. Please install it before.")
+  }
+  
+  if(!requireNamespace("shiny", quietly = TRUE)){
+    stop("This function need 'shiny'. Please install it before.")
+  }
+  
+  if(!requireNamespace("gridExtra", quietly = TRUE)){
+    stop("This function need 'gridExtra'. Please install it before.")
+  }
+  
   if(is.null(outputFile)){
     outputFile <- getwd()
   }
   
-  #if(is.null(data))
-  #{
-  #  data <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
-  #}
-
-
   output_Dir <- outputFile
   outputFile <- paste0(outputFile, "/", gsub(":", "", gsub( " ", "_",as.character(Sys.time()))), "_flowBased_",dayType, "_",data[idDayType == dayType]$Class, ".html")
   e <- environment()
@@ -46,7 +56,7 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
   
   CompTitle <- matchingNameTable$title[which(data[dayType]$Class == matchingNameTable$Class)]
   e$CompTitle <- CompTitle
-
+  
   rmarkdown::render(system.file("/report/resumeclustflex.Rmd", package = "flowBasedClustering"),
                     output_file = outputFile,
                     params = list(set_title = paste0("Typical Day ", dayType,

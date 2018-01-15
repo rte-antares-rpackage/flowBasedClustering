@@ -35,6 +35,10 @@ Suggests:
     testthat(>= 1.0.2),
     flexdashboard,
     manipulateWidget,
+    shiny,
+    gridExtra,
     knitr,
     covr
-VignetteBuilder: knitr
+VignetteBuilder: knitr,
+    rmarkdown,
+    webshot
