@@ -25,12 +25,14 @@ while the vertices are the coordinnates of the extreme points of the domains.
 \examples{
 
 \dontrun{
-ptdf_data <- data.table::fread(system.file("dataset/ptdf_example.csv",package = "flowBasedClustering"),
-data.table = F)
+
+ptdf_data <- data.table::fread(system.file("dataset/ptdf_example.csv", 
+   package = "flowBasedClustering"), data.table = F)
 
 head(ptdf_data[, 1:7])
 
-vertices <- ptdfToVertices(system.file("dataset/ptdf_example.csv",package = "flowBasedClustering"))
+vertices <- ptdfToVertices(system.file("dataset/ptdf_example.csv",
+    package = "flowBasedClustering"))
 
 head(vertices)
 

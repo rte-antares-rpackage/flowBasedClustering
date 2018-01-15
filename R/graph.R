@@ -15,22 +15,18 @@
 #' 
 #' clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 #' generateClusteringReport(dayType = 7, data = clusterTD)
+#' 
 #' }
 #' @export
-generateClusteringReport <- function(dayType, outputFile = NULL,
-                             data){
-
-
+#' 
+#' @import rmarkdown flexdashboard manipulateWidget gridExtra
+#' @importFrom shiny tags
+generateClusteringReport <- function(dayType, outputFile = NULL, data){
+  
   if(is.null(outputFile)){
     outputFile <- getwd()
   }
   
-  #if(is.null(data))
-  #{
-  #  data <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
-  #}
-
-
   output_Dir <- outputFile
   outputFile <- paste0(outputFile, "/", gsub(":", "", gsub( " ", "_",as.character(Sys.time()))), "_flowBased_",dayType, "_",data[idDayType == dayType]$Class, ".html")
   e <- environment()
@@ -46,7 +42,7 @@ generateClusteringReport <- function(dayType, outputFile = NULL,
   
   CompTitle <- matchingNameTable$title[which(data[dayType]$Class == matchingNameTable$Class)]
   e$CompTitle <- CompTitle
-
+  
   rmarkdown::render(system.file("/report/resumeclustflex.Rmd", package = "flowBasedClustering"),
                     output_file = outputFile,
                     params = list(set_title = paste0("Typical Day ", dayType,

@@ -18,6 +18,8 @@ library(flowBasedClustering)
 library(ggplot2)
 library(pipeR)
 library(DT)
+library(shiny)
+library(gridExtra)
 ```
 
 
@@ -37,28 +39,27 @@ Column {data-width=100}
 day <- data[idDayType == dayType]$TypicalDay
 
 datatable(data.frame(Date = as.character(unique(data[idDayType == dayType]$dayIn[[1]][[1]]$Date))), rownames=FALSE, 
-            # filter = 'top'
-        extensions = 'Buttons',
-        options = list(searching=F,
-                       paging = F,
-                       bInfo = F,
-                       pageLength = 10000,
-                       dom = 'Bfrtip',
-                       buttons = list(
-                                      list(extend = 'csv',
-                                           buttons = c('csv'),
-                                           text = 'Download data',
-                                           filename = "cluster_typicalDay")
-                       )
-        )
-  )
+          # filter = 'top'
+          extensions = 'Buttons',
+          options = list(searching=F,
+                         paging = F,
+                         bInfo = F,
+                         pageLength = 10000,
+                         dom = 'Bfrtip',
+                         buttons = list(
+                           list(extend = 'csv',
+                                buttons = c('csv'),
+                                text = 'Download data',
+                                filename = "cluster_typicalDay")
+                         )
+          )
+)
 
 
 
 ```
 
-
-Column {.tabset data-width=1200}
+Column {.tabset}
 -----------------------------------------------------------------------
 Hour 1 {data-navmenu="Hour"}
 =====================================
@@ -68,36 +69,39 @@ hour <- 1
 ```
 
 
-Column {.tabset data-width=400}
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 1
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 1
 
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-
-Column {.tabset data-width=400}
-------------------------------------------------------------------
-### Historical domains, hour 1
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
-```
-
-### Typical day, hour 1
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 2 {data-navmenu="Hour"}
 =====================================
@@ -106,34 +110,40 @@ Hour 2 {data-navmenu="Hour"}
 hour <- 2
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 2
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 2
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 2
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 2
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 3 {data-navmenu="Hour"}
 =====================================
@@ -142,34 +152,40 @@ Hour 3 {data-navmenu="Hour"}
 hour <- 3
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 3
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 3
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 3
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 3
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 4 {data-navmenu="Hour"}
 =====================================
@@ -178,35 +194,40 @@ Hour 4 {data-navmenu="Hour"}
 hour <- 4
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 4
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 4
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
+
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 4
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
-```
-
-### Typical day, hour 4
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
-
 
 Hour 5 {data-navmenu="Hour"}
 =====================================
@@ -215,35 +236,40 @@ Hour 5 {data-navmenu="Hour"}
 hour <- 5
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 5
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 5
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
+
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 5
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
-```
-
-### Typical day, hour 5
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
-
 
 Hour 6 {data-navmenu="Hour"}
 =====================================
@@ -252,34 +278,40 @@ Hour 6 {data-navmenu="Hour"}
 hour <- 6
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 6
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 6
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 6
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 6
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 7 {data-navmenu="Hour"}
 =====================================
@@ -288,34 +320,40 @@ Hour 7 {data-navmenu="Hour"}
 hour <- 7
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 7
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 7
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 7
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 7
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 8 {data-navmenu="Hour"}
 =====================================
@@ -324,35 +362,40 @@ Hour 8 {data-navmenu="Hour"}
 hour <- 8
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 8
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 8
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
+
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 8
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
-```
-
-### Typical day, hour 8
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
-
 
 Hour 9 {data-navmenu="Hour"}
 =====================================
@@ -361,34 +404,40 @@ Hour 9 {data-navmenu="Hour"}
 hour <- 9
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 9
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 9
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 9
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 9
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 10 {data-navmenu="Hour"}
 =====================================
@@ -397,34 +446,40 @@ Hour 10 {data-navmenu="Hour"}
 hour <- 10
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 10
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 10
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 10
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 10
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 11 {data-navmenu="Hour"}
 =====================================
@@ -433,34 +488,40 @@ Hour 11 {data-navmenu="Hour"}
 hour <- 11
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 11
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 11
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 11
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 11
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 12 {data-navmenu="Hour"}
 =====================================
@@ -469,34 +530,40 @@ Hour 12 {data-navmenu="Hour"}
 hour <- 12
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 12
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 12
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 12
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 12
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 13 {data-navmenu="Hour"}
 =====================================
@@ -505,34 +572,40 @@ Hour 13 {data-navmenu="Hour"}
 hour <- 13
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 13
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 13
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 13
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 13
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 14 {data-navmenu="Hour"}
 =====================================
@@ -541,34 +614,40 @@ Hour 14 {data-navmenu="Hour"}
 hour <- 14
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 14
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 14
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 14
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 14
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 15 {data-navmenu="Hour"}
 =====================================
@@ -577,34 +656,40 @@ Hour 15 {data-navmenu="Hour"}
 hour <- 15
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 15
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 15
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 15
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 15
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 16 {data-navmenu="Hour"}
 =====================================
@@ -613,35 +698,40 @@ Hour 16 {data-navmenu="Hour"}
 hour <- 16
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 16
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 16
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
+
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 16
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
-```
-
-### Typical day, hour 16
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
-
 
 Hour 17 {data-navmenu="Hour"}
 =====================================
@@ -650,34 +740,40 @@ Hour 17 {data-navmenu="Hour"}
 hour <- 17
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 17
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 17
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 17
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 17
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 18 {data-navmenu="Hour"}
 =====================================
@@ -686,34 +782,40 @@ Hour 18 {data-navmenu="Hour"}
 hour <- 18
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 18
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 18
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 18
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 18
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 19 {data-navmenu="Hour"}
 =====================================
@@ -722,34 +824,40 @@ Hour 19 {data-navmenu="Hour"}
 hour <- 19
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 19
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 19
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 19
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 19
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 20 {data-navmenu="Hour"}
 =====================================
@@ -758,34 +866,40 @@ Hour 20 {data-navmenu="Hour"}
 hour <- 20
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 20
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 20
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 20
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 20
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 21 {data-navmenu="Hour"}
 =====================================
@@ -794,35 +908,40 @@ Hour 21 {data-navmenu="Hour"}
 hour <- 21
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 21
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 21
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
+
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 21
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
-```
-
-### Typical day, hour 21
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
-
 
 Hour 22 {data-navmenu="Hour"}
 =====================================
@@ -831,34 +950,40 @@ Hour 22 {data-navmenu="Hour"}
 hour <- 22
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 22
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 22
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 22
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 22
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 23 {data-navmenu="Hour"}
 =====================================
@@ -867,34 +992,40 @@ Hour 23 {data-navmenu="Hour"}
 hour <- 23
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 23
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 23
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 23
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
-
-### Typical day, hour 23
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```
-
 
 Hour 24 {data-navmenu="Hour"}
 =====================================
@@ -903,30 +1034,38 @@ Hour 24 {data-navmenu="Hour"}
 hour <- 24
 ```
 
-Column {.tabset data-width=500}
+
+Column {.tabset}
 -----------------------------------------------------------------------
 ### Historical domains, hour 24
-```{r}
-clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE)
+```{r, fig.width=9.5, fig.height=8.5}
+
+grid.arrange(
+  clusterPlot(data, "BE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "BE", "NL", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE),
+  clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE), 
+  nrow=2, ncol=2
+)
 ```
 
 ### Typical day, hour 24
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "BE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "BE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
+
+```{r,  fig.width=10, fig.height=9}
+tags$div(
+  tags$div(style = "height: 830px; width : 840px",
+           combineWidgets(ncol = 2, 
+                          clusterPlot(data, "BE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE, 
+                                      width = "640px", height = "610px"),
+                          clusterPlot(data, "BE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "FR", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE),
+                          clusterPlot(data, "DE", "NL", hour, dayType, 
+                                      ggplot = FALSE, typicalDayOnly = TRUE)
+           )
+  ), 
+  align = "center")
 ```
 
-Column {.tabset data-width=500}
-------------------------------------------------------------------
-### Historical domains, hour 24
-```{r}
-clusterPlot(data, "DE", "FR", hour, dayType, ggplot = TRUE)
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = TRUE)
-```
-
-### Typical day, hour 24
-```{r, fig.height=8}
-combineWidgets(clusterPlot(data, "DE", "FR", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE),
-clusterPlot(data, "DE", "NL", hour, dayType, ggplot = FALSE, typicalDayOnly = TRUE))
-```

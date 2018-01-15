@@ -161,6 +161,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 #'
 #' @noRd
 #' @importFrom rgl tmesh3d
+#' @importFrom geometry delaunayn surf.tri
 #'
 .getMesh <- function(out){
   tc <- geometry::delaunayn(out, full = F)
