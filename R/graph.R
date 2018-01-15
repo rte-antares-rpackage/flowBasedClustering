@@ -128,20 +128,25 @@ generateClusteringReport <- function(dayType, outputFile = NULL, data){
 #'@param typicalDayDate : date of typical day
 #'@param typicalDayOnly : plot only typical day ?
 #'@param ggplot : ggplot or amCharts ?
-#'@param xlim : xlim
-#'@param ylim : ylim
 #'@param width \code{character}, for rAmCharts only. Default to "420px" (set to "100%" for dynamic resize)
 #'@param height \code{character}, for rAmCharts only. Default to "410px" (set to "100%" for dynamic resize)
 #' 
 #'@noRd
-.makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, ggplot = FALSE, 
-                       xlim = c(-10000, 10000), ylim = c(-10000, 10000),
-                       width = "420px", height = "410px"){
+.makeGraph <- function(data, typicalDayDate, typicalDayOnly = FALSE, 
+                       ggplot = FALSE, width = "420px", height = "410px"){
   ctry <- unique(substr(names(data), 11, 12))
   if(typicalDayOnly){
     dates <- typicalDayDate
   } else {
     dates <- unique(substr(names(data), 1, 10))
+  }
+  
+  xlim = c(-10000, 10000)
+  ylim = c(-10000, 10000)
+  
+  if(max(data, na.rm = TRUE) <= 8000 & min(data, na.rm = TRUE) >= -8000){
+    xlim = c(-8000, 8000)
+    ylim = c(-8000, 8000)
   }
   
   if(!ggplot){
@@ -192,14 +197,17 @@ generateClusteringReport <- function(dayType, outputFile = NULL, data){
       tmp_data
     }))
     
-    ggplot(data=gg_data, aes(x = eval(parse(text=ctry[1])), y = eval(parse(text=ctry[2])), group = date, colour = col, size = size, linetype = as.character(col))) + geom_path() +
+    ggplot(data=gg_data, aes(x = eval(parse(text=ctry[1])), y = eval(parse(text=ctry[2])), 
+                             group = date, colour = col, size = size, linetype = as.character(col))) + geom_path() +
       geom_point()  + scale_size(range=c(0.1, 2), guide=FALSE) + theme(legend.position="none") +
-      xlim(xlim[1], xlim[2]) + ylim(ylim[1], ylim[2]) + 
+      # xlim(xlim[1], xlim[2]) + ylim(ylim[1], ylim[2]) + 
       ggtitle(paste0("Flow-based  clustering ", ctry[1], "/", ctry[2])) +
       theme(plot.title = element_text(hjust = 0.5)) + ylab(paste(ctry[2], "(MW)")) +
       xlab(paste(ctry[1], "(MW)")) + theme(panel.background = element_rect(fill = 'white', colour = 'black'),
                                            panel.grid.major = element_line(size = 0.5, linetype = 'dashed',
-                                                                           colour = "grey"))
+                                                                           colour = "grey")) +
+      scale_y_continuous(breaks = seq(ylim[1], ylim[2], 2000), limits = ylim, expand = c(0, 0)) +
+      scale_x_continuous(breaks = seq(xlim[1], xlim[2], 2000), limits = xlim, expand = c(0, 0))
     
     
   }
