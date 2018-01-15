@@ -26,6 +26,14 @@ test_that("compare one and all", {
   expect_true(identical(clusterTD[Class == "winterWd"]$TypicalDay, out$TypicalDay))
   expect_true(identical(clusterTD[Class == "winterWd"]$distance, out$distance))
   
+  
+  
+  ordertest <- data.table(clusterTD$Class, .orderTpDay(clusterTD,hourWeight ))
+  expect_true(all(unlist(ordertest[,which(V2==min(V2)), by = "V1"][,.SD, .SDcols = 2]==1)))
+  
+  ordertest <- data.table(out$Class, .orderTpDay(out,hourWeight ))
+  expect_true(all(unlist(ordertest[,which(V2==min(V2)), by = "V1"][,.SD, .SDcols = 2]==1)))
+  
 })
 
 
