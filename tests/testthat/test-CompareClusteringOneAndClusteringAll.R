@@ -52,7 +52,8 @@ test_that("compare one and all", {
   
   # clustering1Class
   out <- clusterTypicalDaysForOneClass(vertices = vertices, dates = calendar$winterWd, nbCluster = 2,
-                                       className = "winterWd", id_start = 4, report = FALSE, hourWeight = weights)
+                                       className = "winterWd", id_start = 4,
+                                       report = FALSE, hourWeight = weights)
   
   
   # cluster all 
