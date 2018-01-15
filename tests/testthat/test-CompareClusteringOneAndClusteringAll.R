@@ -65,4 +65,13 @@ test_that("compare one and all", {
 
   expect_true(identical(out[idDayType == 5] ,  clusterTD[idDayType == 5]))
   
+  
+  ordertest <- data.table(clusterTD$Class, .orderTpDay(clusterTD,weights ))
+  expect_true(all(unlist(ordertest[,which(V2==min(V2)), by = "V1"][,.SD, .SDcols = 2]==1)))
+  
+  ordertest <- data.table(out$Class, .orderTpDay(out,weights ))
+  expect_true(all(unlist(ordertest[,which(V2==min(V2)), by = "V1"][,.SD, .SDcols = 2]==1)))
+  
+  
+  
 })
