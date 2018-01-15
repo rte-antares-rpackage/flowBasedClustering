@@ -285,14 +285,20 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
     stop("All levelsProba must be between 0 ans 1")
   }
   if(!all(names(levelsProba) %in% class)){
-    stop("Names of levelsProba must be contains in names of cluster data, missings :",
+    stop("Names of the list levelsProba should be classes of the clustering (here: unique(cluster$Class) )",
          paste0(names(levelsProba)[!names(levelsProba) %in% class], collapse = ";"))
   }
   
   lapply(levelsProba, function(X){
+    if(class(X) := 'list'){
+      stop("A list of variables is expected in each class of levelsProba (here : names(climate) )")
+    }
+  })
+  
+  
+  lapply(levelsProba, function(X){
     if(!all(names(X)%in%clVar)){
-      stop("All names of eatch levelProba members must be contain in names of climate data, missings :",
-           paste0(names(X)[!names(X) %in% clVar], collapse = ";"))
+      stop(paste0(names(X)[!names(X) %in% clVar], collapse = ";"), "is not a variable of the climate input.")
     }
   })
   NULL
