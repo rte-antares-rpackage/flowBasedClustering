@@ -281,6 +281,13 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
 
 
 .ctrlvlPb <- function(levelsProba, clVar, class){
+  
+  lapply(levelsProba, function(X){
+    if(class(X) != 'list'){
+      stop("A list of variables is expected in each class of levelsProba (here : names(climate) )")
+    }
+  })
+  
   if(!all(unlist(levelsProba)>0) | ! all(unlist(levelsProba)<1) ){
     stop("All levelsProba must be between 0 ans 1")
   }
@@ -289,11 +296,7 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
          paste0(names(levelsProba)[!names(levelsProba) %in% class], collapse = ";"))
   }
   
-  lapply(levelsProba, function(X){
-    if(class(X) := 'list'){
-      stop("A list of variables is expected in each class of levelsProba (here : names(climate) )")
-    }
-  })
+
   
   
   lapply(levelsProba, function(X){

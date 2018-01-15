@@ -39,4 +39,26 @@ test_that(".ctrlvlPb works", {
   expect_error(.ctrlvlPb(levelsProba, clVar, class))
   
   
+  
+  
+  levelsProba <- list(
+    FR_load = c(1/3, 2/3), DE_wind = c(1/3, 2/3)
+  )
+  
+  expect_error(.ctrlvlPb(levelsProba, clVar, class))
+  
+  
+  levelsProba <- list(
+    summerWd = c(1/3, 2/3)
+  )
+  expect_error(.ctrlvlPb(levelsProba, clVar, class))
+  
+  levelsProba <- list(
+    winterWd = list(FR_LAOD = c(1/3, 2/3), DE_WIND = c(1/3, 2/3))
+  )
+  expect_error(.ctrlvlPb(levelsProba, clVar, class))
+  
+  
+  
+  
 })
