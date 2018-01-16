@@ -1,6 +1,7 @@
 #' Transform a PTDF file
 #'
-#' Link function to transform a PTDF file for computeFB function (package antaresFlowbased)
+#' Transform a PTDF file for \code{computeFB} function from package antaresFlowbased.
+#' The returned PTDF file contains only the typical days.
 #'
 #' @param cluster \code{data.table} output of \link{clusteringTypicalDays}
 #' @param PTDF \code{character}, path of a PTDF file. 
@@ -8,7 +9,7 @@
 #' It must be a .csv file with ";" as column separator and "." as decimal separator.
 #' The names of the seven columns (Date, Period, ...) must be included in the header (first line)
 #' of the .csv file.
-#' @param pathOutput \code{character} path of folder where file will be write, default getwd()
+#' @param pathOutput \code{character} path of the folder where the file will be writen, default getwd()
 #' 
 #' @importFrom utils type.convert
 #' 
@@ -29,8 +30,7 @@
 #' 
 #' @export
 createPtdfForCompute <- function(cluster, 
-                                 PTDF = system.file("dataset/ptdf_example.csv",
-                                                    package = "flowBasedClustering"),
+                                 PTDF,
                                  pathOutput = getwd()){
   
   cluster <- copy(cluster)
