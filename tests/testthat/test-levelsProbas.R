@@ -26,7 +26,8 @@ test_that(".ctrlvlPb works", {
                           DE_wind = c(1/3, 2/3), 
                           DE_solar = c(1/2))
   )
-  expect_error(.ctrlvlPb(levelsProba, clVar, class))
+  expect_error(.ctrlvlPb(levelsProba, clVar, class),
+               "Names of the list levelsProba should be classes of the clustering :summerWd;summerWe;winterWd;winterWe;interSeasonWd;interSeasonWe")
   
   
   levelsProba <- list(
@@ -36,7 +37,8 @@ test_that(".ctrlvlPb works", {
                           DE_wind2 = c(1/3, 2/3), 
                           DE_solar = c(1/2))
   )
-  expect_error(.ctrlvlPb(levelsProba, clVar, class))
+  expect_error(.ctrlvlPb(levelsProba, clVar, class),
+               "DE_wind2is not a variable of the climate input.")
   
   
   
@@ -45,13 +47,14 @@ test_that(".ctrlvlPb works", {
     FR_load = c(1/3, 2/3), DE_wind = c(1/3, 2/3)
   )
   
-  expect_error(.ctrlvlPb(levelsProba, clVar, class))
+  expect_error(.ctrlvlPb(levelsProba, clVar, class),
+               "Names of the list levelsProba should be classes of the clustering :summerWd;summerWe;winterWd;winterWe;interSeasonWd;interSeasonWe")
   
   
   levelsProba <- list(
     summerWd = c(1/3, 2/3)
   )
-  expect_error(.ctrlvlPb(levelsProba, clVar, class))
+  expect_error(.ctrlvlPb(levelsProba, clVar[1], class))
   
   levelsProba <- list(
     winterWd = list(FR_LAOD = c(1/3, 2/3), DE_WIND = c(1/3, 2/3))
