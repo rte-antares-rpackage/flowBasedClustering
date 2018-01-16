@@ -4,8 +4,7 @@
 \alias{createPtdfForCompute}
 \title{Transform a PTDF file}
 \usage{
-createPtdfForCompute(cluster, PTDF = system.file("dataset/ptdf_example.csv",
-  package = "flowBasedClustering"), pathOutput = getwd())
+createPtdfForCompute(cluster, PTDF, pathOutput = getwd())
 }
 \arguments{
 \item{cluster}{\code{data.table} output of \link{clusteringTypicalDays}}
@@ -16,10 +15,11 @@ It must be a .csv file with ";" as column separator and "." as decimal separator
 The names of the seven columns (Date, Period, ...) must be included in the header (first line)
 of the .csv file.}
 
-\item{pathOutput}{\code{character} path of folder where file will be write, default getwd()}
+\item{pathOutput}{\code{character} path of the folder where the file will be writen, default getwd()}
 }
 \description{
-Link function to transform a PTDF file for computeFB function (package antaresFlowbased)
+Transform a PTDF file for \code{computeFB} function from package antaresFlowbased.
+The returned PTDF file contains only the typical days.
 }
 \examples{
 
