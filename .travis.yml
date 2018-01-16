@@ -6,6 +6,9 @@ cache: packages
 dist: trusty
 
 language: r
+
+r: bioc-devel
+
 r:
   - oldrel
   - release
