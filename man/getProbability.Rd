@@ -24,6 +24,7 @@ Get probabilities and quantiles from climate file for a classification
 
 \dontrun{
 # load climate daily time serires
+library(data.table)
 climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
 
 # load clustering results (or build them with clusteringTypicalDays function())

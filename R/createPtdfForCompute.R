@@ -22,16 +22,16 @@
 #' PTDF = system.file("dataset/ptdf_example.csv",
 #'       package = "flowBasedClustering")
 #'       
-#' createPtdfForCompute(clusterTD, PTDF)
+#' writePtdfOfTypicalDays(clusterTD, PTDF)
 #' #Write on D:/ :
-#' createPtdfForCompute(clusterTD, PTDF, pathOutput = "D:/")
+#' writePtdfOfTypicalDays(clusterTD, PTDF, pathOutput = "D:/")
 #' 
 #' }
 #' 
 #' @export
-createPtdfForCompute <- function(cluster, 
+writePtdfOfTypicalDays <- function(cluster, 
                                  PTDF,
-                                 pathOutput = getwd()){
+                                 pathOutput = getwd(), sep = ";"){
   
   cluster <- copy(cluster)
   # Load PTDF
@@ -70,12 +70,12 @@ createPtdfForCompute <- function(cluster,
     }
     choice <- utils::type.convert(scan(what = character(), nmax = 1), as.is = TRUE)
     if(choice == 1){
-      fwrite(out, fil)
+      fwrite(out, fil, sep = sep)
       cat(paste0("Write ",fil," done"))
     }
     
   }else{
-    fwrite(out, fil)
+    fwrite(out, fil, sep = sep)
     cat(paste0("Write ",fil," done"))
   }
 }
