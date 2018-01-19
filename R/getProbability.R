@@ -10,6 +10,7 @@
 #'
 #' \dontrun{
 #' # load climate daily time serires
+#' library(data.table)
 #' climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
 #'
 #' # load clustering results (or build them with clusteringTypicalDays function())
@@ -166,7 +167,7 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
   setnames(probaNotExtrapol, "idDayType", "idDayType")
   setnames(probaNotExtrapol, "Proba", "probability")
   setnames(probaNotExtrapol, "V2", "sizeClass")
-  
+  ClimQuantiles <- ClimQuantiles[!quantiles %in% c("Q0", "Q1")]
   return(list(probaNotExtrapol, ClimQuantiles))
   
 }
