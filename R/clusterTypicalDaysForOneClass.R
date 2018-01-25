@@ -72,8 +72,8 @@ clusterTypicalDaysForOneClass <- function(dates,
   #Compute mesh from vertices
   vertices <- .computeMesh(vertices)
  
-  
-  distMat <- .getDistMatrix(veticesSel <- vertices[Date %in% dates], hourWeight)
+  veticesSel <- vertices[Date %in% dates]
+  distMat <- .getDistMatrix(veticesSel, hourWeight)
   
   set.seed(123456)
   vect <- cluster::pam(distMat, nbCluster, diss = TRUE)$clustering

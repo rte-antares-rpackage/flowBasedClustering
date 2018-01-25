@@ -199,7 +199,10 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       x_on_y_All <- vcgClost(vertices[Date%in% date_1 & Period %in% h, ]$out[[1]],
                              vertices[Date%in% date_2 & Period %in% h, ]$mesh[[1]],
                              borderchk = TRUE,
-                             sign = TRUE, facenormals = TRUE, barycentric = TRUE)
+                             sign = TRUE, facenormals = TRUE, barycentric = TRUE, tol = 9999999999999999)
+      
+      
+      
       
       x_on_y <- x_on_y_All$quality
       
@@ -210,7 +213,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
       #          t(as.matrix(PTDFTp[,.SD, .SDcols = c("BE", "DE", "FR", "NL")]))<= PTDFTp$RAM)}))] <- 0
       #Dist from Y to X
       y_on_x_All <- vcgClost(vertices[Date%in% date_2 & Period %in% h, ]$out[[1]],
-                             vertices[Date%in% date_1 & Period %in% h, ]$mesh[[1]], borderchk = TRUE, sign = TRUE)
+                             vertices[Date%in% date_1 & Period %in% h, ]$mesh[[1]], borderchk = TRUE, sign = TRUE, tol = 9999999999999999)
       
       
       y_on_x <- y_on_x_All$quality
