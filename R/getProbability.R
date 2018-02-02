@@ -291,7 +291,7 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
   
   lapply(levelsProba, function(X){
     if(class(X) != 'list'){
-      stop("A list of variables is expected in each class of levelsProba (here : names(climate) )",
+      stop("A list of variables is expected in each class of levelsProba, here : ",
            paste0(clVar, collapse = ";"))
     }
   })
