@@ -6,7 +6,7 @@
 \usage{
 clusterTypicalDaysForOneClass(dates, vertices, nbCluster, hourWeight = rep(1,
   24), className = NULL, reportPath = getwd(), report = TRUE,
-  id_start = 1)
+  id_start = 1, maxDomainSize = 10000)
 }
 \arguments{
 \item{dates}{\code{character}, vector of date (format YYYY-MM-DD).}
@@ -33,6 +33,8 @@ will be more accurate for the flow-based domains of the hours with a relatively 
 \item{report}{\code{boolean}, if TRUE, reports are generated.}
 
 \item{id_start}{\code{numeric}, first identifier of the returned typical days. Default value is 1}
+
+\item{maxDomainSize}{\code{numeric} limit of size in each axis of domain.}
 }
 \description{
 Run a clustering algorithm for a given historical period. It creates clusters by

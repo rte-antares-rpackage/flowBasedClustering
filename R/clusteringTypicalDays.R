@@ -22,6 +22,7 @@
 #' @param reportPath \code{character}, path where the report is written. Defaut to \code{getwd()}
 #' @param hourWeight \code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
 #' will be more accurate for the flow-based domains of the hours with a relatively higher weight. 
+#' @param maxDomainSize \code{numeric} limit of size in each axis of domain.
 #'
 #' @examples
 #'
@@ -59,7 +60,7 @@
 #'
 clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
                                   report = TRUE, reportPath = getwd(),
-                                  hourWeight = rep(1, 24)){
+                                  hourWeight = rep(1, 24), maxDomainSize = 10000){
   
   cat("run clustering of flow-based domains\n")
   
@@ -68,6 +69,22 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
 
   
   vertices <- .ctrlVertices(vertices)
+  
+  ##Vertices out of domain
+  Max <- vertices[,max(unlist(.SD)), by = c("Date", "Period"), .SDcols = 3:ncol(vertices)]
+  Max[, isSupLim := V1 > maxDomainSize]
+  Max <- Max[Max$isSupLim]
+  if(nrow(Max) > 0){
+    Max <- Max[,list(list(Period)), by = "Date"]
+    
+    stop( paste("The following flow-based domains exceed the expected maximum size :", 
+                   paste(Max$Date, "(hour : ",lapply(Max$V1, function(X){paste(X, collapse = ", ")}),")", collapse = ", ")))
+  }
+  
+  
+  
+  
+  
   calendar <- lapply(calendar, as.character)
   
   lapply(calendar, function(X){

@@ -23,6 +23,7 @@
 #' @param hourWeight \code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
 #' will be more accurate for the flow-based domains of the hours with a relatively higher weight. 
 #' @param report \code{boolean}, if TRUE, reports are generated.
+#' @param maxDomainSize \code{numeric} limit of size in each axis of domain.
 #'
 #' @examples
 #'
@@ -52,7 +53,8 @@ clusterTypicalDaysForOneClass <- function(dates,
                                           className = NULL,
                                           reportPath = getwd(),
                                           report = TRUE, 
-                                          id_start = 1){
+                                          id_start = 1,
+                                          maxDomainSize = 10000){
   
   cat("run clustering of flow-based domains\n")
   
@@ -60,6 +62,23 @@ clusterTypicalDaysForOneClass <- function(dates,
   setTxtProgressBar(pb, 0)
   
   vertices <- .ctrlVertices(vertices)
+  
+  
+  ##Vertices out of domain
+  Max <- vertices[,max(unlist(.SD)), by = c("Date", "Period"), .SDcols = 3:ncol(vertices)]
+  Max[, isSupLim := V1 > maxDomainSize]
+  Max <- Max[Max$isSupLim]
+  if(nrow(Max) > 0){
+    Max <- Max[,list(list(Period)), by = "Date"]
+    
+    stop( paste("The following flow-based domains exceed the expected maximum size :", 
+                paste(Max$Date, "(hour : ",lapply(Max$V1, function(X){paste(X, collapse = ", ")}),")", collapse = ", ")))
+  }
+  
+  
+  
+  
+  
   
   dates <- as.character(dates)
   .ctrlDates(dates, unique(vertices$Date))

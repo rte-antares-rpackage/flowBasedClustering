@@ -14,6 +14,11 @@ test_that("clustering typical days works", {
   # open vertices
   vertices <- fread(system.file("dataset/vertices_example.txt", package = "flowBasedClustering"))
   
+  
+  expect_error(clusteringTypicalDays(calendar, vertices, nbClustWeek = 2, 
+                                                    nbClustWeekend = 1, report = FALSE, maxDomainSize = 500))
+  
+  
   clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 2, 
                                      nbClustWeekend = 1, report = FALSE)
   

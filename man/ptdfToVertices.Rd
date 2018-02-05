@@ -4,7 +4,7 @@
 \alias{ptdfToVertices}
 \title{Convert a PTDF file into a table of vertices}
 \usage{
-ptdfToVertices(PTDF, nbCore = 1)
+ptdfToVertices(PTDF, nbCore = 1, maxDomainSize = 10000)
 }
 \arguments{
 \item{PTDF}{\code{character}, path of a PTDF file. 
@@ -14,6 +14,8 @@ The names of the seven columns (Date, Period, ...) must be included in the heade
 of the .csv file.}
 
 \item{nbCore}{\code{numeric}, number of cores for parallel computation. Default to one.}
+
+\item{maxDomainSize}{\code{numeric} limit of size in each axis of domain.}
 }
 \value{
 A data table with the vertices of the flow-based domains.
@@ -29,7 +31,7 @@ while the vertices are the coordinnates of the extreme points of the domains.
 ptdf_data <- data.table::fread(system.file("dataset/ptdf_example.csv", 
    package = "flowBasedClustering"), data.table = F)
 
-head(ptdf_data[, 1:7])
+head(ptdf_data)
 
 vertices <- ptdfToVertices(system.file("dataset/ptdf_example.csv",
     package = "flowBasedClustering"))

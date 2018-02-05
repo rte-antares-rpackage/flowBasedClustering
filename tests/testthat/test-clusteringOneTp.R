@@ -17,4 +17,12 @@ test_that("clusterTypicalDaysForOneClass", {
   apply(out, 1, function(X){
     expect_true(X$TypicalDay == X$distance$Date[which.min(X$distance$Distance)])
   })
+  
+  
+  expect_error(clusterTypicalDaysForOneClass(vertices = vertices,
+                                             dates = dates, nbCluster = nbCluster,
+                                             className = "myName", id_start = id_start, report = FALSE, maxDomainSize = 500))
+  
+  
+  
 })

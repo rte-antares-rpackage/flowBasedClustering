@@ -7,6 +7,10 @@ test_that("ptdfToVertices works", {
 
   out1 <- ptdfToVertices(PTDF = system.file("testdata/PTDF6h.csv",package = "flowBasedClustering"),  nbCore = 1)
   
+  
+  expect_warning(ptdfToVertices(PTDF = system.file("testdata/PTDF6h.csv",package = "flowBasedClustering"),  nbCore = 1, maxDomainSize = 500))
+  
+  
   # output file should not be empty
   expect_false(nrow(out1) == 0)
   
@@ -72,6 +76,6 @@ test_that("bad pdtf file", {
 test_that("ptdfToVertices returns error if header is not correct", {
   expect_error(
     ptdfToVertices(PTDF = system.file("testdata/PTDF.csv",package = "flowBasedClustering"),  nbCore = 1))
-})
+  })
   
   
