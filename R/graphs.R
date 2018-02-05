@@ -3,7 +3,7 @@
 #' @description For a given hour, plot the flow-based domain of one typical day along with the other
 #' flow-based domains it represents (i.e. other domains of the same cluster).
 #'
-#' @param data \code{data.table} results from the clustering, output data from \link{clusteringTypicalDays}
+#' @param data \code{data.table} results from the clustering, output data from \link{clusteringTypicalDays} or \link{clusterTypicalDaysForOneClass}
 #' @param country1 \code{character}, name of the country whose net position is in the x axis (BE, FR, DE or NL)
 #' @param country2 \code{character}, name of the country whose net position is in the y axis (BE, FR, DE or NL)
 #' @param hour \code{numeric}, hour of the plotted domain

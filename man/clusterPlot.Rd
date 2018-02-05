@@ -8,7 +8,7 @@ clusterPlot(data, country1, country2, hour, dayType, typicalDayOnly = FALSE,
   ggplot = FALSE, width = "420px", height = "410px")
 }
 \arguments{
-\item{data}{\code{data.table} results from the clustering, output data from \link{clusteringTypicalDays}}
+\item{data}{\code{data.table} results from the clustering, output data from \link{clusteringTypicalDays} or \link{clusterTypicalDaysForOneClass}}
 
 \item{country1}{\code{character}, name of the country whose net position is in the x axis (BE, FR, DE or NL)}
 

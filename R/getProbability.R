@@ -1,11 +1,14 @@
-#' Get probabilities and quantiles from climate file for a classification
+#' Classify the typical days by searching for external factors (e.g. climate factors) explaning 
+#' the occurence of a particular typical day
 #'
-#' @param climate \code{data.table} climate file, 2 first columns are Date and Period, others are params files
-#' @param cluster \code{data.table} output of \link{clusteringTypicalDays}
-#' @param levelsProba \code{numeric or list}, can be \code{numeric} or \code{list}, if \code{numeric}, all quantiles
-#' are the same for all climate variables, if \code{list}, must be names and give quantiles for each climate variable.
-#' @param extrapolationNA \code{booelan} extrapolate NA value wich neighbours.
-#'
+#' @param climate \code{data.table}, the first column contains the dates (header : Date, format : YYYY-MM-DD), 
+#' other columns are external variable whose name must be given in the header.
+#' @param cluster \code{data.table} output of \link{clusteringTypicalDays} or \link{clusterTypicalDaysForOneClass}
+#' @param levelsProba \code{numeric or list}. if \code{numeric}, contains a vector of quantiles which will be used for all 
+#' external variables and classes. 
+#' if \code{list}, quantiles are described independenly for each class and each external variable (see examples below)
+#' @param extrapolationNA \code{booelan} should NA values of the matrix be extrapolated (\code{TRUE}) or not (\code{FALSE})
+#' 
 #' @examples
 #'
 #' \dontrun{
@@ -291,7 +294,7 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
   
   lapply(levelsProba, function(X){
     if(class(X) != 'list'){
-      stop("A list of variables is expected in each class of levelsProba (here : names(climate) )",
+      stop("A list of variables is expected in each class of levelsProba, here : ",
            paste0(clVar, collapse = ";"))
     }
   })

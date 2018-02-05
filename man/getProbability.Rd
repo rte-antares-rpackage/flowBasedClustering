@@ -2,23 +2,27 @@
 % Please edit documentation in R/getProbability.R
 \name{getProbability}
 \alias{getProbability}
-\title{Get probabilities and quantiles from climate file for a classification}
+\title{Classify the typical days by searching for external factors (e.g. climate factors) explaning 
+the occurence of a particular typical day}
 \usage{
 getProbability(climate, cluster, levelsProba = c(1/3, 2/3),
   extrapolationNA = TRUE)
 }
 \arguments{
-\item{climate}{\code{data.table} climate file, 2 first columns are Date and Period, others are params files}
+\item{climate}{\code{data.table}, the first column contains the dates (header : Date, format : YYYY-MM-DD), 
+other columns are external variable whose name must be given in the header.}
 
-\item{cluster}{\code{data.table} output of \link{clusteringTypicalDays}}
+\item{cluster}{\code{data.table} output of \link{clusteringTypicalDays} or \link{clusterTypicalDaysForOneClass}}
 
-\item{levelsProba}{\code{numeric or list}, can be \code{numeric} or \code{list}, if \code{numeric}, all quantiles
-are the same for all climate variables, if \code{list}, must be names and give quantiles for each climate variable.}
+\item{levelsProba}{\code{numeric or list}. if \code{numeric}, contains a vector of quantiles which will be used for all 
+external variables and classes. 
+if \code{list}, quantiles are described independenly for each class and each external variable (see examples below)}
 
-\item{extrapolationNA}{\code{booelan} extrapolate NA value wich neighbours.}
+\item{extrapolationNA}{\code{booelan} should NA values of the matrix be extrapolated (\code{TRUE}) or not (\code{FALSE})}
 }
 \description{
-Get probabilities and quantiles from climate file for a classification
+Classify the typical days by searching for external factors (e.g. climate factors) explaning 
+the occurence of a particular typical day
 }
 \examples{
 
