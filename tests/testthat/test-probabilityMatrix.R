@@ -56,6 +56,19 @@ test_that("clustering getProbability works", {
   
   expect_true(all(abs(shoubBeOne$V1 - 1) < 0.00001))
   
+  climate$oneMoreVariable <- runif(nrow(climate))
+  
+  
+  levelsProba <- list(summerWd = list(FR_load = c(0.5), DE_wind = c(1/3, 2/3), DE_solar = .5,
+                                      oneMoreVariable = c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9)),
+                      summerWe = list(FR_load = c(0.5, 0.7), DE_wind = c(.5))
+  )
+  endProb <- getProbability(climate, cluster = clusterTD,
+                                     levelsProba = levelsProba, extrapolationNA = TRUE)
+  shoubBeOne <- endProb[[1]][,sum(probability), by = c("class", "FR_load", "DE_wind", "DE_solar", "oneMoreVariable")]
+  
+  expect_true(all(abs(shoubBeOne$V1 - 1) < 0.00001))
+  
 })
 
 
