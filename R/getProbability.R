@@ -268,7 +268,7 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
     for(i in cl1){
       totest <- levelsProba[[i]]
       if(!all(unlist(lapply(totest, function(X){
-        X == c(0, 1)
+        identical(X , c(0, 1))
       })))){
         warning(paste0("Somes probabilities are defined for season : ",
                        i, " which only contains one typical day. They have been pass to NULL"))
