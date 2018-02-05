@@ -156,7 +156,9 @@ cal &lt;-<span class="st"> </span><span class="kw">getCalendar</span>(dates, int
 <p>Once we have the <strong>vertices</strong> and the <strong>calendar</strong>, the clustering algorithm can be run with the function <code>clusteringTypicalDays()</code>. The number of clusters of the different day categories (week days and week-end) can be set with <code>nbClustWeek</code> and <code>nbClustWeekend</code>. A report can be automaticcaly built using <code>report</code> and <code>reportPath</code> arguments.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">clusterTD &lt;-<span class="st"> </span><span class="kw">clusteringTypicalDays</span>(calendar, vertices, <span class="dt">nbClustWeek =</span> <span class="dv">3</span>, <span class="dt">nbClustWeekend =</span> <span class="dv">1</span>,
                               <span class="dt">report =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>One can also use the output of <code>clusteringTypicalDays()</code> to generate report later for one or more typical day(s) using <code>generateClusteringReport()</code>, or just plot domains with <code>clusterPlot()</code> :</p>
+<p>In case the clustering algorithm must be run on short periods of time or with more or less seasons or types of day. The function <code>clusterTypicalDaysForOneClass()</code> can be used instead of <code>clusteringTypicalDays()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">clusterTD &lt;-<span class="st"> </span><span class="kw">clusterTypicalDaysForOneClass</span>(<span class="dt">vertices =</span> vertices, <span class="dt">dates =</span> <span class="kw">getSequence</span>(<span class="st">&quot;2018-01-01&quot;</span>, <span class="st">&quot;2018-01-31&quot;</span>), <span class="dt">nbCluster =</span> <span class="dv">2</span>,<span class="dt">className =</span> <span class="st">&quot;january2018&quot;</span>)</code></pre></div>
+<p>One can also use the output of <code>clusteringTypicalDays()</code> or <code>clusterTypicalDaysForOneClass()</code> to generate report later for one or more typical day(s) using <code>generateClusteringReport()</code>, or just plot domains with <code>clusterPlot()</code> :</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># build report for one typical day</span>
 <span class="kw">generateClusteringReport</span>(<span class="dt">dayType =</span> <span class="dv">7</span>, <span class="dt">data =</span> clusterTD)</code></pre></div>
 <div style="text-align:center" markdown="1">
@@ -178,8 +180,8 @@ cal &lt;-<span class="st"> </span><span class="kw">getCalendar</span>(dates, int
 <h2>5 - Probabilities and quantiles</h2>
 <p>Finally, the function <code>getProbability()</code> can be used to learn the correlations between the occurences of the different clusters and external data (typically climatic data).</p>
 <ul>
-<li><code>climate</code> : climate file, the first column is the <code>Date</code> (<code>YYYY-MM-DD</code>), other columns are exogenous variables (e.g. wind speed and temperature)</li>
-<li><code>cluster</code> : output of <code>clusteringTypicalDays()</code></li>
+<li><code>climate</code> : data table, the first column is the <code>Date</code> (<code>YYYY-MM-DD</code>), other columns are exogenous variables (e.g. wind speed and temperature)</li>
+<li><code>cluster</code> : output of <code>clusteringTypicalDays()</code> or <code>clusterTypicalDaysForOneClass()</code></li>
 </ul>
 <p>Below, an example of a climate file :</p>
 <pre><code>##          Date  FR_load   DE_wind    DE_solar
@@ -191,14 +193,15 @@ cal &lt;-<span class="st"> </span><span class="kw">getCalendar</span>(dates, int
 ## 6: 2016-01-06 67146.35 0.1458649 0.013333333</code></pre>
 <p>The quantiles are set with <code>levelsProba</code>, and can be :</p>
 <ul>
-<li>the same for all exogenous variables using a <code>numeric vector</code></li>
-<li>set for each climate variable using a <code>named list</code></li>
+<li>the same for all exogenous variables and classes using a <code>numeric vector</code></li>
+<li>set for each class (season / type of day) and climate variable using a <code>named list</code></li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># same quantiles for each variables </span>
 MatProb &lt;-<span class="st"> </span><span class="kw">getProbability</span>(climate, clusterTD, <span class="dt">levelsProba =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="op">/</span><span class="dv">3</span>))
 
-<span class="co"># diffents quantiles for each variables </span>
-levelsProba &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">`</span><span class="dt">Conso (J-1)</span><span class="st">`</span> =<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.8</span>), <span class="dt">DE_wind =</span> <span class="kw">c</span>(<span class="fl">0.3</span>, <span class="fl">0.7</span>),<span class="dt">DE_solar =</span> <span class="kw">c</span>(<span class="fl">0.3</span>,<span class="fl">0.4</span>,<span class="fl">0.8</span>))
+<span class="co"># diffents quantiles for each class and variables </span>
+levelsProba &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">summerWd =</span> <span class="kw">list</span>(<span class="dt">FR_load =</span> <span class="kw">c</span>(<span class="fl">0.5</span>), <span class="dt">DE_wind =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="op">/</span><span class="dv">3</span>), <span class="dt">DE_solar =</span> .<span class="dv">5</span>),
+                    <span class="dt">winterWD =</span> <span class="kw">list</span>(<span class="dt">FR_load =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.7</span>), <span class="dt">DE_wind =</span> <span class="kw">c</span>(.<span class="dv">5</span>)))
 MatProb &lt;-<span class="st"> </span><span class="kw">getProbability</span>(climate, clusterTD, <span class="dt">levelsProba =</span> levelsProba)</code></pre></div>
 </div>
 
