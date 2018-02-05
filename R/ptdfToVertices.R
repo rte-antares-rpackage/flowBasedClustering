@@ -10,7 +10,8 @@
 #' of the .csv file.
 #' 
 #' @param nbCore \code{numeric}, number of cores for parallel computation. Default to one.
-#'
+#' @param maxDomainSize \code{numeric} limit of size in each axis of domain.
+#' 
 #' @return A data table with the vertices of the flow-based domains.
 #'
 #' @examples
@@ -20,7 +21,7 @@
 #' ptdf_data <- data.table::fread(system.file("dataset/ptdf_example.csv", 
 #'    package = "flowBasedClustering"), data.table = F)
 #' 
-#' head(ptdf_data[, 1:7])
+#' head(ptdf_data)
 #' 
 #' vertices <- ptdfToVertices(system.file("dataset/ptdf_example.csv",
 #'     package = "flowBasedClustering"))
@@ -34,7 +35,7 @@
 #' @import parallel
 #'
 #' @export
-ptdfToVertices <- function(PTDF, nbCore = 1)
+ptdfToVertices <- function(PTDF, nbCore = 1, maxDomainSize = 10000)
 {
   
   # Load PTDF
@@ -103,6 +104,17 @@ ptdfToVertices <- function(PTDF, nbCore = 1)
       )}))
     stopCluster(cl)
     
+  }
+  
+  
+  Max <- vertices[,max(unlist(.SD)), by = c("Date", "Period"), .SDcols = 3:ncol(vertices)]
+  Max[, isSupLim := V1 > maxDomainSize]
+  Max <- Max[Max$isSupLim]
+  if(nrow(Max) > 0){
+    Max <- Max[,list(list(Period)), by = "Date"]
+   
+    warning( paste("The following flow-based domains exceed the expected maximum size :", 
+                   paste(Max$Date, "(hour : ",lapply(Max$V1, function(X){paste(X, collapse = ", ")}),")", collapse = ", ")))
   }
   
   vertices

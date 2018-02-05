@@ -6,7 +6,7 @@
 \usage{
 clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
   nbClustWeekend = 1, report = TRUE, reportPath = getwd(),
-  hourWeight = rep(1, 24))
+  hourWeight = rep(1, 24), maxDomainSize = 10000)
 }
 \arguments{
 \item{calendar}{\code{list}, vector of date for each period. Can be obtain with \link{getCalendar}}
@@ -31,6 +31,8 @@ This parameter can be obtained with the function \link{ptdfToVertices}.}
 
 \item{hourWeight}{\code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
 will be more accurate for the flow-based domains of the hours with a relatively higher weight.}
+
+\item{maxDomainSize}{\code{numeric} limit of size in each axis of domain.}
 }
 \description{
 Run a clustering algorithm on the different classes of the calendar (\link{getCalendar}).
