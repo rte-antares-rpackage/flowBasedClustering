@@ -49,6 +49,11 @@ head(vertices)
 #                                report = TRUE)
 #  
 
+## ---- echo = TRUE, eval = FALSE------------------------------------------
+#  clusterTD <- clusterTypicalDaysForOneClass(vertices = vertices, dates = getSequence("2018-01-01", "2018-01-31"), nbCluster = 2,className = "january2018")
+#  
+#  
+
 ## ---- echo = FALSE-------------------------------------------------------
 clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 
@@ -67,14 +72,15 @@ clusterPlot(clusterTD, country1 = "FR", country2 = "DE",
 #              hour = 8, dayType = 9, typicalDayOnly = TRUE, ggplot = FALSE)
 
 ## ---- eval = TRUE, echo = FALSE------------------------------------------
-vertices <- data.table::fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
-head(vertices)
+climate <- data.table::fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
+head(climate)
 
 ## ---- echo = TRUE, eval = FALSE------------------------------------------
 #  # same quantiles for each variables
 #  MatProb <- getProbability(climate, clusterTD, levelsProba = c(1/3, 2/3))
 #  
-#  # diffents quantiles for each variables
-#  levelsProba <- list(`Conso (J-1)` = c(0.2, 0.8), DE_wind = c(0.3, 0.7),DE_solar = c(0.3,0.4,0.8))
+#  # diffents quantiles for each class and variables
+#  levelsProba <- list(summerWd = list(FR_load = c(0.5), DE_wind = c(1/3, 2/3), DE_solar = .5),
+#                      winterWD = list(FR_load = c(0.5, 0.7), DE_wind = c(.5)))
 #  MatProb <- getProbability(climate, clusterTD, levelsProba = levelsProba)
 
