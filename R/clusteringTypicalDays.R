@@ -63,7 +63,7 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
                                   hourWeight = rep(1, 24), maxDomainSize = 10000){
   
   cat("run clustering of flow-based domains\n")
-  
+  isSupLim <- NULL
   pb <- txtProgressBar(style = 3)
   setTxtProgressBar(pb, 0)
 

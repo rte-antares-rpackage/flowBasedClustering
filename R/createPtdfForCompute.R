@@ -10,6 +10,7 @@
 #' The names of the seven columns (Date, Period, ...) must be included in the header (first line)
 #' of the .csv file.
 #' @param pathOutput \code{character} path of the folder where the file will be writen, default getwd()
+#' @param sep \code{character} sep use for write csv output.
 #' 
 #' @importFrom utils type.convert
 #' 

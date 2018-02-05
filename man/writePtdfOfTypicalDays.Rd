@@ -16,6 +16,8 @@ The names of the seven columns (Date, Period, ...) must be included in the heade
 of the .csv file.}
 
 \item{pathOutput}{\code{character} path of the folder where the file will be writen, default getwd()}
+
+\item{sep}{\code{character} sep use for write csv output.}
 }
 \description{
 Transform a PTDF file for \code{computeFB} function from package antaresFlowbased.

@@ -57,7 +57,7 @@ clusterTypicalDaysForOneClass <- function(dates,
                                           maxDomainSize = 10000){
   
   cat("run clustering of flow-based domains\n")
-  
+  isSupLim <- NULL
   pb <- txtProgressBar(style = 3)
   setTxtProgressBar(pb, 0)
   

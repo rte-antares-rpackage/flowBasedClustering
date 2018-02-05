@@ -33,7 +33,7 @@
 #' @export
 getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapolationNA = TRUE)
 {
-  
+  quantiles <- NULL
   class <- unique(cluster$Class)
   clVar <- names(climate)[!names(climate)%in%"Date"]
   # Compute quantiles

@@ -37,7 +37,7 @@
 #' @export
 ptdfToVertices <- function(PTDF, nbCore = 1, maxDomainSize = 10000)
 {
-  
+  isSupLim <- NULL
   # Load PTDF
   if(!file.exists(PTDF)){
     stop(paste0(PTDF, " file not found"))
