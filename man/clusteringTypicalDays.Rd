@@ -32,7 +32,8 @@ This parameter can be obtained with the function \link{ptdfToVertices}.}
 \item{hourWeight}{\code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
 will be more accurate for the flow-based domains of the hours with a relatively higher weight.}
 
-\item{maxDomainSize}{\code{numeric} limit of size in each axis of domain.}
+\item{maxDomainSize}{\code{numeric} limit of domain size in each axis. The function will return an error if one domain
+or more exceed these limits.#'}
 }
 \description{
 Run a clustering algorithm on the different classes of the calendar (\link{getCalendar}).

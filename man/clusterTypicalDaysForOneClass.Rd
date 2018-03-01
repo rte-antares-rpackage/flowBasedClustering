@@ -34,7 +34,8 @@ will be more accurate for the flow-based domains of the hours with a relatively 
 
 \item{id_start}{\code{numeric}, first identifier of the returned typical days. Default value is 1}
 
-\item{maxDomainSize}{\code{numeric} limit of size in each axis of domain.}
+\item{maxDomainSize}{\code{numeric} limit of domain size in each axis. The function will return an error if one domain
+or more exceed these limits.}
 }
 \description{
 Run a clustering algorithm for a given historical period. It creates clusters by

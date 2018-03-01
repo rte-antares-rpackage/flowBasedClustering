@@ -10,7 +10,8 @@
 #' of the .csv file.
 #' 
 #' @param nbCore \code{numeric}, number of cores for parallel computation. Default to one.
-#' @param maxDomainSize \code{numeric} limit of size in each axis of domain.
+#' @param maxDomainSize \code{numeric} limit of domain size in each axis. The function will return a warning if one domain
+#' or more exceed these limits.
 #' 
 #' @return A data table with the vertices of the flow-based domains.
 #'

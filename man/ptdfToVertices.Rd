@@ -15,7 +15,8 @@ of the .csv file.}
 
 \item{nbCore}{\code{numeric}, number of cores for parallel computation. Default to one.}
 
-\item{maxDomainSize}{\code{numeric} limit of size in each axis of domain.}
+\item{maxDomainSize}{\code{numeric} limit of domain size in each axis. The function will return a warning if one domain
+or more exceed these limits.}
 }
 \value{
 A data table with the vertices of the flow-based domains.
