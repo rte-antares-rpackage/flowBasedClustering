@@ -2,7 +2,7 @@
 #' the occurence of a particular typical day
 #'
 #' @param climate \code{data.table}, the first column contains the dates (header : Date, format : YYYY-MM-DD), 
-#' other columns are external variable whose name must be given in the header.
+#' other columns are external variable whose name must be given in the header. Data should be given with a daily time step.
 #' @param cluster \code{data.table} output of \link{clusteringTypicalDays} or \link{clusterTypicalDaysForOneClass}
 #' @param levelsProba \code{numeric or list}. if \code{numeric}, contains a vector of quantiles which will be used for all 
 #' external variables and classes. 

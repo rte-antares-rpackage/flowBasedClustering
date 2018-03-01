@@ -10,7 +10,7 @@
 #' @param vertices \code{data.table}, 5 columns :
 #' \itemize{
 #'  \item Date : date (%Y-%M-%D)
-#'  \item Period : Hour (1:24)
+#'  \item Period : Hour (1:24), period i corresponds to the hourly time-step [i-1 ; i]
 #'  \item BE : belgium vertices
 #'  \item DE : german vertices
 #'  \item FR : french vertices
