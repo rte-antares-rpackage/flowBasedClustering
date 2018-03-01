@@ -142,7 +142,7 @@ cal &lt;-<span class="st"> </span><span class="kw">getCalendar</span>(dates, int
 ## 4 06/08/2016      1 -0.09885 -0.06501 -0.16941  0.00000  293.5410
 ## 5 06/08/2016      1 -0.15224 -0.08318 -0.15224  0.00000  293.7366
 ## 6 06/08/2016      1 -0.04487 -0.24617 -0.38570 -0.15168  642.0483</code></pre>
-<p>And the result is a <code>data.table</code> which contains vertices.</p>
+<p>The Period lies between 1 and 24 for the 24 hourly market periods. Therefore, period i corresponds to the time-step [i-1 ; i]. And the result is a <code>data.table</code> which contains vertices.</p>
 <pre><code>##          Date Period         BE    DE        FR
 ## 1: 2016-08-06      1  4783.8970 -4400 1216.4590
 ## 2: 2016-08-06      1  2849.1600 -4400  333.4179
