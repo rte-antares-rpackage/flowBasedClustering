@@ -71,7 +71,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 #' PTDF[ Date == "06/08/2016" & Period == 2],
 #' PTDF[ Date == "06/08/2016" & Period == 3])
 #' plotFlowbased(PTDF2, country1 = "DE", country2 = "BE", domainsNames = c("01/11/2015 - H1",
-#' "01/11/2015 - H2", "01/11/2015 - H3"), main = "Myplot")
+#' "01/11/2015 - H2", "01/11/2015 - H3"), main = "domains BE - DE")
 #'
 #' }
 #'

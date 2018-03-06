@@ -33,5 +33,13 @@ test_that("Prepare data", {
                        country2 = "BE")
   expect_true("htmlwidget"%in% class(plo))
   
+  
+  
+
+})
+
+test_that("plotMonotone", {
+ 
+   
 })
 

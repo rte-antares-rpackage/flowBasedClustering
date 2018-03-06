@@ -63,6 +63,9 @@ clusterTypicalDaysForOneClass <- function(dates,
   
   vertices <- .ctrlVertices(vertices)
   
+  vertices <- vertices[as.character(vertices$Date)%in%as.character( dates)]
+  
+  
   
   ##Vertices out of domain
   Max <- vertices[,max(unlist(.SD)), by = c("Date", "Period"), .SDcols = 3:ncol(vertices)]

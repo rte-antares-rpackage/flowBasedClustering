@@ -68,7 +68,13 @@ clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWe
   setTxtProgressBar(pb, 0)
 
   
+
+  
+  
   vertices <- .ctrlVertices(vertices)
+  
+  ##•Select only vertices in calendar
+  vertices <- vertices[as.character(vertices$Date)%in%as.character( do.call("c", calendar))]
   
   ##Vertices out of domain
   Max <- vertices[,max(unlist(.SD)), by = c("Date", "Period"), .SDcols = 3:ncol(vertices)]
