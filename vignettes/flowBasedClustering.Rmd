@@ -90,6 +90,7 @@ ptdf_data <- data.table::fread(system.file("dataset/ptdf_example.csv",package = 
 head(ptdf_data[, 1:7])
 ```
 
+The Period lies between 1 and 24 for the 24 hourly market periods. Therefore, period i corresponds to the time-step [i-1 ; i].
 And the result is a ``data.table`` which contains vertices.
 
 ```{r, eval = TRUE, echo = FALSE}

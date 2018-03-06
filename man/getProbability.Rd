@@ -10,7 +10,7 @@ getProbability(climate, cluster, levelsProba = c(1/3, 2/3),
 }
 \arguments{
 \item{climate}{\code{data.table}, the first column contains the dates (header : Date, format : YYYY-MM-DD), 
-other columns are external variable whose name must be given in the header.}
+other columns are external variable whose name must be given in the header. Data should be given with a daily time step.}
 
 \item{cluster}{\code{data.table} output of \link{clusteringTypicalDays} or \link{clusterTypicalDaysForOneClass}}
 

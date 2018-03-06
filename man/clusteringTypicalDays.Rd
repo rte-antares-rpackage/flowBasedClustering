@@ -14,7 +14,7 @@ clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
 \item{vertices}{\code{data.table}, 5 columns :
 \itemize{
  \item Date : date (%Y-%M-%D)
- \item Period : Hour (1:24)
+ \item Period : Hour (1:24), period i corresponds to the hourly time-step [i-1 ; i]
  \item BE : belgium vertices
  \item DE : german vertices
  \item FR : french vertices
@@ -32,7 +32,8 @@ This parameter can be obtained with the function \link{ptdfToVertices}.}
 \item{hourWeight}{\code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
 will be more accurate for the flow-based domains of the hours with a relatively higher weight.}
 
-\item{maxDomainSize}{\code{numeric} limit of size in each axis of domain.}
+\item{maxDomainSize}{\code{numeric} limit of domain size in each axis. The function will return an error if one domain
+or more exceed these limits.}
 }
 \description{
 Run a clustering algorithm on the different classes of the calendar (\link{getCalendar}).

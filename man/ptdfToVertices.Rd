@@ -11,11 +11,13 @@ ptdfToVertices(PTDF, nbCore = 1, maxDomainSize = 10000)
 The PTDF file must contains at least these seven columns : Date, Period, BE, DE, FR, NL and RAM - in this order.
 It must be a .csv file with ";" as column separator and "." as decimal separator.
 The names of the seven columns (Date, Period, ...) must be included in the header (first line)
-of the .csv file.}
+of the .csv file.
+The Period lies between 1 and 24 for the 24 hourly market periods. Therefore, period i corresponds to the time-step [i-1 ; i].}
 
 \item{nbCore}{\code{numeric}, number of cores for parallel computation. Default to one.}
 
-\item{maxDomainSize}{\code{numeric} limit of size in each axis of domain.}
+\item{maxDomainSize}{\code{numeric} limit of domain size in each axis. The function will return a warning if one domain
+or more exceed these limits.}
 }
 \value{
 A data table with the vertices of the flow-based domains.
