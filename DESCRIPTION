@@ -1,6 +1,6 @@
 Package: flowBasedClustering
 Type: Package
-Title: Clustering Days for FlowBased
+Title: Clustering Days for 'FlowBased'
 Version: 0.1.1
 Authors@R: c(
     person("Titouan", "ROBERT", , "titouan.robert@rte-france.com", role = c("aut", "cre")),
