@@ -16,8 +16,8 @@ getVertices <- function(face, b){
   d <- b+1e-6
   res <- apply(grid, 2, function(gridRaw){
     # For each ijk raw of face, and b, resolve   qr.solve(Bijk, bijk)
-    Bijk<- rbind(B[gridRaw[1], ], B[gridRaw[1], ], B[gridRaw[2], ], B[gridRaw[3], ], Un)
-    bijk <- c(b[gridRaw[1]], b[gridRaw[1]], b[gridRaw[2]], b[gridRaw[3]], 0)
+    Bijk<- rbind( B[gridRaw[1], ], B[gridRaw[2], ], B[gridRaw[3], ], Un)
+    bijk <- c(b[gridRaw[1]], b[gridRaw[2]], b[gridRaw[3]], 0)
     x <- try({
        qr.solve(Bijk, bijk)
     }, silent = TRUE)

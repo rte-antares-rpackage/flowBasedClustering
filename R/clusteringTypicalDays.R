@@ -19,7 +19,7 @@
 #' @param nbClustWeek \code{numeric}, number of clusters for week period(working days). Defaut to 3
 #' @param nbClustWeekend \code{numeric}, number of clusters for weekend period. Defaut to 1
 #' @param report \code{boolean}, should a .html report be generated with the results of the clustering. Defaut to TRUE
-#' @param reportPath \code{character}, path where the report is written. Defaut to \code{getwd()}
+#' @param reportPath \code{character}, path where the report is written.
 #' @param hourWeight \code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
 #' will be more accurate for the flow-based domains of the hours with a relatively higher weight. 
 #' @param maxDomainSize \code{numeric} limit of domain size in each axis. The function will return an error if one domain
@@ -45,12 +45,14 @@
 #' calendar$summerWd <- c("2016-08-08", "2016-08-09", "2016-08-10", "2016-08-11", "2016-08-12")
 #'
 #' # run clustering algorithm
-#' clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 2, nbClustWeekend = 1)
+#' clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 2,
+#'                                    nbClustWeekend = 1, reportPath = tempdir())
 #' 
 #' # run clustering algorithm distinguishing the days only with the flow-based domains of hour 18
 #' w <- rep(0,24)
 #' w[18] <- 1
-#' clusterTD <- clusteringTypicalDays(calendar, vertices,  hourWeight = w, report = FALSE)
+#' clusterTD <- clusteringTypicalDays(calendar, vertices,  hourWeight = w, 
+#'                                   report = FALSE, reportPath = tempdir())
 #' }
 #'
 #'
@@ -59,8 +61,8 @@
 #' @importFrom cluster pam
 #' @importFrom utils txtProgressBar getTxtProgressBar setTxtProgressBar
 #'
-clusteringTypicalDays <- function(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
-                                  report = TRUE, reportPath = getwd(),
+clusteringTypicalDays <- function(calendar, vertices, reportPath, nbClustWeek = 3, nbClustWeekend = 1,
+                                  report = TRUE,
                                   hourWeight = rep(1, 24), maxDomainSize = 10000){
   
   cat("run clustering of flow-based domains\n")

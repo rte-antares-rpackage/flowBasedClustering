@@ -4,7 +4,7 @@
 \alias{generateClusteringReport}
 \title{Generate html report}
 \usage{
-generateClusteringReport(dayType, outputFile = NULL, data)
+generateClusteringReport(dayType, outputFile, data)
 }
 \arguments{
 \item{dayType}{\code{numeric} Typical day identifier}
@@ -23,7 +23,7 @@ with the domains of the other historical days it represents.
 \dontrun{
 
 clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
-generateClusteringReport(dayType = 7, data = clusterTD)
+generateClusteringReport(dayType = 7, data = clusterTD, outputFile = tempdir())
 
 }
 }

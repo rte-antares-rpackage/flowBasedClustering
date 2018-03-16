@@ -9,7 +9,7 @@
 #' It must be a .csv file with ";" as column separator and "." as decimal separator.
 #' The names of the seven columns (Date, Period, ...) must be included in the header (first line)
 #' of the .csv file.
-#' @param pathOutput \code{character} path of the folder where the file will be writen, default getwd()
+#' @param pathOutput \code{character} path of the folder where the file will be writen.
 #' @param sep \code{character} sep use for write csv output.
 #' 
 #' @importFrom utils type.convert
@@ -23,16 +23,14 @@
 #' PTDF = system.file("dataset/ptdf_example.csv",
 #'       package = "flowBasedClustering")
 #'       
-#' writePtdfOfTypicalDays(clusterTD, PTDF)
-#' #Write on D:/ :
-#' writePtdfOfTypicalDays(clusterTD, PTDF, pathOutput = "D:/")
+#' writePtdfOfTypicalDays(clusterTD, PTDF, pathOutput = tempdir())
 #' 
 #' }
 #' 
 #' @export
 writePtdfOfTypicalDays <- function(cluster, 
                                  PTDF,
-                                 pathOutput = getwd(), sep = ";"){
+                                 pathOutput, sep = ";"){
   
   cluster <- copy(cluster)
   # Load PTDF

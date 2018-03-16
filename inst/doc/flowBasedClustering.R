@@ -19,7 +19,7 @@ require(flowBasedClustering)
 #  
 #  # Cluster the typical days
 #  clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
-#                        nbClustWeekend = 1, report = TRUE)
+#                        nbClustWeekend = 1, report = TRUE, reportPath = tempdir())
 #  
 #  # Get probabilities and quantiles from climate file in order to classify the typical days
 #  climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
@@ -46,11 +46,11 @@ head(vertices)
 
 ## ---- echo = TRUE, eval = FALSE------------------------------------------
 #  clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
-#                                report = TRUE)
+#                                report = TRUE, reportPath = tempdir())
 #  
 
 ## ---- echo = TRUE, eval = FALSE------------------------------------------
-#  clusterTD <- clusterTypicalDaysForOneClass(vertices = vertices, dates = getSequence("2018-01-01", "2018-01-31"), nbCluster = 2,className = "january2018")
+#  clusterTD <- clusterTypicalDaysForOneClass(vertices = vertices, dates = getSequence("2018-01-01", "2018-01-31"), nbCluster = 2,className = "january2018", reportPath = tempdir())
 #  
 #  
 
@@ -59,7 +59,7 @@ clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBa
 
 ## ---- eval = FALSE-------------------------------------------------------
 #  # build report for one typical day
-#  generateClusteringReport(dayType = 7, data = clusterTD)
+#  generateClusteringReport(dayType = 7, data = clusterTD, outputFile = tempdir())
 
 ## ---- echo = TRUE, fig.width= 7, fig.height= 4.5, warning=FALSE----------
 # static graphic

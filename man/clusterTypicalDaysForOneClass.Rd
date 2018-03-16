@@ -4,8 +4,8 @@
 \alias{clusterTypicalDaysForOneClass}
 \title{Generate a set of flow-based typical days on one time period}
 \usage{
-clusterTypicalDaysForOneClass(dates, vertices, nbCluster, hourWeight = rep(1,
-  24), className = NULL, reportPath = getwd(), report = TRUE,
+clusterTypicalDaysForOneClass(dates, vertices, nbCluster, reportPath,
+  hourWeight = rep(1, 24), className = NULL, report = TRUE,
   id_start = 1, maxDomainSize = 10000)
 }
 \arguments{
@@ -23,12 +23,12 @@ This parameter can be obtained with the function \link{ptdfToVertices}.}
 
 \item{nbCluster}{\code{numeric}, number of clusters}
 
+\item{reportPath}{\code{character}, path where the report is written.}
+
 \item{hourWeight}{\code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
 will be more accurate for the flow-based domains of the hours with a relatively higher weight.}
 
 \item{className}{\code{character}, name of the class characterizing the studied time period}
-
-\item{reportPath}{\code{character}, path where the report is written. Defaut to \code{getwd()}}
 
 \item{report}{\code{boolean}, if TRUE, reports are generated.}
 
@@ -54,11 +54,13 @@ hourWeight = rep(1, 24)
 
 out1 <- clusterTypicalDaysForOneClass(vertices = vertices,
                                       dates = dates, nbCluster = 2,
-                                      className = "myName", id_start = 5, report = FALSE)
+                                      className = "myName", id_start = 5, report = FALSE,
+                                      reportPath = tempdir())
 
 out2 <- clusterTypicalDaysForOneClass(vertices = vertices,
                                       dates = dates, nbCluster = 4,
-                                      className = "myName2", id_start = 7, report = FALSE)
+                                      className = "myName2", id_start = 7, report = FALSE,
+                                      reportPath = tempdir())
 
 rbindlist(list(out1, out2))
 }

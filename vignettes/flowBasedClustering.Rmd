@@ -35,7 +35,7 @@ vertices <- ptdfToVertices(PTDF = ptdf_file_path, nbCore = 4)
 
 # Cluster the typical days
 clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3, 
-                      nbClustWeekend = 1, report = TRUE)
+                      nbClustWeekend = 1, report = TRUE, reportPath = tempdir())
 
 # Get probabilities and quantiles from climate file in order to classify the typical days
 climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
@@ -106,7 +106,7 @@ Once we have the **vertices** and the **calendar**, the clustering algorithm can
 
 ```{r, echo = TRUE, eval = FALSE}
 clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3, nbClustWeekend = 1,
-                              report = TRUE)
+                              report = TRUE, reportPath = tempdir())
 
 ```
 
@@ -114,7 +114,7 @@ clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 3, nbClustW
 In case the clustering algorithm must be run on short periods of time or with more or less seasons or types of day. The function ``clusterTypicalDaysForOneClass()`` can be used instead of ``clusteringTypicalDays()``.
 
 ```{r, echo = TRUE, eval = FALSE}
-clusterTD <- clusterTypicalDaysForOneClass(vertices = vertices, dates = getSequence("2018-01-01", "2018-01-31"), nbCluster = 2,className = "january2018")
+clusterTD <- clusterTypicalDaysForOneClass(vertices = vertices, dates = getSequence("2018-01-01", "2018-01-31"), nbCluster = 2,className = "january2018", reportPath = tempdir())
 
 
 ```
@@ -127,7 +127,7 @@ clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBa
 
 ```{r, eval = FALSE}
 # build report for one typical day
-generateClusteringReport(dayType = 7, data = clusterTD)
+generateClusteringReport(dayType = 7, data = clusterTD, outputFile = tempdir())
 ```
 
 <div style="text-align:center" markdown="1">

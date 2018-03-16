@@ -19,7 +19,7 @@
 #' @param nbCluster \code{numeric}, number of clusters
 #' @param className \code{character}, name of the class characterizing the studied time period
 #' @param id_start \code{numeric}, first identifier of the returned typical days. Default value is 1
-#' @param reportPath \code{character}, path where the report is written. Defaut to \code{getwd()}
+#' @param reportPath \code{character}, path where the report is written.
 #' @param hourWeight \code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
 #' will be more accurate for the flow-based domains of the hours with a relatively higher weight. 
 #' @param report \code{boolean}, if TRUE, reports are generated.
@@ -36,11 +36,13 @@
 #' 
 #' out1 <- clusterTypicalDaysForOneClass(vertices = vertices,
 #'                                       dates = dates, nbCluster = 2,
-#'                                       className = "myName", id_start = 5, report = FALSE)
+#'                                       className = "myName", id_start = 5, report = FALSE,
+#'                                       reportPath = tempdir())
 #' 
 #' out2 <- clusterTypicalDaysForOneClass(vertices = vertices,
 #'                                       dates = dates, nbCluster = 4,
-#'                                       className = "myName2", id_start = 7, report = FALSE)
+#'                                       className = "myName2", id_start = 7, report = FALSE,
+#'                                       reportPath = tempdir())
 #' 
 #' rbindlist(list(out1, out2))
 #' }
@@ -50,9 +52,9 @@
 clusterTypicalDaysForOneClass <- function(dates, 
                                           vertices, 
                                           nbCluster,
+                                          reportPath,
                                           hourWeight = rep(1, 24),
                                           className = NULL,
-                                          reportPath = getwd(),
                                           report = TRUE, 
                                           id_start = 1,
                                           maxDomainSize = 10000){
@@ -160,9 +162,6 @@ clusterTypicalDaysForOneClass <- function(dates,
 
 .crtOutFile <- function(allTypDay, reportPath){
   outputFile <- reportPath
-  if(is.null(outputFile)){
-    outputFile <- getwd()
-  }
   direName <-  as.character(Sys.time())
   direName <- gsub(" ", "", gsub( ":", "",direName))
   reportDir <- paste0(outputFile, "/fb-clustering-", direName)

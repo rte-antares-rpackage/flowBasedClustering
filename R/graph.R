@@ -14,18 +14,14 @@
 #' \dontrun{
 #' 
 #' clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
-#' generateClusteringReport(dayType = 7, data = clusterTD)
+#' generateClusteringReport(dayType = 7, data = clusterTD, outputFile = tempdir())
 #' 
 #' }
 #' @export
 #' 
 #' @import rmarkdown flexdashboard manipulateWidget gridExtra
 #' @importFrom shiny tags
-generateClusteringReport <- function(dayType, outputFile = NULL, data){
-  
-  if(is.null(outputFile)){
-    outputFile <- getwd()
-  }
+generateClusteringReport <- function(dayType, outputFile, data){
   
   output_Dir <- outputFile
   outputFile <- paste0(outputFile, "/", gsub(":", "", gsub( " ", "_",as.character(Sys.time()))), "_flowBased_",dayType, "_",data[idDayType == dayType]$Class, ".html")

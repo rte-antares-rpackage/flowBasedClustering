@@ -1,15 +1,18 @@
 Package: flowBasedClustering
 Type: Package
-Title: Clustering Days for 'FlowBased'
-Version: 0.1.1
+Title: Cluster 'FlowBased' Typical Days 
+Version: 1.0.0
 Authors@R: c(
-    person("Titouan", "ROBERT", , "titouan.robert@rte-france.com", role = c("aut", "cre")),
-    person("Baptiste", "SEGUINOT", , "baptiste.seguinot@rte-france.com", role = "ctb"),
-    person("Marion", "LI", , "marion.li@rte-france.com", role = "ctb"),
+    person("Baptiste", "Seguinot", role = c("aut", "cre"), email = "baptiste.seguinot@rte-france.com"),
+    person("Marion", "Li", role = c("aut"), email = "marion.li@rte-france.com"),
+    person("Titouan", "Robert",  role = c("aut"), email = "titouan.robert@rte-france.com"),
     person("RTE", role = "cph")
     )
-Maintainer: Baptiste SEGUINOT <baptiste.seguinot@rte-france.com>
-Description: Cluster and visualize typical-days of flow-based domains.
+Maintainer: Baptiste Seguinot <baptiste.seguinot@rte-france.com>
+Description: Cluster and visualize time series of 'flow-Based domains'.
+    'flow-Based domains' are polyhedrons defining the set of possible cross-border
+    exchanges offered by the transmission electrical grid. (more information about
+    'flow-based' and the clustering methodology here: <https://antares.rte-france.com/wp-content/uploads/2017/11/171024-Rte-Typical-Flow-Based-Days-Selection-1.pdf>).
 URL: https://github.com/rte-antares-rpackage/flowBasedClustering
 BugReports: https://github.com/rte-antares-rpackage/flowBasedClustering/issues
 License: GPL (>= 2) | file LICENSE

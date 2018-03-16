@@ -4,9 +4,9 @@
 \alias{clusteringTypicalDays}
 \title{Generate a set of flow-based typical days}
 \usage{
-clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
-  nbClustWeekend = 1, report = TRUE, reportPath = getwd(),
-  hourWeight = rep(1, 24), maxDomainSize = 10000)
+clusteringTypicalDays(calendar, vertices, reportPath, nbClustWeek = 3,
+  nbClustWeekend = 1, report = TRUE, hourWeight = rep(1, 24),
+  maxDomainSize = 10000)
 }
 \arguments{
 \item{calendar}{\code{list}, vector of date for each period. Can be obtain with \link{getCalendar}}
@@ -21,13 +21,13 @@ clusteringTypicalDays(calendar, vertices, nbClustWeek = 3,
 }
 This parameter can be obtained with the function \link{ptdfToVertices}.}
 
+\item{reportPath}{\code{character}, path where the report is written.}
+
 \item{nbClustWeek}{\code{numeric}, number of clusters for week period(working days). Defaut to 3}
 
 \item{nbClustWeekend}{\code{numeric}, number of clusters for weekend period. Defaut to 1}
 
 \item{report}{\code{boolean}, should a .html report be generated with the results of the clustering. Defaut to TRUE}
-
-\item{reportPath}{\code{character}, path where the report is written. Defaut to \code{getwd()}}
 
 \item{hourWeight}{\code{numeric}, vector of 24 weights, one for each hour of the day. The clustering algorithm
 will be more accurate for the flow-based domains of the hours with a relatively higher weight.}
@@ -63,12 +63,14 @@ calendar$summerWe <- c("2016-08-06", "2016-08-07")
 calendar$summerWd <- c("2016-08-08", "2016-08-09", "2016-08-10", "2016-08-11", "2016-08-12")
 
 # run clustering algorithm
-clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 2, nbClustWeekend = 1)
+clusterTD <- clusteringTypicalDays(calendar, vertices, nbClustWeek = 2,
+                                   nbClustWeekend = 1, reportPath = tempdir())
 
 # run clustering algorithm distinguishing the days only with the flow-based domains of hour 18
 w <- rep(0,24)
 w[18] <- 1
-clusterTD <- clusteringTypicalDays(calendar, vertices,  hourWeight = w, report = FALSE)
+clusterTD <- clusteringTypicalDays(calendar, vertices,  hourWeight = w, 
+                                  report = FALSE, reportPath = tempdir())
 }
 
 

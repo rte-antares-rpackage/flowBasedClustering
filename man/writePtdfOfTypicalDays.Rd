@@ -4,7 +4,7 @@
 \alias{writePtdfOfTypicalDays}
 \title{Transform a PTDF file}
 \usage{
-writePtdfOfTypicalDays(cluster, PTDF, pathOutput = getwd(), sep = ";")
+writePtdfOfTypicalDays(cluster, PTDF, pathOutput, sep = ";")
 }
 \arguments{
 \item{cluster}{\code{data.table} output of \link{clusteringTypicalDays}}
@@ -15,7 +15,7 @@ It must be a .csv file with ";" as column separator and "." as decimal separator
 The names of the seven columns (Date, Period, ...) must be included in the header (first line)
 of the .csv file.}
 
-\item{pathOutput}{\code{character} path of the folder where the file will be writen, default getwd()}
+\item{pathOutput}{\code{character} path of the folder where the file will be writen.}
 
 \item{sep}{\code{character} sep use for write csv output.}
 }
@@ -32,9 +32,7 @@ clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBa
 PTDF = system.file("dataset/ptdf_example.csv",
       package = "flowBasedClustering")
       
-writePtdfOfTypicalDays(clusterTD, PTDF)
-#Write on D:/ :
-writePtdfOfTypicalDays(clusterTD, PTDF, pathOutput = "D:/")
+writePtdfOfTypicalDays(clusterTD, PTDF, pathOutput = tempdir())
 
 }
 
