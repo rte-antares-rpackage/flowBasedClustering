@@ -12,7 +12,7 @@ Maintainer: Baptiste Seguinot <baptiste.seguinot@rte-france.com>
 Description: Cluster and visualize time series of 'flow-Based domains'.
     'flow-Based domains' are polyhedrons defining the set of possible cross-border
     exchanges offered by the transmission electrical grid. (more information about
-    'flow-based' and the clustering methodology here: <https://antares.rte-france.com/wp-content/uploads/2017/11/171024-Rte-Typical-Flow-Based-Days-Selection-1.pdf>).
+    'flow-based' and the clustering methodology here: <https://antares.rte-france.com/?page_id=19>).
 URL: https://github.com/rte-antares-rpackage/flowBasedClustering
 BugReports: https://github.com/rte-antares-rpackage/flowBasedClustering/issues
 License: GPL (>= 2) | file LICENSE
