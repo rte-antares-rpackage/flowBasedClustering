@@ -9,7 +9,7 @@ Sys.setenv("RGL_USE_NULL"=TRUE)
 options(rgl.useNULL = TRUE)
 
 
-if (Sys.getenv("DO_R_TESTS") %in% c(1, "TRUE", "true", TRUE))
+if (Sys.getenv("DO_R_TESTS") %in% c(1, "TRUE", "true", TRUE) || Sys.getenv("R_COVR") %in% c(1, "TRUE", "true", TRUE) )
 {
   test_check("flowBasedClustering")
 }
