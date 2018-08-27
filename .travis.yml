@@ -16,6 +16,7 @@ r:
   
 env:
   - RGL_USE_NULL = true
+  - DO_R_TESTS = true
 
 before_install:
   - export RGL_USE_NULL=TRUE

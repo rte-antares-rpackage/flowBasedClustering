@@ -8,4 +8,8 @@ Sys.unsetenv("R_TESTS")
 Sys.setenv("RGL_USE_NULL"=TRUE)
 options(rgl.useNULL = TRUE)
 
-test_check("flowBasedClustering")
+
+if (Sys.getenv("DO_R_TESTS") %in% c(1, "TRUE", "true", TRUE))
+{
+  test_check("flowBasedClustering")
+}
