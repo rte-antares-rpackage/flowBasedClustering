@@ -16,8 +16,8 @@ install:
 environment:
   global:
     _R_CHECK_FORCE_SUGGESTS_: false
-    DO_R_TESTS :  true
     CODECOV_TOKEN : "95f87ccf-6806-460a-a161-9d804c35809c"
+    DO_R_TESTS :  "true"
 
 
 build_script:
