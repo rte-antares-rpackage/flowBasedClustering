@@ -36,7 +36,7 @@ of days (working days and weekends)
 }
 \examples{
 
-\dontrun{
+\donttest{
 dates <- getSequence("2017-01-01", "2017-12-31")
 interSeasonBegin <- c("2017-03-01", "2017-09-01")
 interSeasonEnd <- c("2017-05-01", "2017-11-01")

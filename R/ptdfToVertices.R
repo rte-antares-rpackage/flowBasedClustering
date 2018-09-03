@@ -18,7 +18,7 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' 
 #' ptdf_data <- data.table::fread(system.file("dataset/ptdf_example.csv", 
 #'    package = "flowBasedClustering"), data.table = F)

@@ -25,7 +25,7 @@ The returned PTDF file contains only the typical days.
 }
 \examples{
 
-\dontrun{
+\donttest{
 #load clustering results (or build them with clusteringTypicalDays function())
 clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
 

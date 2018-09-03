@@ -27,7 +27,7 @@
 #' 
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' library(data.table)
 #' 
 #' # read vertices (from file, or obtained them with ptdfToVertices() function)

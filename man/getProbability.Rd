@@ -26,7 +26,7 @@ the occurence of a particular typical day
 }
 \examples{
 
-\dontrun{
+\donttest{
 # load climate daily time serires
 library(data.table)
 climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))

@@ -19,7 +19,7 @@ Return a vector of consecutive dates
 }
 \examples{
 
-\dontrun{
+\donttest{
 getSequence("2017-01-01", "2017-12-31")
 }
 

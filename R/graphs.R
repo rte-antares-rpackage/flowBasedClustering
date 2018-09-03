@@ -17,7 +17,7 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #'
 #' # classification result
 #' clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
@@ -61,7 +61,7 @@ clusterPlot <- function(data, country1, country2, hour, dayType,
 #' 
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' PTDF <- fread(system.file("dataset/ptdf_example.csv",package = "flowBasedClustering"))
 #' #Plot unique PTDF
 #' PTDF1 <- PTDF[ Date == "06/08/2016" & Period == 1]

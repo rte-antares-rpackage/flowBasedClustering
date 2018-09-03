@@ -28,7 +28,7 @@ while the vertices are the coordinnates of the extreme points of the domains.
 }
 \examples{
 
-\dontrun{
+\donttest{
 
 ptdf_data <- data.table::fread(system.file("dataset/ptdf_example.csv", 
    package = "flowBasedClustering"), data.table = F)

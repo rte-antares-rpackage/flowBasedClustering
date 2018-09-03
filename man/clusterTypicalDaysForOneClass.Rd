@@ -46,7 +46,7 @@ days at the same hour.
 }
 \examples{
 
-\dontrun{
+\donttest{
 library(data.table)
 vertices <- fread(system.file("dataset/vertices_example.txt",package = "flowBasedClustering"))
 dates <- seq(as.Date("2016-08-09"), as.Date("2018-09-01"), by = "day")

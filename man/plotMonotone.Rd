@@ -20,7 +20,7 @@ Plot monotone
 }
 \examples{
 
-\dontrun{
+\donttest{
 # climate data
 climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
 

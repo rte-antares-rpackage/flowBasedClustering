@@ -33,7 +33,7 @@ Plot flow-based domain(s)
 }
 \examples{
 
-\dontrun{
+\donttest{
 PTDF <- fread(system.file("dataset/ptdf_example.csv",package = "flowBasedClustering"))
 #Plot unique PTDF
 PTDF1 <- PTDF[ Date == "06/08/2016" & Period == 1]
@@ -43,7 +43,7 @@ PTDF2 <- list(PTDF[ Date == "06/08/2016" & Period == 1],
 PTDF[ Date == "06/08/2016" & Period == 2],
 PTDF[ Date == "06/08/2016" & Period == 3])
 plotFlowbased(PTDF2, country1 = "DE", country2 = "BE", domainsNames = c("01/11/2015 - H1",
-"01/11/2015 - H2", "01/11/2015 - H3"), main = "Myplot")
+"01/11/2015 - H2", "01/11/2015 - H3"), main = "domains BE - DE")
 
 }
 

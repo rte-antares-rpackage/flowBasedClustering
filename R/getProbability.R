@@ -11,7 +11,7 @@
 #' 
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' # load climate daily time serires
 #' library(data.table)
 #' climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
@@ -387,7 +387,7 @@ getProbability <- function(climate, cluster, levelsProba = c(1/3, 2/3), extrapol
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' # climate data
 #' climate <- fread(system.file("dataset/climate_example.txt",package = "flowBasedClustering"))
 #'

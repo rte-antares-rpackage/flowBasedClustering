@@ -32,7 +32,7 @@ flow-based domains it represents (i.e. other domains of the same cluster).
 }
 \examples{
 
-\dontrun{
+\donttest{
 
 # classification result
 clusterTD <- readRDS(system.file("dataset/cluster_example.RDS",package = "flowBasedClustering"))
