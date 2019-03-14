@@ -11,6 +11,6 @@ test_that(".getDistExt", {
   Dmat <- diag(1, nrow = nrow(x0))
   Ax0 <- object[[3]]
 
-  res <- .getDistExt(V1 = x0, PL = -t(PL) , ram = ram, Dmat = Dmat, col_ptdf = NULL)
+  res <- .getDistExt(V1 = x0, PL = -t(PL) , ram = ram, Dmat = Dmat)
   expect_true(res < 496 & res > 494)
 })

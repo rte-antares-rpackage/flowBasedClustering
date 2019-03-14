@@ -227,7 +227,7 @@ setDiffNotWantedPtdf <- function(PLAN, not_wanted_col = NULL)
 }
 
 ######### Compute the distance if external point ####
-.getDistExt <- function(V1, PL , ram, Dmat, col_ptdf)
+.getDistExt <- function(V1, PL , ram, Dmat)
 {
   # sapply(1:nrow(VERT), function(X){
     # V1 <- VERT[X]
@@ -261,7 +261,7 @@ setDiffNotWantedPtdf <- function(PLAN, not_wanted_col = NULL)
 ######### Compute the distance if interior point ####
 
 
-.getDistInt <- function(V1, PL, ram, Ax0, col_ptdf)
+.getDistInt <- function(V1, PL, ram, Ax0)
 {
 
   norm <- rowSums(PL^2)
@@ -289,10 +289,10 @@ dEnd <- function(VERT, PLAN, col_ptdf)
     if (flag) {
       # print("external")
       # saveRDS(list(V1, flag, Ax0, PL, X, ram), "object.rds")
-      .getDistExt(V1 = V1, PL = TPL, ram = ram, Dmat = Dmat, col_ptdf = col_ptdf)
+      .getDistExt(V1 = V1, PL = TPL, ram = ram, Dmat = Dmat)
     } else {
       # print("interior")
-      .getDistInt(V1 = V1, PL = PL, ram = ram, Ax0 = Ax0, col_ptdf = col_ptdf)
+      .getDistInt(V1 = V1, PL = PL, ram = ram, Ax0 = Ax0)
     }
   }))
   # Y_X <- get_dist_poly( VERT, PLAN, col_ptdf = col_ptdf)
